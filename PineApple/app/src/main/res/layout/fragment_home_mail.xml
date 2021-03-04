@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="315dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:background="@color/white">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/newspic"
+                    android:tintMode="multiply"
+                    app:tint="@color/gray100" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/fl_btn_back"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+
+                android:layout_marginTop="59dp"
+                android:layout_marginLeft="17dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <Button
+                    android:id="@+id/btn_back"
+                    android:layout_width="7dp"
+                    android:layout_height="14dp"
+                    android:background="@drawable/btn_back"
+                    app:backgroundTint="@color/white"/>
+
+            </FrameLayout>
+
+            <Button
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@drawable/btn_bookmark_line"
+                app:backgroundTint="@color/white"
+                app:backgroundTintMode="multiply"
+
+                android:layout_marginTop="59dp"
+                android:layout_marginRight="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_home_mail_title"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+
+                android:layout_marginTop="200dp"
+                android:fontFamily="@font/no_b"
+                android:text="팬톤, 올해의 컬러에 담긴 메시지 if 2 sentence"
+                android:includeFontPadding="false"
+                android:textColor="@color/white"
+                android:textSize="22sp"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginLeft="18dp"/>
+
+            <FrameLayout
+                android:layout_width="31dp"
+                android:layout_height="31dp"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="270dp"
+                android:background="@drawable/round_circle">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tv_home_mail_brand"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+
+                android:fontFamily="@font/no_r"
+                android:text="디독"
+                android:includeFontPadding="false"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginLeft="54.4dp"
+                android:layout_marginTop="278.4dp"
+                />
+
+            <TextView
+                android:id="@+id/tv_home_mail_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:fontFamily="@font/no_r"
+                android:text="02/01/2021"
+                android:includeFontPadding="false"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="278.4dp"
+                android:layout_marginRight="16dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/pickyGray"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="315dp"
+                />
+
+            <WebView
+                android:layout_width="match_parent"
+                android:layout_height="600dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="316dp"
+                android:background="@color/white"/>
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</LinearLayout>
