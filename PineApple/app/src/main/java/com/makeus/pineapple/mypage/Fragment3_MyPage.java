@@ -44,9 +44,9 @@ public class Fragment3_MyPage extends Fragment {
         rv_mypage_bookmark.setLayoutManager(layoutManager2);
         BookmarkLetterAdapter bookmarkLetterAdapter = new BookmarkLetterAdapter();
 
-        bookmarkLetterAdapter.addItem(new NewLetter("디독", "02/02/2021"));
-        bookmarkLetterAdapter.addItem(new NewLetter("디독", "02/02/2021"));
-        bookmarkLetterAdapter.addItem(new NewLetter("디독", "02/02/2021"));
+        bookmarkLetterAdapter.addItem(new BookmarkLetter("디독", "02/02/2021",R.drawable.news_1,R.drawable.brand_4));
+        bookmarkLetterAdapter.addItem(new BookmarkLetter("디독", "02/02/2021",R.drawable.news_2,R.drawable.brand_4));
+        bookmarkLetterAdapter.addItem(new BookmarkLetter("디독", "02/02/2021",R.drawable.news_3,R.drawable.brand_4));
 
         rv_mypage_bookmark.setAdapter(bookmarkLetterAdapter); //리사이클러뷰에 어답터 설정
 

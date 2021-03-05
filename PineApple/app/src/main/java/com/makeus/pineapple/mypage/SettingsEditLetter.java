@@ -60,16 +60,10 @@ public class SettingsEditLetter extends Fragment {
         rv_edit_letter.setLayoutManager((layoutManager));
         EditLetterAdapter editLetterAdapter = new EditLetterAdapter();
 
-        for(int num =1; num<=5;num++){
+        editLetterAdapter.addItem(new EditedLetter(EditLetterViewCode.VIEW_EDIT_LETTER_MIDDLE,"디독",R.drawable.brand_1));
+        editLetterAdapter.addItem(new EditedLetter(EditLetterViewCode.VIEW_EDIT_LETTER_MIDDLE,"어피티",R.drawable.brand_3));
+        editLetterAdapter.addItem(new EditedLetter(EditLetterViewCode.VIEW_EDIT_LETTER_END,"오렌지레터",R.drawable.brand_4));
 
-            if (num!=5){
-                editLetterAdapter.addItem(new EditedLetter(EditLetterViewCode.VIEW_EDIT_LETTER_MIDDLE,"디독"));
-            }
-            else{
-                editLetterAdapter.addItem(new EditedLetter(EditLetterViewCode.VIEW_EDIT_LETTER_END,"뉴닉"));
-            }
-
-        }
 
         rv_edit_letter.setAdapter(editLetterAdapter);
 

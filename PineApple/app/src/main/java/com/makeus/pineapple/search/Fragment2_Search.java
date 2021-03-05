@@ -42,16 +42,18 @@ public class Fragment2_Search extends Fragment {
         rv_rank.setLayoutManager((layoutManager));
         SearchedNewsRankAdapter searchedNewsAdapter = new SearchedNewsRankAdapter();
 
-        for(int num =1; num<=10;num++){
 
-            if (num==2){
-                searchedNewsAdapter.addItem(new SearchedNews(SearchViewCode.VIEW_SEARCH_RANK_BLIND,"'다크패턴'이라고 부르면 안되는 이유","디독","02/01/2021",num));
-            }
-            else{
-                searchedNewsAdapter.addItem(new SearchedNews(SearchViewCode.VIEW_RANK_SEARCH,"'다크패턴'이라고 부르면 안되는 이유","디독","02/01/2021",num));
-            }
+        searchedNewsAdapter.addItem(new SearchedNews(SearchViewCode.VIEW_SEARCH_RANK_BLIND,"개발 실력을 위한 IT기업 기술 블로그 45곳 모음","오렌지레터","02/01/2021",1,R.drawable.news_1,R.drawable.brand_4));
+        searchedNewsAdapter.addItem(new SearchedNews(SearchViewCode.VIEW_RANK_SEARCH,"머스크·최태원 한다는데…클럽하우스 안해도 괜찮아요?","오렌지레터","02/01/2021",2,R.drawable.news_2,R.drawable.brand_4));
+        searchedNewsAdapter.addItem(new SearchedNews(SearchViewCode.VIEW_RANK_SEARCH,"쇼핑 중독에 걸리다","오렌지레터","02/01/2021",3,R.drawable.news_3,R.drawable.brand_4));
+        searchedNewsAdapter.addItem(new SearchedNews(SearchViewCode.VIEW_SEARCH_RANK_BLIND,"가게 배달지역 관리방식 개편 프로젝트","디독","02/01/2021",4,R.drawable.news_4,R.drawable.brand_1));
+        searchedNewsAdapter.addItem(new SearchedNews(SearchViewCode.VIEW_SEARCH_RANK_BLIND,"5달러 짜리 로고와 250달러 짜리 로고의 차이점","디독","02/01/2021",5,R.drawable.news_5,R.drawable.brand_1));
+        searchedNewsAdapter.addItem(new SearchedNews(SearchViewCode.VIEW_SEARCH_RANK_BLIND,"페이스북,인스타그램,유튜브의 잘못된 UI","디독","02/01/2021",6,R.drawable.news_6,R.drawable.brand_1));
+        searchedNewsAdapter.addItem(new SearchedNews(SearchViewCode.VIEW_SEARCH_RANK_BLIND,"주목받는 재택근무 관련주와 라이프스타일의 변화 \uD83D\uDC69\u200D\uD83D\uDCBB\n","어피티","02/01/2021",7,R.drawable.news_7,R.drawable.brand_3));
+        searchedNewsAdapter.addItem(new SearchedNews(SearchViewCode.VIEW_SEARCH_RANK_BLIND,"비상 걸린 콜센터,원격 콜센터 구축 업체는? \uD83D\uDCDE","어피티","02/01/2021",8,R.drawable.news_8,R.drawable.brand_3));
+        searchedNewsAdapter.addItem(new SearchedNews(SearchViewCode.VIEW_SEARCH_RANK_BLIND,"금 수요 폭등,거래소에는 호재","어피티","02/01/2021",9,R.drawable.news_9,R.drawable.brand_3));
+        searchedNewsAdapter.addItem(new SearchedNews(SearchViewCode.VIEW_SEARCH_RANK_BLIND,"타다 클라이언트 개발기","어피티","02/01/2021",10,R.drawable.news_10,R.drawable.brand_3));
 
-        }
 
         rv_rank.setAdapter(searchedNewsAdapter);
 
@@ -89,16 +91,17 @@ public class Fragment2_Search extends Fragment {
                     rv_search_result.setLayoutManager((layoutManager2));
                     SearchedNewsResultAdapter searchedNewsResultAdapter = new SearchedNewsResultAdapter();
 
-                    for(int num =1; num<=3;num++){
 
-                        if (num==2){
-                            searchedNewsResultAdapter.addItem(new SearchedNews(SearchViewCode.VIEW_SEARCH_RESULT_BLIND,"'다크패턴'이라고 부르면 안되는 이유","디독","02/01/2021",-1));
-                        }
-                        else{
-                            searchedNewsResultAdapter.addItem(new SearchedNews(SearchViewCode.VIEW_SEARCH_RESULT,"새로운 색상","어피티","02/01/2021",-1));
-                        }
-
-                    }
+                    searchedNewsResultAdapter.addItem(new SearchedNews(SearchViewCode.VIEW_SEARCH_RESULT,"개발 실력을 위한 IT기업 기술 블로그 45곳 모음","오렌지레터","02/01/2021",1,R.drawable.news_1,R.drawable.brand_4));
+                    searchedNewsResultAdapter.addItem(new SearchedNews(SearchViewCode.VIEW_SEARCH_RESULT_BLIND,"머스크·최태원 한다는데…클럽하우스 안해도 괜찮아요?","오렌지레터","02/01/2021",2,R.drawable.news_2,R.drawable.brand_4));
+                    searchedNewsResultAdapter.addItem(new SearchedNews(SearchViewCode.VIEW_SEARCH_RESULT_BLIND,"쇼핑 중독에 걸리다","오렌지레터","02/01/2021",3,R.drawable.news_3,R.drawable.brand_4));
+                    searchedNewsResultAdapter.addItem(new SearchedNews(SearchViewCode.VIEW_SEARCH_RESULT,"가게 배달지역 관리방식 개편 프로젝트","디독","02/01/2021",4,R.drawable.news_4,R.drawable.brand_1));
+                    searchedNewsResultAdapter.addItem(new SearchedNews(SearchViewCode.VIEW_SEARCH_RESULT,"5달러 짜리 로고와 250달러 짜리 로고의 차이점","디독","02/01/2021",5,R.drawable.news_5,R.drawable.brand_1));
+                    searchedNewsResultAdapter.addItem(new SearchedNews(SearchViewCode.VIEW_SEARCH_RESULT,"페이스북,인스타그램,유튜브의 잘못된 UI","디독","02/01/2021",6,R.drawable.news_6,R.drawable.brand_1));
+                    searchedNewsResultAdapter.addItem(new SearchedNews(SearchViewCode.VIEW_SEARCH_RESULT,"주목받는 재택근무 관련주와 라이프스타일의 변화 \uD83D\uDC69\u200D\uD83D\uDCBB\n","어피티","02/01/2021",7,R.drawable.news_7,R.drawable.brand_3));
+                    searchedNewsResultAdapter.addItem(new SearchedNews(SearchViewCode.VIEW_SEARCH_RESULT,"비상 걸린 콜센터,원격 콜센터 구축 업체는? \uD83D\uDCDE","어피티","02/01/2021",8,R.drawable.news_8,R.drawable.brand_3));
+                    searchedNewsResultAdapter.addItem(new SearchedNews(SearchViewCode.VIEW_SEARCH_RESULT,"금 수요 폭등,거래소에는 호재","어피티","02/01/2021",9,R.drawable.news_9,R.drawable.brand_3));
+                    searchedNewsResultAdapter.addItem(new SearchedNews(SearchViewCode.VIEW_SEARCH_RESULT,"타다 클라이언트 개발기","어피티","02/01/2021",10,R.drawable.news_10,R.drawable.brand_3));
 
                     rv_search_result.setAdapter(searchedNewsResultAdapter);
                     ll_search_result.setVisibility(View.VISIBLE);

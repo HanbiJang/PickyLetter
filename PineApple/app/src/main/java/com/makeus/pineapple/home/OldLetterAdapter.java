@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -14,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.makeus.pineapple.R;
 
 import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class OldLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -78,6 +81,8 @@ public class OldLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         TextView tv_brand;
         TextView tv_date;
         Button btn_bookmark_past;
+        ImageView img_news;
+        CircleImageView cimg_brand;
         //북마크 체크 기능
         Boolean isClicked = false;
 
@@ -87,12 +92,16 @@ public class OldLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             tv_brand = itemView.findViewById(R.id.tv_brand);
             tv_date = itemView.findViewById(R.id.tv_date);
             btn_bookmark_past = itemView.findViewById(R.id.btn_bookmark_past);
+            img_news = itemView.findViewById(R.id.img_news);
+            cimg_brand = itemView.findViewById(R.id.cimg_brand);
 
         }
 
         public void setItem(OldLetter item){ //뷰 객체의 데이터를 다른 것으로 보이도록함
             tv_brand.setText(item.getNewsBrand());
             tv_date.setText(item.getNewsDate());
+            img_news.setImageResource(item.getImg_news());
+            cimg_brand.setImageResource(item.getImg_brand());
 
             //북마크 체크 기능
             btn_bookmark_past.setOnClickListener(new View.OnClickListener() {

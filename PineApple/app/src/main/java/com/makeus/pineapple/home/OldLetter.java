@@ -2,12 +2,26 @@ package com.makeus.pineapple.home;
 
 public class OldLetter {
 
+    String newstitle;
     String newsBrand;
     String newsDate;
+    Integer img_news;
+    Integer img_brand;
 
-    public OldLetter(String newsBrand, String newsDate) {
+    public OldLetter(String newstitle, String newsBrand, String newsDate,Integer img_news, Integer img_brand) {
+        this.newstitle = newstitle;
         this.newsBrand = newsBrand;
         this.newsDate = newsDate;
+        this.img_news = img_news;
+        this.img_brand = img_brand;
+    }
+
+    public String getNewstitle() {
+        return newstitle;
+    }
+
+    public void setNewstitle(String newstitle) {
+        this.newstitle = newstitle;
     }
 
     public String getNewsBrand() {
@@ -25,4 +39,22 @@ public class OldLetter {
     public void setNewsDate(String newsDate) {
         this.newsDate = newsDate;
     }
+
+    public Integer getImg_news() {
+        return img_news;
+    }
+
+    public Integer getImg_brand() {
+        return img_brand;
+    }
+
+    public void setImg_news(Integer img_news) {
+        this.img_news = img_news;
+    }
+
+    public void setImg_brand(Integer img_brand) {
+        this.img_brand = img_brand;
+    }
+
+
 }

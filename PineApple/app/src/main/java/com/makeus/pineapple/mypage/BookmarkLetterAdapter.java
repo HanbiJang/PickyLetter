@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,9 +15,11 @@ import com.makeus.pineapple.home.NewLetter;
 
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class BookmarkLetterAdapter extends RecyclerView.Adapter<BookmarkLetterAdapter.ViewHolder> {
 
-    ArrayList<NewLetter> items = new ArrayList<>();
+    ArrayList<BookmarkLetter> items = new ArrayList<>();
 
     @NonNull
     @Override //뷰홀더 객체의 생성,재사용시 자동으로 호출
@@ -35,7 +38,7 @@ public class BookmarkLetterAdapter extends RecyclerView.Adapter<BookmarkLetterAd
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         //기존 뷰객체의 데이터를 position 변수에 맞게 꺼냄
 
-        NewLetter item= items.get(position);
+        BookmarkLetter item= items.get(position);
         viewHolder.setItem(item);
 
     }
@@ -46,25 +49,37 @@ public class BookmarkLetterAdapter extends RecyclerView.Adapter<BookmarkLetterAd
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder{
+        TextView tv_title;
         TextView tv_brand;
         TextView tv_date;
         Button btn_bookmark_bookmark;
+
+        ImageView img_news;
+        CircleImageView cimg_brand;
+
         //북마크 체크 기능
         Boolean isClicked = true;
 
 
         public ViewHolder(View itemView){ //아이템을 위한 뷰를 담아두는곳
             super(itemView);
-
+            tv_title = itemView.findViewById(R.id.tv_title);
             tv_brand = itemView.findViewById(R.id.tv_brand);
             tv_date = itemView.findViewById(R.id.tv_date);
             btn_bookmark_bookmark = itemView.findViewById(R.id.btn_bookmark_bookmark);
 
+            img_news = itemView.findViewById(R.id.img_news);
+            cimg_brand = itemView.findViewById(R.id.cimg_brand);
+
         }
 
-        public void setItem(NewLetter item){ //뷰 객체의 데이터를 다른 것으로 보이도록함
+        public void setItem(BookmarkLetter item){ //뷰 객체의 데이터를 다른 것으로 보이도록함
+//            tv_title.setText(item.getNewsTitle());
             tv_brand.setText(item.getNewsBrand());
             tv_date.setText(item.getNewsDate());
+
+            img_news.setImageResource(item.getImg_news());
+            cimg_brand.setImageResource(item.getImg_brand());
 
             //북마크 체크 기능
             btn_bookmark_bookmark.setBackgroundResource(R.drawable.btn_bookmark_fill);//이미 눌려있음
@@ -86,19 +101,19 @@ public class BookmarkLetterAdapter extends RecyclerView.Adapter<BookmarkLetterAd
     }
 
     //어댑터에서 NewLetter 객체를 사용할 수 있도록하는 함수들
-    public void addItem(NewLetter item){
+    public void addItem(BookmarkLetter item){
         items.add(item);
     }
 
-    public void setItems(ArrayList<NewLetter> items){
+    public void setItems(ArrayList<BookmarkLetter> items){
         this.items=items;
     }
 
-    public NewLetter getItem(int position){
+    public BookmarkLetter getItem(int position){
         return items.get(position);
     }
 
-    public void setItem(int position, NewLetter item){
+    public void setItem(int position, BookmarkLetter item){
         items.set(position,item);
     }
 

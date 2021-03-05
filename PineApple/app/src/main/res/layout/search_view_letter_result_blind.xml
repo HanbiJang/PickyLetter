@@ -83,12 +83,14 @@
                             android:gravity="center|left"
                             android:orientation="horizontal">
 
-                            <ImageView
+                            <de.hdodenhof.circleimageview.CircleImageView
                                 android:id="@+id/imageView2"
                                 android:layout_width="8pt"
                                 android:layout_height="8pt"
                                 android:layout_marginRight="5dp"
-                                android:background="@drawable/round_circle" />
+                                android:src="@drawable/newspic"
+                                app:civ_border_color="@color/pickyGray"
+                                app:civ_border_width="1dp" />
 
                             <TextView
                                 android:id="@+id/tv_brand"
