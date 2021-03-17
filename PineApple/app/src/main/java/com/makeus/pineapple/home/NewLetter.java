@@ -4,25 +4,29 @@ public class NewLetter {
 
     String newsBrand;
     String newsDate;
-    String newstitle;
+    String newsTitle;
 
-    Integer img_news;
-    Integer img_brand;
+    String img_news;
+    String img_brand;
 
-    public NewLetter(String newstitle,String newsBrand, String newsDate,Integer img_news, Integer img_brand) {
-        this.newstitle = newstitle;
+    public NewLetter() {
+
+    }
+
+    public NewLetter(String newstitle,String newsBrand, String newsDate,String img_news, String img_brand) {
+        this.newsTitle = newstitle;
         this.newsBrand = newsBrand;
         this.newsDate = newsDate;
         this.img_news = img_news;
         this.img_brand = img_brand;
     }
 
-    public String getNewstitle() {
-        return newstitle;
+    public String getNewsTitle() {
+        return newsTitle;
     }
 
-    public void setNewstitle(String newstitle) {
-        this.newstitle = newstitle;
+    public void setNewsTitle(String newsTitle) {
+        this.newsTitle = newsTitle;
     }
 
     public String getNewsBrand() {
@@ -41,19 +45,19 @@ public class NewLetter {
         this.newsDate = newsDate;
     }
 
-    public Integer getImg_news() {
+    public String getImg_news() {
         return img_news;
     }
 
-    public Integer getImg_brand() {
+    public String getImg_brand() {
         return img_brand;
     }
 
-    public void setImg_news(Integer img_news) {
+    public void setImg_news(String img_news) {
         this.img_news = img_news;
     }
 
-    public void setImg_brand(Integer img_brand) {
+    public void setImg_brand(String img_brand) {
         this.img_brand = img_brand;
     }
 }

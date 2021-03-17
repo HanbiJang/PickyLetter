@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,6 +23,9 @@ import com.makeus.pineapple.search.Fragment2_Search;
 import java.util.Stack;
 
 public class MainActivity extends AppCompatActivity {
+    //사용자 정보
+    static String userId = null;
+    static String token= null;
 
     Fragment fragment1_home;
     Fragment fragment2_search;
@@ -31,11 +35,21 @@ public class MainActivity extends AppCompatActivity {
 /*    //앱종료시간체크
     long backKeyPressedTime;*/
 
+    public static String getUserId() {
+        return userId;
+    }
+
+    public static String getToken() {
+        return token;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //인텐트에서 userId, token 정보 얻기
+        getIntentData();
 
         //프레그먼트 생성
         fragment1_home = new Fragment1_Home();
@@ -69,6 +83,14 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
 
+
+    }
+
+    //인텐트에서 정보 얻기
+    private void getIntentData() {
+        Intent intent =getIntent();
+        userId = intent.getExtras().getString("userId");
+        token = intent.getExtras().getString("token");
 
     }
 

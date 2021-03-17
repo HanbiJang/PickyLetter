@@ -37,7 +37,8 @@ public class SignIn extends Activity {
     static String loginUrl = "http://3.13.65.158/v1/users/login"; //로그인 url
     static RequestQueue requestQueue;
     static String token = null;
-    static String userId;
+    static String userId = null;
+    static String userEmail;
     static String userpw;
     boolean loginResult;
 
@@ -66,10 +67,10 @@ public class SignIn extends Activity {
             public void onClick(View v) {
                 //아이디, 비번 입력 받기
                 userpw = et_pw.getText().toString();
-                userId = et_id.getText().toString();
+                userEmail = et_id.getText().toString();
 
                 //로그인 시도
-                tryLogin(userId, userpw);
+                tryLogin(userEmail, userpw);
 
             }
         });
@@ -190,6 +191,7 @@ public class SignIn extends Activity {
             //로그인 성공 시
             Intent intent = new Intent(SignIn.this, MainActivity.class);
             intent.putExtra("token", token); //인텐트로 token 정보를 넘김
+            intent.putExtra("userId", userId); //인텐트로 userId 정보를 넘김
             startActivity(intent);
             overridePendingTransition(R.anim.enter_right, R.anim.exit_left);
             finish();
@@ -204,6 +206,7 @@ public class SignIn extends Activity {
     public void processResponseForLogin(JSONObject response) {
         Gson gson = new Gson();
         UserResult userResult = gson.fromJson(String.valueOf(response), UserResult.class);
+        userId = userResult.getUser().getUserId();
         token = userResult.getToken();
     }
 

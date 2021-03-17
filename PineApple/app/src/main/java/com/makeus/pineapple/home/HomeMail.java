@@ -19,6 +19,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.makeus.pineapple.MainActivity;
 import com.makeus.pineapple.R;
 import com.makeus.pineapple.mypage.Fragment3_MyPage;
@@ -58,8 +59,8 @@ public class HomeMail extends Fragment {
         String newsTitle = getArguments().getString("newsTitle"); // 전달한 key 값
         String newsBrand = getArguments().getString("newsBrand"); // 전달한 key 값
         String newsDate = getArguments().getString("newsDate"); // 전달한 key 값
-        Integer newsImage = getArguments().getInt("newsImage"); // 전달한 key 값
-        Integer newsBrandImage = getArguments().getInt("newsBrandImage"); // 전달한 key 값
+        String newsImage = getArguments().getString("newsImage"); // 전달한 key 값
+        String newsBrandImage = getArguments().getString("newsBrandImage"); // 전달한 key 값
 
         //정보 세팅
         tv_title = view.findViewById(R.id.tv_title);
@@ -72,8 +73,17 @@ public class HomeMail extends Fragment {
         tv_title.setText(newsTitle);
         tv_brand.setText(newsBrand);
         tv_date.setText(newsDate);
-        img_news.setImageResource(newsImage);
-        cimg_brand.setImageResource(newsBrandImage);
+
+        //G-glide로 이미지 설정
+        String imageUrl = newsBrandImage;
+        Glide.with(getContext()).load(imageUrl).into(cimg_brand);
+
+        String imageUrl2 = newsImage;
+//        Glide.with(getContext()).load(imageUrl2).into(img_news);
+        Glide.with(getContext()).load(imageUrl2)
+                .error(R.color.pickyUnableGray)
+                .into(img_news);
+
 
         //가라데이터 세팅
         MyWebView myWebView = new MyWebView();
