@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="254dp"
+            android:layout_height="153dp"
+            android:background="@drawable/round_squre"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="105dp"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv_brand"
+                    android:layout_width="235dp"
+                    android:layout_height="85dp"
+                    android:gravity="center"
+                    android:textSize="13sp"
+                    android:textColor="@color/pickyGray"
+                    android:text="오렌지레터를\n아직 구독하지 않고 계시네요!\n구독하여 더 다양한 뉴스레터를 \n받아보시겠어요?"
+                    android:fontFamily="@font/no_m"
+                    android:includeFontPadding="false"/>
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="46dp"
+                    android:text="　다음에　"
+                    android:fontFamily="@font/no_m"
+                    android:includeFontPadding="false"
+                    android:textSize="14sp"
+                    android:background="@drawable/btn_popup_round_squre_left"
+                    android:backgroundTint="@color/pickyGray"
+                    android:textColor="@color/white"
+                    android:layout_weight="1"></Button>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="46dp"
+                    android:text="구독할래요"
+                    android:fontFamily="@font/no_m"
+                    android:includeFontPadding="false"
+                    android:background="@drawable/btn_popup_round_squre_right"
+
+                    app:backgroundTintMode="multiply"
+                    app:backgroundTint="@color/white"
+
+                    android:textSize="14sp"
+                    android:textColor="@color/pickyGray"
+                    android:layout_weight="1"></Button>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
