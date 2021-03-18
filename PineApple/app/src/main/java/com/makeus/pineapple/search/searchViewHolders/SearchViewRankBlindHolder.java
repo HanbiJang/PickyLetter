@@ -9,10 +9,11 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.makeus.pineapple.R;
 import com.makeus.pineapple.search.PopupSub;
-import com.makeus.pineapple.search.SearchedNews;
-import com.makeus.pineapple.search.SearchedNewsRankAdapter;
+import com.makeus.pineapple.search.data.SearchedNews;
+import com.makeus.pineapple.search.adapters.SearchedNewsRankAdapter;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -34,11 +35,11 @@ public class SearchViewRankBlindHolder extends SearchViewHolder {
     public SearchViewRankBlindHolder(@NonNull View itemView) {
         super(itemView);
 
+        myContext = (FragmentActivity) itemView.getContext();
         tv_title = itemView.findViewById(R.id.tv_title);
         tv_brand = itemView.findViewById(R.id.tv_brand);
         tv_date = itemView.findViewById(R.id.tv_date);
         tv_num_rank = itemView.findViewById(R.id.tv_num_rank_blind);
-
         img_news = itemView.findViewById(R.id.img_news);
         cimg_brand = itemView.findViewById(R.id.cimg_brand);
 
@@ -50,23 +51,12 @@ public class SearchViewRankBlindHolder extends SearchViewHolder {
                 if (pos != RecyclerView.NO_POSITION) {
                     // 데이터 리스트로부터 아이템 데이터 참조.
                     SearchedNews item = SearchedNewsRankAdapter.getItems().get(pos);
-                    myContext = (FragmentActivity) itemView.getContext();
-/*                    Fragment fragment_homemail = new HomeMail();
 
-                    // 누른 아이템에 대한 정보 프래그먼트로 전달
-                    Bundle bundle = new Bundle(1); // 파라미터는 전달할 데이터 개수
-                    bundle.putString("newsTitle", item.getTitle()); // key , value
-                    bundle.putString("newsBrand", item.getBrand()); // key , value
-                    bundle.putString("newsDate", item.getDate()); // key , value
-                    bundle.putInt("newsImage", item.getImg_news()); // key , value
-                    bundle.putInt("newsBrandImage", item.getImg_brand()); // key , value
-                    fragment_homemail.setArguments(bundle);*/
 
+                    //구독 유도 팝업
                     Intent intent = new Intent(myContext, PopupSub.class);
-                    //브랜드 이름 넘기기
-                    intent.putExtra("brand",brand);
-/*        intent.putExtra("data", "Test Popup");
-        startActivityForResult(intent, 1);*/
+                    intent.putExtra("brand",brand);                    //브랜드 이름 넘기기
+
                     myContext.startActivity(intent);
 
                 }
@@ -84,8 +74,14 @@ public class SearchViewRankBlindHolder extends SearchViewHolder {
         tv_date.setText(item.getDate());
         tv_num_rank.setText(item.getNumRank().toString());
 
-        img_news.setImageResource(item.getImg_news());
-        cimg_brand.setImageResource(item.getImg_brand());
+        // Glide로 이미지 표시하기
+        String imageUrl = item.getImg_brand();
+        Glide.with(myContext).load(imageUrl).into(cimg_brand);
+
+        String imageUrl2 = item.getImg_news();
+        Glide.with(myContext).load(imageUrl2)
+                .error(R.color.pickyUnableGray)
+                .into(img_news);
 
     }
 }

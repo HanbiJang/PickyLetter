@@ -5,7 +5,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.makeus.pineapple.search.SearchedNews;
+import com.makeus.pineapple.search.data.SearchedNews;
 
 public abstract class SearchViewHolder extends RecyclerView.ViewHolder {
 

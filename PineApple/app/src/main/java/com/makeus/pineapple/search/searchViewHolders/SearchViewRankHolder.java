@@ -2,7 +2,6 @@ package com.makeus.pineapple.search.searchViewHolders;
 
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -12,12 +11,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.makeus.pineapple.MainActivity;
+import com.bumptech.glide.Glide;
 import com.makeus.pineapple.R;
-import com.makeus.pineapple.home.HomeMail;
-import com.makeus.pineapple.mypage.BookmarkLetter;
-import com.makeus.pineapple.search.SearchedNews;
-import com.makeus.pineapple.search.SearchedNewsRankAdapter;
+import com.makeus.pineapple.HomeMail;
+import com.makeus.pineapple.search.data.SearchedNews;
+import com.makeus.pineapple.search.adapters.SearchedNewsRankAdapter;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -27,13 +25,12 @@ public class SearchViewRankHolder extends SearchViewHolder {
     TextView tv_brand;
     TextView tv_date;
     TextView tv_num_rank;
-
     ImageView img_news;
     CircleImageView cimg_brand;
 
     Button btn_bookmark_rank;
     //북마크 체크 기능
-    Boolean isClicked;
+    Boolean isClicked = false;
 
     //화면 전환
     FragmentActivity myContext;
@@ -42,12 +39,12 @@ public class SearchViewRankHolder extends SearchViewHolder {
     public SearchViewRankHolder(@NonNull View itemView) {
         super(itemView);
 
+        myContext = (FragmentActivity) itemView.getContext();
         tv_title = itemView.findViewById(R.id.tv_title);
         tv_brand = itemView.findViewById(R.id.tv_brand);
         tv_date = itemView.findViewById(R.id.tv_date);
         tv_num_rank = itemView.findViewById(R.id.tv_num_rank);
         btn_bookmark_rank = itemView.findViewById(R.id.btn_bookmark_rank);
-
         img_news = itemView.findViewById(R.id.img_news);
         cimg_brand = itemView.findViewById(R.id.cimg_brand);
 
@@ -59,7 +56,6 @@ public class SearchViewRankHolder extends SearchViewHolder {
                 if (pos != RecyclerView.NO_POSITION) {
                     // 데이터 리스트로부터 아이템 데이터 참조.
                     SearchedNews item = SearchedNewsRankAdapter.getItems().get(pos);
-                    myContext = (FragmentActivity) itemView.getContext();
                     Fragment fragment_homemail = new HomeMail();
 
                     // 누른 아이템에 대한 정보 프래그먼트로 전달
@@ -67,13 +63,14 @@ public class SearchViewRankHolder extends SearchViewHolder {
                     bundle.putString("newsTitle", item.getTitle()); // key , value
                     bundle.putString("newsBrand", item.getBrand()); // key , value
                     bundle.putString("newsDate", item.getDate()); // key , value
-                    bundle.putInt("newsImage", item.getImg_news()); // key , value
-                    bundle.putInt("newsBrandImage", item.getImg_brand()); // key , value
+                    bundle.putString("newsImage", item.getImg_news()); // key , value
+                    bundle.putString("newsBrandImage", item.getImg_brand()); // key , value
                     fragment_homemail.setArguments(bundle);
 
-                    Fragment currentFragment = myContext.getSupportFragmentManager().findFragmentById(R.id.container_fragment);
-                    myContext.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_right,R.anim.exit_left,R.anim.enter_left_pop,R.anim.exit_left_pop).addToBackStack(null).replace(R.id.container_fragment,fragment_homemail).commit();
-
+                    myContext.getSupportFragmentManager().beginTransaction().
+                            setCustomAnimations(R.anim.enter_right,R.anim.exit_left,R.anim.enter_left_pop,R.anim.exit_left_pop).
+                            addToBackStack(null).
+                            replace(R.id.container_fragment,fragment_homemail).commit();
 
                 }
             }
@@ -88,8 +85,14 @@ public class SearchViewRankHolder extends SearchViewHolder {
         tv_date.setText(item.getDate());
         tv_num_rank.setText(item.getNumRank().toString());
 
-        img_news.setImageResource(item.getImg_news());
-        cimg_brand.setImageResource(item.getImg_brand());
+        // Glide로 이미지 표시하기
+        String imageUrl = item.getImg_brand();
+        Glide.with(myContext).load(imageUrl).into(cimg_brand);
+
+        String imageUrl2 = item.getImg_news();
+        Glide.with(myContext).load(imageUrl2)
+                .error(R.color.pickyUnableGray)
+                .into(img_news);
 
         //북마크 체크 기능
         //isClicked == true 이면 이미 찍혀있음

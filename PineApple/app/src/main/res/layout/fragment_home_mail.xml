@@ -54,6 +54,7 @@
             </FrameLayout>
 
             <Button
+                android:id="@+id/btn_bookmark"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:background="@drawable/btn_bookmark_line"

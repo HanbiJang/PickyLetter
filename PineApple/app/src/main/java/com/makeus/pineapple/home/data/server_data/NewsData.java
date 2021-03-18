@@ -1,7 +1,7 @@
-package com.makeus.pineapple.newsletters;
+package com.makeus.pineapple.home.data.server_data;
 
-public class NewNewsData {
-    /*                 "letterId": 18,
+public class NewsData {
+    /*            "letterId": 18,
                   "platformId": 1,
                   "platformName": "퍼블리",
                   "platformImageUrl": "https://cdn.logo.com/hotlink-ok/logo-social.png",
@@ -16,7 +16,7 @@ public class NewNewsData {
     Integer letterId, platformId, bookmarkId, bookmarkCount;
     String platformName, platformImageUrl, title, content, thumbnailImageUrl, createdAt, modifiedAt;
 
-    public NewNewsData(Integer letterId, Integer platformId, Integer bookmarkId, Integer bookmarkCount, String platformName, String platformImageUrl, String title, String content, String thumbnailImageUrl, String createdAt, String modifiedAt) {
+    public NewsData(Integer letterId, Integer platformId, Integer bookmarkId, Integer bookmarkCount, String platformName, String platformImageUrl, String title, String content, String thumbnailImageUrl, String createdAt, String modifiedAt) {
         this.letterId = letterId;
         this.platformId = platformId;
         this.bookmarkId = bookmarkId;

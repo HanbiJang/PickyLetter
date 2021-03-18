@@ -15,8 +15,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.makeus.pineapple.R;
-import com.makeus.pineapple.home.HomeMail;
-import com.makeus.pineapple.search.SearchedNews;
+import com.makeus.pineapple.HomeMail;
 
 
 import java.util.ArrayList;

@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
     static String userId = null;
     static String token= null;
 
+    static Boolean oneTimeEmpty =false;    //홈화면 empty이미지 띄우는 변수
+
     Fragment fragment1_home;
     Fragment fragment2_search;
     Fragment fragment3_mypage;
@@ -42,6 +44,10 @@ public class MainActivity extends AppCompatActivity {
     public static String getToken() {
         return token;
     }
+
+    public static Boolean getOneTimeEmpty() { return oneTimeEmpty; }
+
+    public static void setOneTimeEmpty(Boolean oneTimeEmpty) { MainActivity.oneTimeEmpty = oneTimeEmpty; }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         switch (item.getItemId()){
                             case R.id.tab_home:
+                                setOneTimeEmpty(false);
                                 getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_right,R.anim.exit_left).replace(R.id.container_fragment,fragment1_home).commit();
                                 return true;
 

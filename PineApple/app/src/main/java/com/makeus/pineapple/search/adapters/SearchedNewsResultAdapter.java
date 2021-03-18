@@ -1,19 +1,17 @@
-package com.makeus.pineapple.search;
+package com.makeus.pineapple.search.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.makeus.pineapple.R;
-import com.makeus.pineapple.home.OldLetter;
-import com.makeus.pineapple.mypage.BookmarkLetterAdapter;
+import com.makeus.pineapple.search.SearchViewCode;
+import com.makeus.pineapple.search.data.SearchedNews;
 import com.makeus.pineapple.search.searchViewHolders.LoadingViewHolder;
 import com.makeus.pineapple.search.searchViewHolders.SearchViewHolder;
-import com.makeus.pineapple.search.searchViewHolders.SearchViewRankBlindHolder;
 import com.makeus.pineapple.search.searchViewHolders.SearchViewResultBlindHolder;
 import com.makeus.pineapple.search.searchViewHolders.SearchViewResultHolder;
 

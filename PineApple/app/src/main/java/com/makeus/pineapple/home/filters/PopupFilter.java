@@ -11,8 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.makeus.pineapple.R;
-import com.makeus.pineapple.home.NewLetter;
-import com.makeus.pineapple.home.NewLetterAdapter;
 
 public class PopupFilter extends Activity {
 

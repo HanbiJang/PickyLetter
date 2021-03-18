@@ -83,8 +83,8 @@
                         android:layout_height="8dp"
                         android:layout_gravity="center"
                         android:background="@drawable/btn_search_x"
-                        android:backgroundTint="@color/white"
-                        android:backgroundTintMode="multiply" />
+                        app:backgroundTint="@color/white"
+                        app:backgroundTintMode="multiply" />
 
                 </FrameLayout>
 

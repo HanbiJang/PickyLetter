@@ -9,11 +9,12 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.makeus.pineapple.R;
 
 import com.makeus.pineapple.search.PopupSub;
-import com.makeus.pineapple.search.SearchedNews;
-import com.makeus.pineapple.search.SearchedNewsRankAdapter;
+import com.makeus.pineapple.search.data.SearchedNews;
+import com.makeus.pineapple.search.adapters.SearchedNewsRankAdapter;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -35,10 +36,10 @@ public class SearchViewResultBlindHolder extends SearchViewHolder {
     public SearchViewResultBlindHolder(@NonNull View itemView) {
         super(itemView);
 
+        myContext = (FragmentActivity) itemView.getContext();
         tv_title = itemView.findViewById(R.id.tv_title);
         tv_brand = itemView.findViewById(R.id.tv_brand);
         tv_date = itemView.findViewById(R.id.tv_date);
-
         img_news = itemView.findViewById(R.id.img_news);
         cimg_brand = itemView.findViewById(R.id.cimg_brand);
 
@@ -50,7 +51,7 @@ public class SearchViewResultBlindHolder extends SearchViewHolder {
                 if (pos != RecyclerView.NO_POSITION) {
                     // 데이터 리스트로부터 아이템 데이터 참조.
                     SearchedNews item = SearchedNewsRankAdapter.getItems().get(pos);
-                    myContext = (FragmentActivity) itemView.getContext();
+
 /*                    Fragment fragment_homemail = new HomeMail();
 
                     // 누른 아이템에 대한 정보 프래그먼트로 전달
@@ -83,8 +84,14 @@ public class SearchViewResultBlindHolder extends SearchViewHolder {
         brand = item.getBrand();
         tv_date.setText(item.getDate());
 
-        img_news.setImageResource(item.getImg_news());
-        cimg_brand.setImageResource(item.getImg_brand());
+        // Glide로 이미지 표시하기
+        String imageUrl = item.getImg_brand();
+        Glide.with(myContext).load(imageUrl).into(cimg_brand);
+
+        String imageUrl2 = item.getImg_news();
+        Glide.with(myContext).load(imageUrl2)
+                .error(R.color.pickyUnableGray)
+                .into(img_news);
 
     }
 }

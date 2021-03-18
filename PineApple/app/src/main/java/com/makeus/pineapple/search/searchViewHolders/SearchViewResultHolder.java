@@ -11,10 +11,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.makeus.pineapple.R;
-import com.makeus.pineapple.home.HomeMail;
-import com.makeus.pineapple.search.SearchedNews;
-import com.makeus.pineapple.search.SearchedNewsRankAdapter;
+import com.makeus.pineapple.HomeMail;
+import com.makeus.pineapple.search.data.SearchedNews;
+import com.makeus.pineapple.search.adapters.SearchedNewsRankAdapter;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -54,8 +55,14 @@ public class SearchViewResultHolder extends SearchViewHolder {
         tv_brand.setText(item.getBrand());
         tv_date.setText(item.getDate());
 
-        img_news.setImageResource(item.getImg_news());
-        cimg_brand.setImageResource(item.getImg_brand());
+        // Glide로 이미지 표시하기
+        String imageUrl = item.getImg_brand();
+        Glide.with(myContext).load(imageUrl).into(cimg_brand);
+
+        String imageUrl2 = item.getImg_news();
+        Glide.with(myContext).load(imageUrl2)
+                .error(R.color.pickyUnableGray)
+                .into(img_news);
 
         //클릭 시 동작
         itemView.setOnClickListener(new View.OnClickListener() {
@@ -73,8 +80,8 @@ public class SearchViewResultHolder extends SearchViewHolder {
                     bundle.putString("newsTitle", item.getTitle()); // key , value
                     bundle.putString("newsBrand", item.getBrand()); // key , value
                     bundle.putString("newsDate", item.getDate()); // key , value
-                    bundle.putInt("newsImage", item.getImg_news()); // key , value
-                    bundle.putInt("newsBrandImage", item.getImg_brand()); // key , value
+                    bundle.putString("newsImage", item.getImg_news()); // key , value
+                    bundle.putString("newsBrandImage", item.getImg_brand()); // key , value
                     fragment_homemail.setArguments(bundle);
 
                     Fragment currentFragment = myContext.getSupportFragmentManager().findFragmentById(R.id.container_fragment);

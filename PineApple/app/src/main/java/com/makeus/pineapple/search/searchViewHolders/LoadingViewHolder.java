@@ -6,7 +6,7 @@ import android.widget.ProgressBar;
 import androidx.annotation.NonNull;
 
 import com.makeus.pineapple.R;
-import com.makeus.pineapple.search.SearchedNews;
+import com.makeus.pineapple.search.data.SearchedNews;
 
 
 //(2) 로딩뷰 홀더

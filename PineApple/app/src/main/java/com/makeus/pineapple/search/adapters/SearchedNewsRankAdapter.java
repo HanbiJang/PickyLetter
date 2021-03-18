@@ -1,4 +1,4 @@
-package com.makeus.pineapple.search;
+package com.makeus.pineapple.search.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.makeus.pineapple.R;
+import com.makeus.pineapple.search.SearchViewCode;
+import com.makeus.pineapple.search.data.SearchedNews;
 import com.makeus.pineapple.search.searchViewHolders.SearchViewHolder;
 import com.makeus.pineapple.search.searchViewHolders.SearchViewRankBlindHolder;
 import com.makeus.pineapple.search.searchViewHolders.SearchViewRankHolder;
@@ -35,7 +37,6 @@ public class SearchedNewsRankAdapter extends RecyclerView.Adapter<SearchViewHold
         else if (viewType == SearchViewCode.VIEW_SEARCH_RANK_BLIND){
             itemView = inflater.inflate(R.layout.search_view_letter_rank_blind,parent,false);
             return new SearchViewRankBlindHolder(itemView);
-
         }
 
         else{
