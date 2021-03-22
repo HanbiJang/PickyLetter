@@ -2,6 +2,9 @@ package com.makeus.pineapple.home.data;
 
 public interface HomeLetters {
     //상속 관계 : home.NewLetter, home.OldLetter
+
+    String getTitle();
+
     //홈화면
     void setPlatformImageUrl(String platformImageUrl);
 

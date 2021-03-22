@@ -1,4 +1,4 @@
-package com.makeus.pineapple.mypage.mypageSettingsViewHolders;
+package com.makeus.pineapple.mypage_settings.mypageSettingsViewHolders;
 
 import android.view.View;
 import android.widget.TextView;
@@ -6,7 +6,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.makeus.pineapple.R;
-import com.makeus.pineapple.mypage.EditedLetter;
+import com.makeus.pineapple.mypage_settings.settings.EditedLetter;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 

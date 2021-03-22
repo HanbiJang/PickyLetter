@@ -1,4 +1,4 @@
-package com.makeus.pineapple.mypage;
+package com.makeus.pineapple.mypage_settings.settings;
 
 public class EditedLetter {
 

@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class SearchedNewsResultAdapter extends RecyclerView.Adapter<SearchViewHolder> {
 
-    ArrayList<SearchedNews> items = new ArrayList<>();
+    static ArrayList<SearchedNews>  items = new ArrayList<>();
 
 
     @NonNull
@@ -71,6 +71,7 @@ public class SearchedNewsResultAdapter extends RecyclerView.Adapter<SearchViewHo
 
     }
 
+    public void removeAll(){items.clear();}
 
     @Override
     public int getItemCount() {
@@ -89,7 +90,7 @@ public class SearchedNewsResultAdapter extends RecyclerView.Adapter<SearchViewHo
         items.remove(position);
     }
 
-    public ArrayList<SearchedNews> getItems(){
+    public static ArrayList<SearchedNews> getItems(){
         return items;
     }
 

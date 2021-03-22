@@ -21,7 +21,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
-import com.makeus.pineapple.MainActivity;
+import com.makeus.pineapple.main.MainActivity;
 import com.makeus.pineapple.R;
 import com.makeus.pineapple.sign.users.UserResult;
 
@@ -40,6 +40,7 @@ public class SignIn extends Activity {
     static String userId = null;
     static String userEmail;
     static String userpw;
+    static String userNickName;
     boolean loginResult;
 
     Button btn_login, btn_signup, btn_eye;
@@ -154,7 +155,9 @@ public class SignIn extends Activity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        //로그인 실패
                         loginResult = false;
+                        Toast.makeText(SignIn.this, "로그인 실패...", Toast.LENGTH_SHORT).show();
 
                     }
                 }
@@ -186,19 +189,15 @@ public class SignIn extends Activity {
 
     private void processLogin() {
 
-        Toast.makeText(SignIn.this, "로그인 토큰값 : " + token, Toast.LENGTH_SHORT).show();
         if (loginResult == true) {
             //로그인 성공 시
             Intent intent = new Intent(SignIn.this, MainActivity.class);
             intent.putExtra("token", token); //인텐트로 token 정보를 넘김
             intent.putExtra("userId", userId); //인텐트로 userId 정보를 넘김
+            intent.putExtra("nickName", userNickName); //인텐트로 userId 정보를 넘김
             startActivity(intent);
             overridePendingTransition(R.anim.enter_right, R.anim.exit_left);
             finish();
-
-        } else {
-            //로그인 실패
-            Toast.makeText(SignIn.this, "로그인 실패...", Toast.LENGTH_SHORT).show();
 
         }
     }
@@ -208,6 +207,7 @@ public class SignIn extends Activity {
         UserResult userResult = gson.fromJson(String.valueOf(response), UserResult.class);
         userId = userResult.getUser().getUserId();
         token = userResult.getToken();
+        userNickName = userResult.getUser().getNickname();
     }
 
 
@@ -226,7 +226,6 @@ public class SignIn extends Activity {
             @Override
             public void afterTextChanged(Editable s) {
                 setBtnClickable();
-
             }
         });
 
@@ -251,7 +250,7 @@ public class SignIn extends Activity {
     }
 
     public void setBtnClickable() {
-        if (et_pw.length() > 0 && et_id.length() > 0) {
+        if (et_pw.length() >= 8 && et_id.length() > 0) {
             btn_login.setTextColor(getResources().getColor(R.color.pickyGray));
             btn_login.setBackgroundResource(R.drawable.round_squre_coral);
             btn_login.setClickable(true);

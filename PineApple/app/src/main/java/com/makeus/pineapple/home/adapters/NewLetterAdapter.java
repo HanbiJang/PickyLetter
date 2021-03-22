@@ -15,8 +15,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.RequestQueue;
 import com.bumptech.glide.Glide;
 import com.makeus.pineapple.R;
+import com.makeus.pineapple.bookmark.AddOrDelBookmark;
 import com.makeus.pineapple.home.data.HomeLetters;
 import com.makeus.pineapple.HomeMail;
 import com.makeus.pineapple.home.data.NewLetter;
@@ -45,7 +47,7 @@ public class NewLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         else if(viewType == VIEW_TYPE_LOADING){
             //인플레이션
             LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-            View itemView = inflater.inflate(R.layout.view_loading, viewGroup, false);
+            View itemView = inflater.inflate(R.layout.view_loading_top, viewGroup, false);
             return new LoadingViewHolder(itemView);
         }
 
@@ -65,13 +67,11 @@ public class NewLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     private void populateItemRows(ViewHolder viewHolder, int position) {
         NewLetter item =items.get(position);
-        Log.e("NewLetterAdapter", "PopulateItemRows : "+ item + " "+ position);
         viewHolder.setItem(item);
 
     }
 
-    //ProgressBar would be displayed
-    private void showLoadingView(LoadingViewHolder viewHolder, int position) {}
+
 
     @Override
     public int getItemViewType(int position) {
@@ -91,8 +91,9 @@ public class NewLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         Button btn_bookmark_new;
         ImageView img_news;
         CircleImageView cimg_brand;
-        Boolean isClicked = false;        //북마크 체크 기능
+        Integer isClicked = 0;        //북마크 체크 기능
         FragmentActivity myContext;        //화면 전환
+        static RequestQueue requestQueueBookmarkAdd, requestQueueBookmarkDel, requestQueueGetLetterInform;        //북마크 관련
 
         public ViewHolder(View itemView){ //아이템을 위한 뷰를 담아두는곳
             super(itemView);
@@ -142,8 +143,6 @@ public class NewLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             bundle.putString("newsBrandImage", item.getPlatformImageUrl());
             bundle.putInt("letterId", item.getLetterId());
             bundle.putInt("bookmarkId", item.getBookmarkId());
-            bundle.putInt("bookmarkCount", item.getBookmarkCount());
-
             fragment_homemail.setArguments(bundle);
         }
 
@@ -164,17 +163,19 @@ public class NewLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
 
             //북마크 체크 기능
+            //isClicked != 0 이면 이미 찍혀있음
+            isClicked = item.getBookmarkId();
+            if(isClicked != 0){
+                btn_bookmark_new.setBackgroundResource(R.drawable.btn_bookmark_fill);
+            }
+            AddOrDelBookmark addOrDelBookmark = new AddOrDelBookmark(btn_bookmark_new,item.getLetterId(),
+                    myContext,requestQueueBookmarkAdd,requestQueueBookmarkDel,requestQueueGetLetterInform);
+            //북마크 체크 기능
             btn_bookmark_new.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (isClicked == false){
-                        btn_bookmark_new.setBackgroundResource(R.drawable.btn_bookmark_fill);
-                        isClicked = true;
-                    }
-                    else{
-                        btn_bookmark_new.setBackgroundResource(R.drawable.btn_bookmark_line);
-                        isClicked = false;
-                    }
+                    addOrDelBookmark.setBtnFunc(isClicked);
+                    isClicked *= -1;
 
                 }
             });
@@ -213,6 +214,9 @@ public class NewLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void setItem(int position, NewLetter item){
         items.set(position,item);
     }
+
+    //ProgressBar would be displayed
+    private void showLoadingView(LoadingViewHolder viewHolder, int position) {}
 
     //모든 내용 삭제
     @Override

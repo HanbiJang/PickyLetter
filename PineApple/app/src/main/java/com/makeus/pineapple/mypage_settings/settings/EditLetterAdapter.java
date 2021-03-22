@@ -1,4 +1,4 @@
-package com.makeus.pineapple.mypage;
+package com.makeus.pineapple.mypage_settings.settings;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,9 +8,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.makeus.pineapple.R;
-import com.makeus.pineapple.mypage.mypageSettingsViewHolders.EditLetterViewEndHolder;
-import com.makeus.pineapple.mypage.mypageSettingsViewHolders.EditLetterViewHolder;
-import com.makeus.pineapple.mypage.mypageSettingsViewHolders.EditLetterViewMiddleHolder;
+import com.makeus.pineapple.mypage_settings.mypageSettingsViewHolders.EditLetterViewEndHolder;
+import com.makeus.pineapple.mypage_settings.mypageSettingsViewHolders.EditLetterViewHolder;
+import com.makeus.pineapple.mypage_settings.mypageSettingsViewHolders.EditLetterViewMiddleHolder;
 
 import java.util.ArrayList;
 

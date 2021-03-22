@@ -13,6 +13,7 @@ public class NewsData {
                   "createdAt": "2021-03-10T10:38:54Z",
                   "modifiedAt": "2021-03-16T13:20:51Z"*/
 
+
     Integer letterId, platformId, bookmarkId, bookmarkCount;
     String platformName, platformImageUrl, title, content, thumbnailImageUrl, createdAt, modifiedAt;
 

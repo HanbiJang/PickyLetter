@@ -15,8 +15,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.RequestQueue;
 import com.bumptech.glide.Glide;
 import com.makeus.pineapple.R;
+import com.makeus.pineapple.bookmark.AddOrDelBookmark;
 import com.makeus.pineapple.home.data.HomeLetters;
 import com.makeus.pineapple.HomeMail;
 import com.makeus.pineapple.home.data.OldLetter;
@@ -82,7 +84,7 @@ public class OldLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     //(1) 원래 뷰홀더
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tv_title;
         TextView tv_brand;
         TextView tv_date;
@@ -90,8 +92,8 @@ public class OldLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         ImageView img_news;
         CircleImageView cimg_brand;
         //북마크 체크 기능
-        Boolean isClicked = false;
-
+        Integer isClicked = -1;
+        static RequestQueue requestQueueBookmarkAdd, requestQueueBookmarkDel, requestQueueGetLetterInform;        //북마크 관련
         //화면 전환
         FragmentActivity myContext;
 
@@ -105,6 +107,7 @@ public class OldLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             btn_bookmark_past = itemView.findViewById(R.id.btn_bookmark_past);
             img_news = itemView.findViewById(R.id.img_news);
             cimg_brand = itemView.findViewById(R.id.cimg_brand);
+
 
             //클릭 시 동작
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -143,16 +146,19 @@ public class OldLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     .into(img_news);
 
             //북마크 체크 기능
+            //isClicked != 0 이면 이미 찍혀있음
+            isClicked = item.getBookmarkId();
+            if(isClicked != 0){
+                btn_bookmark_past.setBackgroundResource(R.drawable.btn_bookmark_fill);
+            }
+            AddOrDelBookmark addOrDelBookmark = new AddOrDelBookmark(btn_bookmark_past,item.getLetterId(),
+                    myContext,requestQueueBookmarkAdd,requestQueueBookmarkDel,requestQueueGetLetterInform);
+            //북마크 체크 기능
             btn_bookmark_past.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (isClicked == false) {
-                        btn_bookmark_past.setBackgroundResource(R.drawable.btn_bookmark_fill);
-                        isClicked = true;
-                    } else {
-                        btn_bookmark_past.setBackgroundResource(R.drawable.btn_bookmark_line);
-                        isClicked = false;
-                    }
+                    addOrDelBookmark.setBtnFunc(isClicked);
+                    isClicked *= -1;
 
                 }
             });
@@ -160,7 +166,7 @@ public class OldLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
-    private void sendItemDataToNext(int pos, Fragment fragment_homemail) {
+    static void sendItemDataToNext(int pos, Fragment fragment_homemail) {
         OldLetter item = items.get(pos);
 
         Bundle bundle = new Bundle(1); // 파라미터는 전달할 데이터 개수
@@ -214,7 +220,6 @@ public class OldLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     //정보 세팅
     private void populateItemRows(ViewHolder viewHolder, int position) {
         OldLetter item = items.get(position);
-        Log.e(" ", "populateItemRows 내용:" + item + " " + position);
         viewHolder.setItem(item);
 
     }

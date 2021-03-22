@@ -5,10 +5,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +28,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
-import com.makeus.pineapple.MainActivity;
+import com.makeus.pineapple.main.MainActivity;
 import com.makeus.pineapple.R;
 import com.makeus.pineapple.home.adapters.HomeAdapters;
 import com.makeus.pineapple.home.adapters.NewLetterAdapter;
@@ -43,11 +45,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Fragment1_Home extends Fragment {
+public class  Fragment1_Home extends Fragment {
     //사용자 정보 얻기
     static String userId = null;
     static String token = null;
-    static RequestQueue requestQueue;
+    static String nickName = null;
+    static RequestQueue requestQueueTop;
+    static RequestQueue requestQueueBottom;
     static String endDate = "2021-03-17", startDate = "2020-03-17";
     static Integer pageTopRv = 0;
     static Integer pageBottomRv = 0;
@@ -62,11 +66,16 @@ public class Fragment1_Home extends Fragment {
     boolean isLoadingTopRv = false; //상단 무한스크롤
     boolean isLoadingBottomRv = false;  //하단 무한 스크롤
 
+    //새로고침
+    SwipeRefreshLayout sr_layout;
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment1_home, container, false);
+
+        //뷰페이저 오류 디버깅
         pageTopRv = 0; //스크롤할때마다 page값 증가하므로 초기화
         pageBottomRv = 0; //스크롤할때마다 page값 증가하므로 초기화
 
@@ -76,9 +85,10 @@ public class Fragment1_Home extends Fragment {
         //findViewById
         findViewByIdAll(view);
 
+        //닉네임 세팅하기
+        tv_nickname.setText(nickName);
+
         //필터 버튼
-        btn_filter = view.findViewById(R.id.btn_filter);
-        fl_btn_filter = view.findViewById(R.id.fl_btn_filter);
         fl_btn_filter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,22 +101,66 @@ public class Fragment1_Home extends Fragment {
             }
         });
 
-        if (requestQueue == null) {
-            requestQueue = Volley.newRequestQueue(getContext()); // 큐 객체 생성하기
+        if (requestQueueTop == null) {
+            requestQueueTop = Volley.newRequestQueue(getContext()); // 큐 객체 생성하기
+        }
+        if (requestQueueBottom == null) {
+            requestQueueBottom = Volley.newRequestQueue(getContext()); // 큐 객체 생성하기
         }
 
         //empty이미지 보여주기 (get요청 하기 전)
         showEmptyImg();
 
-        //리사이클러뷰 상단 설정
+        //리사이클러뷰 상단 설정 (get요청 포함)
         setTopRv(view);
-        //리사이클러뷰 하단 설정
+
+        //리사이클러뷰 하단 설정 (get요청 포함)
         setBottomRv(view);
+
+        //네비게이션 디버깅 코드
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                MainActivity.toggleNavigationBarItems(true);
+            }
+        },500);
+
+        //스와이프 새로고침
+        sr_layout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //서버통신
+                try {
+                    showEmptyImg(); //empty이미지 보여주기 (get요청 하기 전)
+
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() { //0.3초 뒤에 실행
+                        @Override
+                        public void run() {
+                            pageTopRv = 0; //스크롤할때마다 page값 증가하므로 초기화
+                            pageBottomRv = 0; //스크롤할때마다 page값 증가하므로 초기화
+                            setTopRv(view); //리사이클러뷰 상단 설정 (get요청 포함)
+                            setBottomRv(view); //리사이클러뷰 하단 설정 (get요청 포함)
+                        }
+                    },500);
+
+                }catch (Exception e){
+                    Log.e("0","새로고침 오류");
+                    sr_layout.setRefreshing(false); //새로고침 멈춤
+                }
+
+                sr_layout.setRefreshing(false); //새로고침 멈춤
+
+            }
+        });
 
         return view;
     }
 
     private void findViewByIdAll(View view) {
+        btn_filter = view.findViewById(R.id.btn_filter);
+        fl_btn_filter = view.findViewById(R.id.fl_btn_filter);
         img_empty = view.findViewById(R.id.img_empty);
         tv_nickname = view.findViewById(R.id.tv_nickname);
         tv_dochack = view.findViewById(R.id.tv_dochack);
@@ -114,6 +168,7 @@ public class Fragment1_Home extends Fragment {
         tv_empty = view.findViewById(R.id.tv_empty);
         rv_newletter = view.findViewById(R.id.rv_newletter);
         rv_oldletter = view.findViewById(R.id.rv_oldletter);
+        sr_layout = view.findViewById(R.id.sr_layout);
 
     }
 
@@ -121,6 +176,8 @@ public class Fragment1_Home extends Fragment {
     private void getUserData() {
         userId = MainActivity.getUserId();
         token = MainActivity.getToken();
+        nickName = MainActivity.getNickName();
+
     }
 
 
@@ -151,7 +208,12 @@ public class Fragment1_Home extends Fragment {
 
         //서버에서 구독메일을 받아서 리사이클러뷰의 내용을 세팅함
         ArrayList<HomeLetters> homeLetterArrayList = new ArrayList<>();
-        tryGetLetter(homeLetterArrayList, homeAdapters, endDate, pageTopRv, startDate);
+        if (homeAdapters instanceof NewLetterAdapter) {
+            tryGetLetter(homeLetterArrayList, homeAdapters, endDate, pageTopRv, startDate);
+        } else {
+            tryGetLetter(homeLetterArrayList, homeAdapters, endDate, pageBottomRv, startDate);
+        }
+
 
     }
 
@@ -198,7 +260,7 @@ public class Fragment1_Home extends Fragment {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(getContext(), "메일 오류", Toast.LENGTH_SHORT).show();
-                        if(homeAdapters instanceof NewLetterAdapter){
+                        if (homeAdapters instanceof NewLetterAdapter) {
                             showEmptyImg();//상단 리사이클러뷰 : 문구 수정 + 이미지 보이기
                         }
 
@@ -227,9 +289,14 @@ public class Fragment1_Home extends Fragment {
             }
 
         };
-
         request.setShouldCache(false);
-        requestQueue.add(request);
+
+        if(homeAdapters instanceof NewLetterAdapter){
+            requestQueueTop.add(request);
+        }
+        else{
+            requestQueueBottom.add(request);
+        }
 
     }
 
@@ -287,8 +354,8 @@ public class Fragment1_Home extends Fragment {
         //상단 RV : 받아온 리스트 사이즈가 0이면 텅 빈 이미지 보이기
         if (homeAdapters instanceof NewLetterAdapter) {
 
-            if (homeLettersArrayList.size() == 0 ) {
-                if(MainActivity.getOneTimeEmpty() == false){
+            if (homeLettersArrayList.size() == 0) {
+                if (MainActivity.getOneTimeEmpty() == false) {
                     showEmptyImg();
                 }
             } else {
@@ -329,67 +396,109 @@ public class Fragment1_Home extends Fragment {
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                if (homeAdapters instanceof NewLetterAdapter) {
+                    LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                    if (!isLoadingTopRv) {
+                        if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == homeAdapters.getItemCount() - 1) {//bottom of list!
+                            loadMoreTopRv(homeAdapters); //데이터를 더 로딩하기
+                            isLoadingTopRv = true;
+                        }
+                    }
 
-                if (!isLoadingTopRv) {
-                    if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == homeAdapters.getItemCount() - 1) {//bottom of list!
-                        loadMore(homeAdapters); //데이터를 더 로딩하기
-                        isLoadingTopRv = true;
+                } else if (homeAdapters instanceof OldLetterAdapter) {
+                    LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                    if (!isLoadingBottomRv) {
+                        if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == homeAdapters.getItemCount() - 1) {//bottom of list!
+                            loadMoreBottomRv(homeAdapters); //데이터를 더 로딩하기
+                            isLoadingBottomRv = true;
+                        }
                     }
                 }
+
+
             }
         });
 
 
     }
 
-    //상단 리사이클러뷰의 데이터를 더 로딩하기
-    private void loadMore(HomeAdapters homeAdapters) {
-        homeAdapters.addItem(null);
-        homeAdapters.notifyItemInserted(homeAdapters.getItems().size() - 1);
 
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
+    private void loadMoreTopRv(HomeAdapters homeAdapters) {
+        Handler handler1 = new Handler();
+        Handler handler2 = new Handler();
+
+        handler1.postDelayed(new Runnable() {
             @Override
             public void run() {
+                homeAdapters.addItem(null); //로딩뷰 넣기
+                homeAdapters.notifyItemInserted(homeAdapters.getItems().size() - 1);
+            }
+        },300);
 
+
+        handler2.postDelayed(new Runnable() { //2초간 실행
+            @Override
+            public void run() {
                 homeAdapters.removeItems(homeAdapters.getItems().size() - 1); //로딩뷰 없애기
                 int scrollPosition = homeAdapters.getItems().size();
+                int pastScrollPosition =  scrollPosition;
                 homeAdapters.notifyItemRemoved(scrollPosition);
 
                 pageTopRv += 1; //뉴스를 최대 10개 더 로딩함
                 //get요청
-                ArrayList<NewLetter> newLetterArrayListAdded = new ArrayList<>();
-                tryGetLetter(newLetterArrayListAdded, homeAdapters, endDate, pageTopRv, startDate);
-
-                int currentSize = scrollPosition;
-                int nextLimit = currentSize + newLetterArrayListAdded.size(); //get으로 얻은 리스트 크기 만큼 nextLimit
-
-
-                while (currentSize - 1 < nextLimit) {
-
-                    HomeLetters tmpHomeLetter = homeAdapters.getItem(homeAdapters.getItems().size() - 1); //마지막 요소 킵
-                    homeAdapters.removeItems(homeAdapters.getItems().size() - 1);//마지막 요소가 지워짐
-                    homeAdapters.addItem(tmpHomeLetter); //스크롤 시 추가되는 내용 = 마지막 요소를 넣어야 함
-
-                    for (int i = 0; i < newLetterArrayListAdded.size(); i++) {
-                        homeAdapters.addItem(newLetterArrayListAdded.get(i));
-                    }
-
-
-                    currentSize++;
-                }
+                ArrayList<HomeLetters> homeLettersArrayList = new ArrayList<>();
+                tryGetLetter(homeLettersArrayList, homeAdapters, endDate, pageTopRv, startDate);
 
                 homeAdapters.notifyDataSetChanged();
-                if (homeAdapters instanceof NewLetterAdapter) { //상단 RV
-                    isLoadingTopRv = false;
-                } else if (homeAdapters instanceof OldLetterAdapter) { //하단 RV
-                    isLoadingBottomRv = false;
-                }
+                isLoadingTopRv = false;
+                rv_newletter.smoothScrollToPosition(pastScrollPosition-1);
 
 
             }
         }, 2000);
+    }
+
+    private void loadMoreBottomRv(HomeAdapters homeAdapters) {
+        Handler handler1 = new Handler();
+        Handler handler2 = new Handler();
+
+        handler1.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                homeAdapters.addItem(null); //로딩뷰 넣기
+                homeAdapters.notifyItemInserted(homeAdapters.getItems().size() - 1);
+            }
+        },300);
+
+
+        handler2.postDelayed(new Runnable() { //2초 뒤에 실행
+
+            @Override
+            public void run() {
+                homeAdapters.removeItems(homeAdapters.getItems().size()-1); //로딩뷰 없애기
+
+                int pastScrollPosition =  homeAdapters.getItems().size();
+                homeAdapters.notifyItemRemoved(homeAdapters.getItems().size());
+
+                pageBottomRv += 1;
+
+                //get요청
+                ArrayList<HomeLetters> homeLettersArrayList = new ArrayList<>();
+                tryGetLetter(homeLettersArrayList, homeAdapters, endDate, pageBottomRv, startDate);
+
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() { //0.3초 뒤에 실행
+                    @Override
+                    public void run() {
+                        homeAdapters.notifyDataSetChanged();
+                        isLoadingBottomRv = false;
+                        rv_oldletter.smoothScrollToPosition(pastScrollPosition-1);
+                    }
+                },300);
+
+            }
+        }, 1200);
+
 
     }
 

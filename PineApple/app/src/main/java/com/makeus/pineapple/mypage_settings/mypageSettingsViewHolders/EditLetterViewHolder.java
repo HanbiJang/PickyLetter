@@ -1,11 +1,11 @@
-package com.makeus.pineapple.mypage.mypageSettingsViewHolders;
+package com.makeus.pineapple.mypage_settings.mypageSettingsViewHolders;
 
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.makeus.pineapple.mypage.EditedLetter;
+import com.makeus.pineapple.mypage_settings.settings.EditedLetter;
 
 public abstract class EditLetterViewHolder extends RecyclerView.ViewHolder {
 

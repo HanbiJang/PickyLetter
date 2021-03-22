@@ -1,12 +1,11 @@
-package com.makeus.pineapple;
+package com.makeus.pineapple.main;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
-import androidx.annotation.Nullable;
-
+import com.makeus.pineapple.R;
 import com.makeus.pineapple.sign.SignIn;
 
 public class Splash extends Activity {

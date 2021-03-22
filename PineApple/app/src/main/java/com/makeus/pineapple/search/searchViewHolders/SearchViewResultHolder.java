@@ -1,6 +1,7 @@
 package com.makeus.pineapple.search.searchViewHolders;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -11,11 +12,15 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.makeus.pineapple.R;
 import com.makeus.pineapple.HomeMail;
+import com.makeus.pineapple.bookmark.AddOrDelBookmark;
+import com.makeus.pineapple.bookmark.BookmarkFuncs;
+import com.makeus.pineapple.search.adapters.SearchedNewsResultAdapter;
 import com.makeus.pineapple.search.data.SearchedNews;
-import com.makeus.pineapple.search.adapters.SearchedNewsRankAdapter;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -24,33 +29,30 @@ public class SearchViewResultHolder extends SearchViewHolder {
     TextView tv_title;
     TextView tv_brand;
     TextView tv_date;
-
     ImageView img_news;
     CircleImageView cimg_brand;
-
     Button btn_bookmark_result;
-    //북마크 체크 기능
-    Boolean isClicked;
 
+    //북마크 체크 기능
+    Integer isClicked;
+    static RequestQueue requestQueueBookmarkAdd, requestQueueBookmarkDel, requestQueueGetLetterInform;
     //화면 전환
     FragmentActivity myContext;
 
 
     public SearchViewResultHolder(@NonNull View itemView) {
         super(itemView);
-
+        myContext = (FragmentActivity) itemView.getContext();
         tv_title = itemView.findViewById(R.id.tv_title);
         tv_brand = itemView.findViewById(R.id.tv_brand);
         tv_date = itemView.findViewById(R.id.tv_date);
         btn_bookmark_result = itemView.findViewById(R.id.btn_bookmark_result);
-
         img_news = itemView.findViewById(R.id.img_news);
         cimg_brand = itemView.findViewById(R.id.cimg_brand);
     }
 
     @Override
     public void setItem(SearchViewHolder viewHolder, SearchedNews item) {
-
         tv_title.setText(item.getTitle());
         tv_brand.setText(item.getBrand());
         tv_date.setText(item.getDate());
@@ -71,8 +73,7 @@ public class SearchViewResultHolder extends SearchViewHolder {
                 int pos = getAdapterPosition() ; //리사이클러뷰 내의 위치 알 수 있음
                 if (pos != RecyclerView.NO_POSITION) {
                     // 데이터 리스트로부터 아이템 데이터 참조.
-                    SearchedNews item = SearchedNewsRankAdapter.getItems().get(pos);
-                    myContext = (FragmentActivity) itemView.getContext();
+                    SearchedNews item = SearchedNewsResultAdapter.getItems().get(pos);
                     Fragment fragment_homemail = new HomeMail();
 
                     // 누른 아이템에 대한 정보 프래그먼트로 전달
@@ -82,9 +83,11 @@ public class SearchViewResultHolder extends SearchViewHolder {
                     bundle.putString("newsDate", item.getDate()); // key , value
                     bundle.putString("newsImage", item.getImg_news()); // key , value
                     bundle.putString("newsBrandImage", item.getImg_brand()); // key , value
+                    bundle.putInt("letterId", item.getLetterId()); // key , value
+                    bundle.putInt("bookmarkId", item.getBookmarkId()); // key , value
+                    bundle.putInt("bookmarkCount", item.getBookmarkCount()); // key , value
                     fragment_homemail.setArguments(bundle);
 
-                    Fragment currentFragment = myContext.getSupportFragmentManager().findFragmentById(R.id.container_fragment);
                     myContext.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_right,R.anim.exit_left,R.anim.enter_left_pop,R.anim.exit_left_pop).addToBackStack(null).replace(R.id.container_fragment,fragment_homemail).commit();
 
 
@@ -92,23 +95,20 @@ public class SearchViewResultHolder extends SearchViewHolder {
             }
         });
 
-        //isClicked == true 이면 이미 찍혀있음
-        isClicked = item.getBookmarkClicked();
-        if(isClicked == true){
+        //북마크 체크 기능
+        //isClicked != 0 이면 이미 찍혀있음
+        isClicked = item.getBookmarkId();
+        if(isClicked != 0){
             btn_bookmark_result.setBackgroundResource(R.drawable.btn_bookmark_fill);
         }
+        AddOrDelBookmark addOrDelBookmark = new AddOrDelBookmark(btn_bookmark_result,item.getLetterId(),
+                myContext,requestQueueBookmarkAdd,requestQueueBookmarkDel,requestQueueGetLetterInform);
         //북마크 체크 기능
         btn_bookmark_result.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isClicked == false){
-                    btn_bookmark_result.setBackgroundResource(R.drawable.btn_bookmark_fill);
-                    isClicked = true;
-                }
-                else{
-                    btn_bookmark_result.setBackgroundResource(R.drawable.btn_bookmark_line);
-                    isClicked = false;
-                }
+                addOrDelBookmark.setBtnFunc(isClicked);
+                isClicked *= -1;
 
             }
         });

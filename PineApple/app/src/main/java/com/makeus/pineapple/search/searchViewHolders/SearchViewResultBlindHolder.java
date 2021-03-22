@@ -52,22 +52,10 @@ public class SearchViewResultBlindHolder extends SearchViewHolder {
                     // 데이터 리스트로부터 아이템 데이터 참조.
                     SearchedNews item = SearchedNewsRankAdapter.getItems().get(pos);
 
-/*                    Fragment fragment_homemail = new HomeMail();
-
-                    // 누른 아이템에 대한 정보 프래그먼트로 전달
-                    Bundle bundle = new Bundle(1); // 파라미터는 전달할 데이터 개수
-                    bundle.putString("newsTitle", item.getTitle()); // key , value
-                    bundle.putString("newsBrand", item.getBrand()); // key , value
-                    bundle.putString("newsDate", item.getDate()); // key , value
-                    bundle.putInt("newsImage", item.getImg_news()); // key , value
-                    bundle.putInt("newsBrandImage", item.getImg_brand()); // key , value
-                    fragment_homemail.setArguments(bundle);*/
-
                     Intent intent = new Intent(myContext, PopupSub.class);
                     //브랜드 이름 넘기기
                     intent.putExtra("brand",brand);
-/*        intent.putExtra("data", "Test Popup");
-        startActivityForResult(intent, 1);*/
+
                     myContext.startActivity(intent);
 
                 }

@@ -1,4 +1,4 @@
-package com.makeus.pineapple.mypage;
+package com.makeus.pineapple.mypage_settings.settings;
 
 import android.app.Activity;
 import android.os.Bundle;

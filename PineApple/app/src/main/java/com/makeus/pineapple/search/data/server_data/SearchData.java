@@ -1,6 +1,6 @@
 package com.makeus.pineapple.search.data.server_data;
 
-public class RankData {
+public class SearchData {
 /*    {
         "bookmarkCount": 0,
             "bookmarkId": 0,

@@ -1,4 +1,4 @@
-package com.makeus.pineapple.mypage;
+package com.makeus.pineapple.mypage_settings.settings;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,8 +14,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
-import com.makeus.pineapple.MainActivity;
+import com.makeus.pineapple.main.MainActivity;
 import com.makeus.pineapple.R;
+import com.makeus.pineapple.mypage_settings.mypage.Fragment3_MyPage;
 
 public class SettingsMain extends Fragment {
 

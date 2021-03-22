@@ -16,18 +16,18 @@
         android:theme="@style/Theme.PineApple">
 
         <!-- 팝업 Activity -->
-        <activity android:name=".mypage.PopupOut" android:theme="@android:style/Theme.Dialog" />
+        <activity android:name=".mypage_settings.settings.PopupOut" android:theme="@android:style/Theme.Dialog" />
         <activity android:name=".search.PopupSub" android:theme="@android:style/Theme.Dialog" />
         <activity android:name=".home.filters.PopupFilter" android:theme="@android:style/Theme.Dialog" />
 
-        <activity android:name=".MainActivity"/>
+        <activity android:name=".main.MainActivity"/>
         <activity android:name=".sign.SignIn"/>
         <activity android:name=".sign.SignUp_1"/>
         <activity android:name=".sign.SignUp_2"/>
         <activity android:name=".sign.SignUp_3"/>
 
         <activity
-            android:name=".Splash"
+            android:name=".main.Splash"
             android:screenOrientation="fullSensor">
             <intent-filter> <!-- 스플래시 이미지 화면을 첫화면으로 설정하기 -->
                 <action android:name="android.intent.action.MAIN" />

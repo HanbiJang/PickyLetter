@@ -1,38 +1,32 @@
-package com.makeus.pineapple;
+package com.makeus.pineapple.main;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
-import android.graphics.PorterDuff;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.makeus.pineapple.R;
 import com.makeus.pineapple.home.Fragment1_Home;
-import com.makeus.pineapple.mypage.Fragment3_MyPage;
+import com.makeus.pineapple.mypage_settings.mypage.Fragment3_MyPage;
 import com.makeus.pineapple.search.Fragment2_Search;
-
-import java.util.Stack;
 
 public class MainActivity extends AppCompatActivity {
     //사용자 정보
     static String userId = null;
     static String token= null;
+    static String nickName = null;
 
     static Boolean oneTimeEmpty =false;    //홈화면 empty이미지 띄우는 변수
 
     Fragment fragment1_home;
     Fragment fragment2_search;
     Fragment fragment3_mypage;
-    BottomNavigationView navigation;
+    static BottomNavigationView navigation;
 
 /*    //앱종료시간체크
     long backKeyPressedTime;*/
@@ -47,7 +41,12 @@ public class MainActivity extends AppCompatActivity {
 
     public static Boolean getOneTimeEmpty() { return oneTimeEmpty; }
 
+    public static String getNickName() { return nickName; }
+
+    public static void setNickName(String nickName) { MainActivity.nickName = nickName; }
+
     public static void setOneTimeEmpty(Boolean oneTimeEmpty) { MainActivity.oneTimeEmpty = oneTimeEmpty; }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,21 +70,26 @@ public class MainActivity extends AppCompatActivity {
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        switch (item.getItemId()){
-                            case R.id.tab_home:
-                                setOneTimeEmpty(false);
-                                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_right,R.anim.exit_left).replace(R.id.container_fragment,fragment1_home).commit();
-                                return true;
 
-                            case R.id.tab_search:
-                                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_right,R.anim.exit_left).replace(R.id.container_fragment,fragment2_search).commit();
-                                return true;
+                        toggleNavigationBarItems(false);
 
-                            case R.id.tab_mypage:
-                                getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_right,R.anim.exit_left).replace(R.id.container_fragment,fragment3_mypage).commit();
-                                return true;
+                        if (item.getItemId() == R.id.tab_home){
+                            setOneTimeEmpty(false);
+                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_right,R.anim.exit_left).replace(R.id.container_fragment,fragment1_home).commit();
                         }
-                        return false;
+                        else if (item.getItemId() == R.id.tab_search){
+                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_right,R.anim.exit_left).replace(R.id.container_fragment,fragment2_search).commit();
+                        }
+                        else if (item.getItemId() == R.id.tab_mypage){
+                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_right,R.anim.exit_left).replace(R.id.container_fragment,fragment3_mypage).commit();
+
+                        }
+                        else{
+                            return false;
+                        }
+
+                        return true;
+
                     }
                 }
         );
@@ -93,11 +97,20 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    public static void toggleNavigationBarItems(boolean enabled) {
+        Menu navMenu = navigation.getMenu();
+        for (int i = 0; i < navMenu.size(); ++i) {
+            navMenu.getItem(i).setEnabled(enabled);
+        }
+    }
+
     //인텐트에서 정보 얻기
     private void getIntentData() {
         Intent intent =getIntent();
         userId = intent.getExtras().getString("userId");
         token = intent.getExtras().getString("token");
+        nickName = intent.getExtras().getString("nickName");
 
     }
 
