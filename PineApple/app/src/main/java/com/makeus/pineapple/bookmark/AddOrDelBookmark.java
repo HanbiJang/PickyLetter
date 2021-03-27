@@ -6,8 +6,8 @@ import android.widget.Button;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-import com.makeus.pineapple.server_controllers.DeleteBookmark;
-import com.makeus.pineapple.server_controllers.PostBookmarkAdd;
+import com.makeus.pineapple.server_controllers.delete.DeleteBookmark;
+import com.makeus.pineapple.server_controllers.post.PostBookmarkAdd;
 
 public class AddOrDelBookmark {
 

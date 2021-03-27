@@ -24,6 +24,7 @@
             android:gravity="center"/>
 
         <FrameLayout
+            android:id="@+id/fl_ok"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginRight="19dp">
@@ -88,6 +89,7 @@
         android:layout_marginTop="15.5dp">
 
         <Button
+            android:id="@+id/btn_check"
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:background="@drawable/square_check_fill"
@@ -117,6 +119,7 @@
         android:layout_marginBottom="40dp">
 
         <FrameLayout
+            android:id="@+id/fl_start_date"
             android:layout_width="153dp"
             android:layout_height="78dp"
             android:background="@drawable/round_squre"
@@ -212,6 +215,7 @@
             android:includeFontPadding="false"/>
 
         <FrameLayout
+            android:id="@+id/fl_end_date"
             android:layout_width="153dp"
             android:layout_height="78dp"
             android:background="@drawable/round_squre"

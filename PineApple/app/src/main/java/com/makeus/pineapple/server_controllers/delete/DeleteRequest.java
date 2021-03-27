@@ -1,4 +1,4 @@
-package com.makeus.pineapple.server_controllers;
+package com.makeus.pineapple.server_controllers.delete;
 
 import android.util.Log;
 
@@ -16,10 +16,9 @@ import java.util.Map;
 
 import static com.makeus.pineapple.main.MainActivity.getToken;
 
-public interface PostRequest {
+public interface DeleteRequest {
     void tryRequest(); //리퀘스트 시작 작업
     void processResponse(JSONObject response); //response 받은 후, 후처리 작업
-    String makeRequestUrl(Object data);
 
     //제이슨 오브젝트(서버로 보내는) 생성 작업
     default JSONObject makeJsonObject(){
@@ -31,11 +30,13 @@ public interface PostRequest {
         return requestData;
     }
 
+    String makeRequestUrl(Object data);
+
     //기본으로 get요청 하도록 만듦
     default void makeJsonRequest(JSONObject requestData, String requestUrl, RequestQueue requestQueue) {
 
         JsonObjectRequest request = new JsonObjectRequest(
-                Request.Method.POST,
+                Request.Method.DELETE,
                 requestUrl,
                 requestData,
                 new Response.Listener<JSONObject>() {

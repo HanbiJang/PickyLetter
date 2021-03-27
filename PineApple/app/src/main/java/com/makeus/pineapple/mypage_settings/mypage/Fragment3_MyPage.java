@@ -1,6 +1,7 @@
 package com.makeus.pineapple.mypage_settings.mypage;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -28,6 +29,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.makeus.pineapple.loading.PopupLoading;
 import com.makeus.pineapple.main.MainActivity;
 import com.makeus.pineapple.R;
 import com.makeus.pineapple.mypage_settings.mypage.adapter.BookmarkLetterAdapter;
@@ -44,6 +46,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Fragment3_MyPage extends Fragment {
+    static View view;
+
     static RequestQueue requestQueueBookmark;
     static RequestQueue requestQueueUserData;
     static Integer lastLetterId = 0;
@@ -61,6 +65,7 @@ public class Fragment3_MyPage extends Fragment {
 
     //새로고침
     SwipeRefreshLayout sr_layout;
+    public static boolean setLoadingPopup = false;
 
 
     @Override
@@ -71,15 +76,9 @@ public class Fragment3_MyPage extends Fragment {
         mainActivity = (MainActivity) getActivity();
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment3_mypage, container, false);
-
-        lastLetterId = 0; //마이페이지 북마크 조회 기능 초기화
-
-        findViewByIdAll(view);
-
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         //get 요청 관련
         if (requestQueueBookmark == null) {
             requestQueueBookmark = Volley.newRequestQueue(getContext()); // 큐 객체 생성하기
@@ -89,11 +88,18 @@ public class Fragment3_MyPage extends Fragment {
             requestQueueUserData = Volley.newRequestQueue(getContext()); // 큐 객체 생성하기
         }
 
-        //북마크 리사이클러뷰 설정 (get요청 포함)
-        setBookmarkRv(view);
+        lastLetterId = 0; //마이페이지 북마크 조회 기능 초기화
+    }
 
-        //사용자 정보 가져오기 (get요청 포함)
-        setUserData();
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.fragment3_mypage, container, false);
+        setLoadingPopup = false;
+
+        findViewByIdAll(view);
+
+        setMyPage(view);
 
 
         //세팅 버튼
@@ -121,23 +127,22 @@ public class Fragment3_MyPage extends Fragment {
         sr_layout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                setLoadingPopup = false; //로딩팝업 관련
                 //서버통신
-                try {
-                    lastLetterId = 0; //마이페이지 북마크 조회 기능 초기화
-                    setBookmarkRv(view); //북마크 리사이클러뷰 설정 (get요청 포함)
-                    setUserData(); //사용자 정보 가져오기 (get요청 포함)
-                }catch (Exception e){
-                    Log.e("0","새로고침 오류");
-                    sr_layout.setRefreshing(false); //새로고침 멈춤
-                }
+                lastLetterId = 0; //마이페이지 북마크 조회 기능 초기화
+                setMyPage(view);
 
-                sr_layout.setRefreshing(false); //새로고침 멈춤
 
             }
         });
 
         return view;
 
+    }
+
+    private void setMyPage(View view) {
+        setUserData(); //사용자 정보 가져오기 (get요청 포함)
+        setBookmarkRv(view); //북마크 리사이클러뷰 설정 (get요청 포함)
     }
 
     private void setUserData() {
@@ -235,6 +240,17 @@ public class Fragment3_MyPage extends Fragment {
     }
 
     private void tryGetLetter(ArrayList<BookmarkLetter> bookmarkLetterArrayList, BookmarkLetterAdapter bookmarkLetterAdapter) {
+        //시작 로딩 팝업
+        setLoadingPopup = false;
+        try{
+            Intent intent = new Intent(getContext(), PopupLoading.class);
+            intent.putExtra("pastFragmentNum", 3);
+            getContext().startActivity(intent);
+        }catch (Exception e){
+            Log.e("0","시작 로딩 에러");
+        }
+
+
         JSONObject requestData1 = makeJsonObject();
         makeGetRequestBookmark(requestData1, makeMailBoxUrl(lastLetterId), bookmarkLetterArrayList, bookmarkLetterAdapter);
     }
@@ -250,6 +266,8 @@ public class Fragment3_MyPage extends Fragment {
                     public void onResponse(JSONObject response) {
                         processResponseForBookmarkData(response, bookmarkLetterArrayList, bookmarkLetterAdapter);
                         setNewLetterListToRv(bookmarkLetterAdapter, bookmarkLetterArrayList);
+                        setLoadingPopup = true;
+                        sr_layout.setRefreshing(false); //새로고침 멈춤
 
                     }
                 },
@@ -391,14 +409,14 @@ public class Fragment3_MyPage extends Fragment {
     //핸들러 함수 실행, 생성 순서 정해주기 주의!
     private void loadMore(BookmarkLetterAdapter bookmarkLetterAdapter) {
 
-        Handler handler1 = new Handler();
+/*        Handler handler1 = new Handler();
         handler1.postDelayed(new Runnable() {
             @Override
             public void run() {
                 bookmarkLetterAdapter.addItem(null); //로딩뷰 추가
                 bookmarkLetterAdapter.notifyItemInserted(bookmarkLetterAdapter.getItems().size() - 1);
             }
-        }, 300);
+        }, 300);*/
 
 
         Handler handler2 = new Handler();
@@ -406,7 +424,7 @@ public class Fragment3_MyPage extends Fragment {
             @Override
             public void run() {
                 //로딩뷰 제거
-                bookmarkLetterAdapter.removeItems(bookmarkLetterAdapter.getItems().size() - 1);
+//                bookmarkLetterAdapter.removeItems(bookmarkLetterAdapter.getItems().size() - 1);
 
                 int scrollPosition = bookmarkLetterAdapter.getItems().size();
 

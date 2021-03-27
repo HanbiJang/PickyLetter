@@ -1,4 +1,4 @@
-package com.makeus.pineapple.home.data.server_data;
+package com.makeus.pineapple.server_controllers.server_data;
 
 import java.util.ArrayList;
 

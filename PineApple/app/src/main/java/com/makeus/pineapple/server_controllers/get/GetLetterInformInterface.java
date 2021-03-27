@@ -1,4 +1,4 @@
-package com.makeus.pineapple.server_controllers;
+package com.makeus.pineapple.server_controllers.get;
 
 import android.util.Log;
 

@@ -2,11 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white">
 
     <TextView
         android:layout_width="328dp"
-        android:layout_height="63dp"
+        android:layout_height="70dp"
         android:layout_marginTop="84dp"
         android:fontFamily="@font/no_b"
         android:includeFontPadding="false"
@@ -84,6 +85,7 @@
         android:includeFontPadding="false"
         android:hint="이메일을 입력해주세요."
         android:text="makeus.pineapple@gmail.com"
+        android:editable="false"
         android:textColorHint="@color/pickyUnableGray"
         android:textColor="@color/pickyGray"
         android:textSize="18sp"
@@ -113,6 +115,7 @@
         android:includeFontPadding="false"
         android:hint="이름을 입력해주세요"
         android:text="파인애플"
+        android:editable="false"
         android:textColorHint="@color/pickyUnableGray"
         android:textColor="@color/pickyGray"
         android:textSize="18sp"

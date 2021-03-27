@@ -1,6 +1,4 @@
-package com.makeus.pineapple.server_controllers;
-
-import android.util.Log;
+package com.makeus.pineapple.server_controllers.post;
 
 public interface PostBookmarkAddInterface extends PostRequest {
 

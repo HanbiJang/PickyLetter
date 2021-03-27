@@ -7,7 +7,6 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -25,10 +24,8 @@ import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.makeus.pineapple.bookmark.AddOrDelBookmark;
 import com.makeus.pineapple.main.MainActivity;
-import com.makeus.pineapple.server_controllers.DeleteBookmark;
-import com.makeus.pineapple.server_controllers.GetLetterInformHomeMail;
-import com.makeus.pineapple.home.data.NewLetter;
-import com.makeus.pineapple.server_controllers.PostBookmarkAdd;
+import com.makeus.pineapple.server_controllers.get.GetLetterInformHomeMail;
+import com.makeus.pineapple.server_controllers.server_data.NewsData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -59,8 +56,9 @@ public class HomeMail extends Fragment {
 
     //메일 데이터
     static String newsTitle, newsBrand, newsDate, newsImage, newsBrandImage;
-    static Integer letterId, bookmarkId;
-    public static NewLetter newLetter;
+    static Integer letterId;
+    static Integer bookmarkId;
+    public static NewsData newsData;
 
     static Integer isClicked = -1;        //북마크 체크 기능
 
@@ -151,7 +149,7 @@ public class HomeMail extends Fragment {
     }
 
     public static void bookmarkFirstSetting(Button btn_bookmark){
-        bookmarkId = newLetter.getBookmarkId();
+        bookmarkId = newsData.getBookmarkId();
         isClicked = bookmarkId;
         if(isClicked != 0){
             btn_bookmark.setBackgroundResource(R.drawable.btn_bookmark_fill);

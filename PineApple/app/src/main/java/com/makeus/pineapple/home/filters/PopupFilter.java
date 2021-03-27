@@ -4,27 +4,24 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.FrameLayout;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.makeus.pineapple.R;
+import com.makeus.pineapple.server_controllers.get.GetSubPlatformFilter;
 
 public class PopupFilter extends Activity {
 
-    RecyclerView rv_filter_brand;
+    public static RecyclerView rv_filter_brand;
+    Button btn_check;
+    FrameLayout fl_end_date, fl_start_date, fl_ok;
 
-    public PopupFilter() {
-    }
-
-    @Override
-    public void finish() {
-        super.finish();
-        //종료 애니메이션 설정
-        overridePendingTransition(R.anim.bottom_down,R.anim.bottom_down);
-    }
 
     @Override
     protected  void onCreate(Bundle savedInstanceState){
@@ -38,29 +35,41 @@ public class PopupFilter extends Activity {
             WindowManager.LayoutParams params = window.getAttributes();
             // 화면에 가득 차도록
             params.width = WindowManager.LayoutParams.MATCH_PARENT;
-/*
+
             // 열기&닫기 시 애니메이션 설정
             params.windowAnimations = R.style.AnimationPopupStyle;
-            window.setAttributes(params);*/
+            window.setAttributes(params);
 
             // UI 하단 정렬
             window.setGravity(Gravity.BOTTOM);
         }
 
+        findViewByIdAll();
+
         //브랜드 리사이클러뷰
-        rv_filter_brand = findViewById(R.id.rv_filter_brand);
+        setRv();
+
+
+
+    }
+
+    private void setRv() {
         LinearLayoutManager layoutManager =
                 new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false);
         rv_filter_brand.setLayoutManager(layoutManager);
         FilterBrandAdapter filterBrandAdapter = new FilterBrandAdapter();
 
-        filterBrandAdapter.addItem(new FilterBrand("디독"));
-        filterBrandAdapter.addItem(new FilterBrand("뉴닉"));
-        filterBrandAdapter.addItem(new FilterBrand("어피티"));
+        //브랜드 정보 get요청
+        GetSubPlatformFilter getSubPlatformFilter = new GetSubPlatformFilter(getApplicationContext());
+        getSubPlatformFilter.tryRequest();
+    }
 
-        rv_filter_brand.setAdapter(filterBrandAdapter); //리사이클러뷰에 어답터 설정
-
-
+    void findViewByIdAll(){
+        rv_filter_brand = findViewById(R.id.rv_filter_brand);
+        btn_check = findViewById(R.id.btn_check);
+        fl_end_date = findViewById(R.id.fl_end_date);
+        fl_start_date = findViewById(R.id.fl_start_date);
+        fl_ok = findViewById(R.id.fl_ok);
     }
 }
 

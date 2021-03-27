@@ -1,6 +1,8 @@
-package com.makeus.pineapple.home.data.server_data;
+package com.makeus.pineapple.server_controllers.server_data;
 
-public class NewsData {
+import com.makeus.pineapple.home.data.HomeLetters;
+
+public class NewsData implements HomeLetters {
     /*            "letterId": 18,
                   "platformId": 1,
                   "platformName": "퍼블리",
@@ -14,7 +16,8 @@ public class NewsData {
                   "modifiedAt": "2021-03-16T13:20:51Z"*/
 
 
-    Integer letterId, platformId, bookmarkId, bookmarkCount;
+    Integer letterId, platformId, bookmarkCount;
+    Integer bookmarkId;
     String platformName, platformImageUrl, title, content, thumbnailImageUrl, createdAt, modifiedAt;
 
     public NewsData(Integer letterId, Integer platformId, Integer bookmarkId, Integer bookmarkCount, String platformName, String platformImageUrl, String title, String content, String thumbnailImageUrl, String createdAt, String modifiedAt) {
@@ -30,6 +33,8 @@ public class NewsData {
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
     }
+
+
 
     //
 

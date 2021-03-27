@@ -5,10 +5,10 @@ public class User {
     Integer bookmarkCount;
     String email;
     String nickname;
-    String subscribingPlatformCount;
-    String userId;
+    Integer subscribingPlatformCount;
+    Integer userId;
 
-    public User(Integer bookmarkCount, String email, String nickname, String subscribingPlatformCount, String userId) {
+    public User(Integer bookmarkCount, String email, String nickname, Integer subscribingPlatformCount, Integer userId) {
         this.bookmarkCount = bookmarkCount;
         this.email = email;
         this.nickname = nickname;
@@ -28,11 +28,11 @@ public class User {
         return nickname;
     }
 
-    public String getSubscribingPlatformCount() {
+    public Integer getSubscribingPlatformCount() {
         return subscribingPlatformCount;
     }
 
-    public String getUserId() {
+    public Integer getUserId() {
         return userId;
     }
     //
@@ -49,11 +49,11 @@ public class User {
         this.nickname = nickname;
     }
 
-    public void setSubscribingPlatformCount(String subscribingPlatformCount) {
+    public void setSubscribingPlatformCount(Integer subscribingPlatformCount) {
         this.subscribingPlatformCount = subscribingPlatformCount;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 }

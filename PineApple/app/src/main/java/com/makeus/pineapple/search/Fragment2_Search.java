@@ -1,5 +1,6 @@
 package com.makeus.pineapple.search;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -28,6 +29,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.makeus.pineapple.loading.PopupLoading;
 import com.makeus.pineapple.main.MainActivity;
 import com.makeus.pineapple.R;
 import com.makeus.pineapple.search.adapters.SearchedNewsRankAdapter;
@@ -43,6 +45,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Fragment2_Search extends Fragment {
+    static View view;
 
     static String token = null;
     RequestQueue requestQueue;
@@ -63,15 +66,17 @@ public class Fragment2_Search extends Fragment {
 
     //새로고침
     SwipeRefreshLayout sr_layout;
-
+    //로딩 상태변화
+    public static boolean setLoadingPopup = false;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment2_search, container, false);
+        view = inflater.inflate(R.layout.fragment2_search, container, false);
+        setLoadingPopup = false;
 
         lastLetterId = 0;
-        //모든 컴포넌트 findViewById
+        // 모든 컴포넌트 findViewById
         findViewByIdAll(view);
 
         //로그인으로 얻은 유저 데이터 가져오기
@@ -92,6 +97,8 @@ public class Fragment2_Search extends Fragment {
             public void onClick(View v) {
                 searchKeyword = et_search.getText().toString();
                 if (searchKeyword.length() >= 2) {
+                    lastLetterId = 0;
+
                     tv_search_result.setText("'" + searchKeyword + "'" + " 검색 결과");
                     ll_search_result.setVisibility(View.VISIBLE);
                     // 검색 결과 리사이클러뷰 결과 만들기
@@ -132,14 +139,8 @@ public class Fragment2_Search extends Fragment {
         sr_layout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                //서버통신
-                try {
-                    setRankRv(view);
-                }catch (Exception e){
-                    Log.e("0","새로고침 오류");
-                    sr_layout.setRefreshing(false); //새로고침 멈춤
-                }
-
+                setLoadingPopup = false; //로딩팝업 관련
+                setRankRv(view);
                 sr_layout.setRefreshing(false); //새로고침 멈춤
 
             }
@@ -164,6 +165,12 @@ public class Fragment2_Search extends Fragment {
     }
 
     private void tryGetResultLetter(ArrayList<SearchedNews> searchedNewsArrayList, SearchedNewsResultAdapter searchedNewsResultAdapter) {
+        //시작 로딩 팝업
+        setLoadingPopup = false;
+        Intent intent = new Intent(getContext(), PopupLoading.class);
+        intent.putExtra("pastFragmentNum", 2);
+        getContext().startActivity(intent);
+
         JSONObject requestData1 = makeJsonObject();
         makeGetRequestSearchResult(requestData1, makeSearchResultUrl(), searchedNewsArrayList, searchedNewsResultAdapter);
     }
@@ -178,7 +185,8 @@ public class Fragment2_Search extends Fragment {
                     public void onResponse(JSONObject response) {
                         processResponseForResult(response, searchedNewsArrayList, searchedNewsResultAdapter);
                         setResultLetterListToRv(searchedNewsArrayList, searchedNewsResultAdapter);
-
+                        setLoadingPopup = true;
+                        sr_layout.setRefreshing(false); //새로고침 멈춤
                     }
                 },
                 new Response.ErrorListener() {
@@ -312,6 +320,12 @@ public class Fragment2_Search extends Fragment {
     }
 
     private void tryGetRankLetter(ArrayList<SearchedNews> searchedNewsArrayList, SearchedNewsRankAdapter searchedNewsAdapter) {
+        //시작 로딩 팝업
+        setLoadingPopup = false;
+        Intent intent = new Intent(getContext(), PopupLoading.class);
+        intent.putExtra("pastFragmentNum", 2);
+        getContext().startActivity(intent);
+
         JSONObject requestData1 = makeJsonObject();
         makeGetRequestMailBox(requestData1, makeRankUrl(), searchedNewsArrayList, searchedNewsAdapter);
     }
@@ -327,7 +341,8 @@ public class Fragment2_Search extends Fragment {
                     public void onResponse(JSONObject response) {
                         processResponseForRank(response, searchedNewsArrayList, searchedNewsAdapter);
                         setRankLetterListToRv(searchedNewsArrayList, searchedNewsAdapter);
-
+                        setLoadingPopup = true;
+                        sr_layout.setRefreshing(false); //새로고침 멈춤
                     }
                 },
                 new Response.ErrorListener() {
@@ -439,7 +454,8 @@ public class Fragment2_Search extends Fragment {
                 LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
 
                 if (!isLoading) {
-                    if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == searchedNewsResultAdapter.getItemCount()-1) {//bottom of list!
+                    if (linearLayoutManager != null &&
+                            linearLayoutManager.findLastCompletelyVisibleItemPosition() == searchedNewsResultAdapter.getItemCount()-1) {//bottom of list!
                         loadMore(searchedNewsResultAdapter);
                         isLoading = true;
                     }
@@ -451,38 +467,38 @@ public class Fragment2_Search extends Fragment {
     }
 
     private void loadMore(SearchedNewsResultAdapter searchedNewsResultAdapter) {
-        Handler handler1 = new Handler();
-        handler1.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                searchedNewsResultAdapter.addItem(null); //로딩뷰 추가
-                searchedNewsResultAdapter.notifyItemInserted(searchedNewsResultAdapter.getItems().size() - 1);
-            }
-        }, 300);
 
-        Handler handler2 = new Handler();
-        handler2.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //로딩뷰 제거
-                searchedNewsResultAdapter.removeItems(searchedNewsResultAdapter.getItems().size() - 1);
+/*            Handler handler1 = new Handler();
+            handler1.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    searchedNewsResultAdapter.addItem(null); //로딩뷰 추가
+                    searchedNewsResultAdapter.notifyItemInserted(searchedNewsResultAdapter.getItems().size() - 1);
+                }
+            }, 300);*/
 
-                int scrollPosition = searchedNewsResultAdapter.getItems().size();
+            Handler handler2 = new Handler();
+            handler2.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    //로딩뷰 제거
+//                    searchedNewsResultAdapter.removeItems(searchedNewsResultAdapter.getItems().size() - 1);
 
-                int pastScrollPosition =  scrollPosition;
-                searchedNewsResultAdapter.notifyItemRemoved(scrollPosition);
+                    int scrollPosition = searchedNewsResultAdapter.getItems().size();
 
-                //get요청
-                ArrayList<SearchedNews> bookmarkLetterArrayListAdded = new ArrayList<>();
-                tryGetResultLetter(bookmarkLetterArrayListAdded, searchedNewsResultAdapter);
+                    int pastScrollPosition =  scrollPosition;
+                    searchedNewsResultAdapter.notifyItemRemoved(scrollPosition);
 
-                searchedNewsResultAdapter.notifyDataSetChanged();
-                isLoading = false;
-                rv_search_result.scrollToPosition(pastScrollPosition);
+                    //get요청
+                    ArrayList<SearchedNews> bookmarkLetterArrayListAdded = new ArrayList<>();
+                    tryGetResultLetter(bookmarkLetterArrayListAdded, searchedNewsResultAdapter);
 
-            }
-        }, 1200);
+                    searchedNewsResultAdapter.notifyDataSetChanged();
+                    isLoading = false;
+                    rv_search_result.scrollToPosition(pastScrollPosition);
 
+                }
+            }, 1200);
 
 
 

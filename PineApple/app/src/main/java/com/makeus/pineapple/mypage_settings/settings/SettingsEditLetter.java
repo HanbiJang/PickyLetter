@@ -15,16 +15,22 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.makeus.pineapple.main.MainActivity;
 import com.makeus.pineapple.R;
+import com.makeus.pineapple.server_controllers.get.GetSubPlatform;
 
 public class SettingsEditLetter extends Fragment {
 
     MainActivity mainActivity;
     FragmentActivity myContext; //화면 전환
     Button btn_back;
-    RecyclerView rv_edit_letter;
+    public static RecyclerView rv_edit_letter;
     FrameLayout fl_btn_back;
+    //
+    RequestQueue requestQueue;
+
 
     @Override
     public void onAttach(Context context){
@@ -39,34 +45,44 @@ public class SettingsEditLetter extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings_edit_letter, container, false);
 
+        findViewByIdAll(view);
+
+        //get 요청 관련
+        if (requestQueue == null) {
+            requestQueue = Volley.newRequestQueue(getContext()); // 큐 객체 생성하기
+        }
+
+        //구독메일 리사이클러뷰
+        setRv(view);
+
+
+
         //백버튼
-        fl_btn_back = view.findViewById(R.id.fl_btn_back);
         fl_btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
-
             public void onClick(View v) {
-
                 myContext.getSupportFragmentManager().popBackStack();
-
             }
         });
 
+        return view;
+    }
 
-        //구독메일 리사이클러뷰
-        rv_edit_letter = view.findViewById(R.id.rv_edit_letter);
+    private void setRv(View view) {
         LinearLayoutManager layoutManager =
                 new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
         rv_edit_letter.setLayoutManager((layoutManager));
-        EditLetterAdapter editLetterAdapter = new EditLetterAdapter();
 
-        editLetterAdapter.addItem(new EditedLetter(EditLetterViewCode.VIEW_EDIT_LETTER_MIDDLE,"디독",R.drawable.brand_1));
-        editLetterAdapter.addItem(new EditedLetter(EditLetterViewCode.VIEW_EDIT_LETTER_END,"어피티",R.drawable.brand_3));
+        GetSubPlatform getSubPlatform = new GetSubPlatform(
+                requestQueue,
+                MainActivity.getUserId()
+        );
 
+        getSubPlatform.tryRequest();
+    }
 
-        rv_edit_letter.setAdapter(editLetterAdapter);
-
-
-
-        return view;
+    private void findViewByIdAll(View view) {
+        rv_edit_letter = view.findViewById(R.id.rv_edit_letter);
+        fl_btn_back = view.findViewById(R.id.fl_btn_back);
     }
 }

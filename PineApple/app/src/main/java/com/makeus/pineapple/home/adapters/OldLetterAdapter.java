@@ -1,7 +1,6 @@
 package com.makeus.pineapple.home.adapters;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,7 @@ import com.makeus.pineapple.R;
 import com.makeus.pineapple.bookmark.AddOrDelBookmark;
 import com.makeus.pineapple.home.data.HomeLetters;
 import com.makeus.pineapple.HomeMail;
-import com.makeus.pineapple.home.data.OldLetter;
+import com.makeus.pineapple.server_controllers.server_data.NewsData;
 
 import java.util.ArrayList;
 
@@ -29,7 +28,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class OldLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements HomeAdapters{
 
-    static ArrayList<OldLetter> items = new ArrayList<>();
+    static ArrayList<NewsData> items = new ArrayList<>();
     //뷰타입 - 로딩뷰, 원래뷰
     private final int VIEW_TYPE_PAST_NEWS = 0;
     private final int VIEW_TYPE_LOADING = 1;
@@ -131,7 +130,7 @@ public class OldLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         }
 
-        public void setItem(OldLetter item) { //뷰 객체의 데이터를 다른 것으로 보이도록함
+        public void setItem(NewsData item) { //뷰 객체의 데이터를 다른 것으로 보이도록함
             tv_title.setText(item.getTitle());
             tv_brand.setText(item.getPlatformName());
             tv_date.setText(item.getCreatedAt());
@@ -167,7 +166,7 @@ public class OldLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     static void sendItemDataToNext(int pos, Fragment fragment_homemail) {
-        OldLetter item = items.get(pos);
+        NewsData item = items.get(pos);
 
         Bundle bundle = new Bundle(1); // 파라미터는 전달할 데이터 개수
         bundle.putString("newsTitle", item.getTitle()); // key , value
@@ -197,18 +196,18 @@ public class OldLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     //어댑터에서 NewLetter 객체를 사용할 수 있도록하는 함수들
 
     @Override
-    public void addItem(HomeLetters item){ items.add((OldLetter) item); }
+    public void addItem(HomeLetters item){ items.add((NewsData) item); }
 
-    public void setItems(ArrayList<OldLetter> items) {this.items = items;}
+    public void setItems(ArrayList<NewsData> items) {this.items = items;}
 
     public void removeItems(int position) {items.remove(position);}
 
     @Override
-    public ArrayList<OldLetter> getItems() {return items; }
+    public ArrayList<NewsData> getItems() {return items; }
 
-    public OldLetter getItem(int position) {return items.get(position);}
+    public NewsData getItem(int position) {return items.get(position);}
 
-    public void setItem(int position, OldLetter item) {items.set(position, item);}
+    public void setItem(int position, NewsData item) {items.set(position, item);}
 
     //모든 내용 삭제
     @Override
@@ -219,7 +218,7 @@ public class OldLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     //정보 세팅
     private void populateItemRows(ViewHolder viewHolder, int position) {
-        OldLetter item = items.get(position);
+        NewsData item = items.get(position);
         viewHolder.setItem(item);
 
     }

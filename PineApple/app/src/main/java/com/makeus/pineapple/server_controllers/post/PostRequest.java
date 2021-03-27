@@ -1,38 +1,41 @@
-package com.makeus.pineapple.server_controllers;
+package com.makeus.pineapple.server_controllers.post;
 
 import android.util.Log;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+
 import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import static com.makeus.pineapple.main.MainActivity.getToken;
 
-public interface GetRequestInterface {
+public interface PostRequest {
     void tryRequest(); //리퀘스트 시작 작업
-
-    default JSONObject makeJsonObject() {
-        JSONObject requestData = new JSONObject();
-        return requestData;
-    }
     void processResponse(JSONObject response); //response 받은 후, 후처리 작업
+    String makeRequestUrl(Object data);
 
-    default String makeRequestUrl(Object data) {
-        String url;
-        url = "http://3.13.65.158/v1/";
-        return url;
+    //제이슨 오브젝트(서버로 보내는) 생성 작업
+    default JSONObject makeJsonObject(){
+        JSONObject requestData = new JSONObject();
+        try {
+            //데이터 삽입
+
+        }catch (Exception e){ }
+        return requestData;
     }
 
     //기본으로 get요청 하도록 만듦
     default void makeJsonRequest(JSONObject requestData, String requestUrl, RequestQueue requestQueue) {
 
         JsonObjectRequest request = new JsonObjectRequest(
-                Request.Method.GET,
+                Request.Method.POST,
                 requestUrl,
                 requestData,
                 new Response.Listener<JSONObject>() {
@@ -46,7 +49,7 @@ public interface GetRequestInterface {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e("에러 발생", error.getMessage());
+                        Log.e("Post 에러 발생", error.getMessage());
                         //에러 발생 코드
 
                     }

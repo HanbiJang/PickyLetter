@@ -54,7 +54,7 @@ public class FilterBrandAdapter extends RecyclerView.Adapter<FilterBrandAdapter.
         }
 
         public void setItem(FilterBrand item){ //뷰 객체의 데이터를 다른 것으로 보이도록함
-            btn_brand.setText(item.getNewsBrand());
+            btn_brand.setText(item.getBrandName());
         }
     }
 

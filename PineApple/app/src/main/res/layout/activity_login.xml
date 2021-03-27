@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white">
 
     <ImageView
         android:layout_width="150dp"
@@ -42,6 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
+                android:textColor="@color/pickyGray"
                 android:fontFamily="@font/no_b"
                 android:includeFontPadding="false"
                 android:hint="이메일을 입력해주세요"
@@ -89,6 +91,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
                     android:textSize="18sp"
+                    android:textColor="@color/pickyGray"
                     android:fontFamily="@font/no_b"
                     android:includeFontPadding="false"
                     android:hint="비밀번호를 입력해주세요"

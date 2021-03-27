@@ -1,25 +1,16 @@
-package com.makeus.pineapple.mypage_settings.settings;
+package com.makeus.pineapple.server_controllers.server_data;
 
-public class EditedLetter {
-
-    Integer viewType;
-
+public class SubscribingPlatformData {
     String imageUrl, name;
     Integer platformId;
 
-    public EditedLetter(Integer viewType, String imageUrl, String name, Integer platformId) {
-        this.viewType = viewType;
+    public SubscribingPlatformData(String imageUrl, String name, Integer platformId) {
         this.imageUrl = imageUrl;
         this.name = name;
         this.platformId = platformId;
     }
 
     //
-
-    public Integer getViewType() {
-        return viewType;
-    }
-
     public String getImageUrl() {
         return imageUrl;
     }
@@ -34,9 +25,6 @@ public class EditedLetter {
 
     //
 
-    public void setViewType(Integer viewType) {
-        this.viewType = viewType;
-    }
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;

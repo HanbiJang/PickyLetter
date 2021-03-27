@@ -2,18 +2,18 @@ package com.makeus.pineapple.home.filters;
 
 public class FilterBrand {
 
-    String newsBrand;
+    String brandName;
 
     public FilterBrand(String newsBrand) {
-        this.newsBrand = newsBrand;
+        this.brandName = newsBrand;
     }
 
-    public String getNewsBrand() {
-        return newsBrand;
+    public String getBrandName() {
+        return brandName;
     }
 
-    public void setNewsBrand(String newsBrand) {
-        this.newsBrand = newsBrand;
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
     }
 
 }

@@ -37,7 +37,7 @@ public class SignIn extends Activity {
     static String loginUrl = "http://3.13.65.158/v1/users/login"; //로그인 url
     static RequestQueue requestQueue;
     static String token = null;
-    static String userId = null;
+    static Integer userId = null;
     static String userEmail;
     static String userpw;
     static String userNickName;

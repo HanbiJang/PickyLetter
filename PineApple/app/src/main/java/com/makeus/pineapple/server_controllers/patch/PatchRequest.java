@@ -1,4 +1,4 @@
-package com.makeus.pineapple.server_controllers;
+package com.makeus.pineapple.server_controllers.patch;
 
 import android.util.Log;
 
@@ -16,9 +16,10 @@ import java.util.Map;
 
 import static com.makeus.pineapple.main.MainActivity.getToken;
 
-public interface DeleteRequest {
+public interface PatchRequest {
     void tryRequest(); //리퀘스트 시작 작업
     void processResponse(JSONObject response); //response 받은 후, 후처리 작업
+    String makeRequestUrl(Object data);
 
     //제이슨 오브젝트(서버로 보내는) 생성 작업
     default JSONObject makeJsonObject(){
@@ -30,13 +31,11 @@ public interface DeleteRequest {
         return requestData;
     }
 
-    String makeRequestUrl(Object data);
-
     //기본으로 get요청 하도록 만듦
     default void makeJsonRequest(JSONObject requestData, String requestUrl, RequestQueue requestQueue) {
 
         JsonObjectRequest request = new JsonObjectRequest(
-                Request.Method.DELETE,
+                Request.Method.PATCH,
                 requestUrl,
                 requestData,
                 new Response.Listener<JSONObject>() {
@@ -50,7 +49,7 @@ public interface DeleteRequest {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e("에러 발생", error.getMessage());
+                        Log.e("Patch 에러 발생", error.getMessage());
                         //에러 발생 코드
 
                     }

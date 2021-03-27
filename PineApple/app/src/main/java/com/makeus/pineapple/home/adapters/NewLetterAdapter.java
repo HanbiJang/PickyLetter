@@ -1,7 +1,6 @@
 package com.makeus.pineapple.home.adapters;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,7 @@ import com.makeus.pineapple.R;
 import com.makeus.pineapple.bookmark.AddOrDelBookmark;
 import com.makeus.pineapple.home.data.HomeLetters;
 import com.makeus.pineapple.HomeMail;
-import com.makeus.pineapple.home.data.NewLetter;
+import com.makeus.pineapple.server_controllers.server_data.NewsData;
 
 import java.util.ArrayList;
 
@@ -29,7 +28,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class NewLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements HomeAdapters {
 
-    static ArrayList<NewLetter> items = new ArrayList<>();
+    static ArrayList<NewsData> items = new ArrayList<>();
 
     //뷰타입
     private final int VIEW_TYPE_NEW_NEWS = 0;
@@ -66,7 +65,7 @@ public class NewLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     private void populateItemRows(ViewHolder viewHolder, int position) {
-        NewLetter item =items.get(position);
+        NewsData item =items.get(position);
         viewHolder.setItem(item);
 
     }
@@ -133,7 +132,7 @@ public class NewLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         //클릭 시 홈메일 화면으로 데이터를 보내줌
         private void sendItemDataToNext(int pos,Fragment fragment_homemail) {
-            NewLetter item = items.get(pos);
+            NewsData item = items.get(pos);
 
             Bundle bundle = new Bundle(1); // 파라미터는 전달할 데이터 개수
             bundle.putString("newsTitle", item.getTitle()); // key , value
@@ -147,7 +146,7 @@ public class NewLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
 
         //뷰 객체의 데이터를 다른 것으로 보이도록함
-        public void setItem(NewLetter item){
+        public void setItem(NewsData item){
             tv_title.setText(item.getTitle());
             tv_brand.setText(item.getPlatformName());
             tv_date.setText(item.getCreatedAt());
@@ -197,21 +196,21 @@ public class NewLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void removeItems(int position) {items.remove(position);}
 
     @Override
-    public ArrayList<NewLetter> getItems() {return items; }
+    public ArrayList<NewsData> getItems() {return items; }
 
     @Override
-    public void addItem(HomeLetters item){ items.add((NewLetter) item); }
+    public void addItem(HomeLetters item){ items.add((NewsData) item); }
 
-    public void setItems(ArrayList<NewLetter> items){
+    public void setItems(ArrayList<NewsData> items){
         this.items=items;
     }
 
     @Override
-    public NewLetter getItem(int position){
+    public NewsData getItem(int position){
         return items.get(position);
     }
 
-    public void setItem(int position, NewLetter item){
+    public void setItem(int position, NewsData item){
         items.set(position,item);
     }
 

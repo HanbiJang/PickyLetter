@@ -19,6 +19,7 @@
         <activity android:name=".mypage_settings.settings.PopupOut" android:theme="@android:style/Theme.Dialog" />
         <activity android:name=".search.PopupSub" android:theme="@android:style/Theme.Dialog" />
         <activity android:name=".home.filters.PopupFilter" android:theme="@android:style/Theme.Dialog" />
+        <activity android:name=".loading.PopupLoading" android:theme="@android:style/Theme.Dialog"/>
 
         <activity android:name=".main.MainActivity"/>
         <activity android:name=".sign.SignIn"/>

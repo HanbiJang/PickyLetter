@@ -194,7 +194,7 @@
                 android:textColor="@color/pickyGray"/>
 
             <FrameLayout
-                android:id="@+id/fl_btn_searvice_center"
+                android:id="@+id/fl_btn_service_center"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center">
@@ -211,6 +211,42 @@
 
 
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/no_m"
+                android:includeFontPadding="false"
+                android:text="로그아웃"
+
+                android:textSize="18sp"
+                android:textColor="@color/pickyGray"/>
+
+            <FrameLayout
+                android:id="@+id/fl_btn_logout"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center">
+
+                <Button
+                    android:layout_width="7dp"
+                    android:layout_height="14dp"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/go_pickygray" />
+
+            </FrameLayout>
+
+
+        </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"

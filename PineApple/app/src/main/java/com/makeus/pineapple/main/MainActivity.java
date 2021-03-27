@@ -4,8 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -16,8 +18,10 @@ import com.makeus.pineapple.mypage_settings.mypage.Fragment3_MyPage;
 import com.makeus.pineapple.search.Fragment2_Search;
 
 public class MainActivity extends AppCompatActivity {
+    public static Activity mainActivity;
+
     //사용자 정보
-    static String userId = null;
+    static Integer userId = null;
     static String token= null;
     static String nickName = null;
 
@@ -31,11 +35,12 @@ public class MainActivity extends AppCompatActivity {
 /*    //앱종료시간체크
     long backKeyPressedTime;*/
 
-    public static String getUserId() {
+    public static Integer getUserId() {
         return userId;
     }
 
     public static String getToken() {
+        Log.e("토큰얻음", token);
         return token;
     }
 
@@ -52,6 +57,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //메인 액티비티
+        mainActivity = MainActivity.this;
 
         //인텐트에서 userId, token 정보 얻기
         getIntentData();
@@ -75,13 +83,14 @@ public class MainActivity extends AppCompatActivity {
 
                         if (item.getItemId() == R.id.tab_home){
                             setOneTimeEmpty(false);
-                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_right,R.anim.exit_left).replace(R.id.container_fragment,fragment1_home).commit();
+//                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_right,R.anim.exit_left).replace(R.id.container_fragment,fragment1_home).commit();
+                            getSupportFragmentManager().beginTransaction().replace(R.id.container_fragment,fragment1_home).commit();
                         }
                         else if (item.getItemId() == R.id.tab_search){
-                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_right,R.anim.exit_left).replace(R.id.container_fragment,fragment2_search).commit();
+                            getSupportFragmentManager().beginTransaction().replace(R.id.container_fragment,fragment2_search).commit();
                         }
                         else if (item.getItemId() == R.id.tab_mypage){
-                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_right,R.anim.exit_left).replace(R.id.container_fragment,fragment3_mypage).commit();
+                            getSupportFragmentManager().beginTransaction().replace(R.id.container_fragment,fragment3_mypage).commit();
 
                         }
                         else{
@@ -108,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
     //인텐트에서 정보 얻기
     private void getIntentData() {
         Intent intent =getIntent();
-        userId = intent.getExtras().getString("userId");
+        userId = intent.getExtras().getInt("userId");
         token = intent.getExtras().getString("token");
         nickName = intent.getExtras().getString("nickName");
 

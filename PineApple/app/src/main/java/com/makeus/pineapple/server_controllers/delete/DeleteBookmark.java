@@ -1,6 +1,5 @@
-package com.makeus.pineapple.server_controllers;
+package com.makeus.pineapple.server_controllers.delete;
 
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.Button;
@@ -9,13 +8,14 @@ import com.android.volley.RequestQueue;
 import com.google.gson.Gson;
 import com.makeus.pineapple.R;
 import com.makeus.pineapple.bookmark.BookmakrResult;
+import com.makeus.pineapple.server_controllers.get.GetLetterInformBeforeBookmarkDel;
 
 import org.json.JSONObject;
 
 public class DeleteBookmark implements DeleteRequest {
     Button btn_bookmark;
     RequestQueue requestQueueBookmarkDel, requestQueueGetLetterInform;
-    static Integer bookmarkId = null, letterId;
+    public static Integer bookmarkId = null, letterId;
 
     public DeleteBookmark(RequestQueue requestQueueBookmarkDel, RequestQueue requestQueueGetLetterInform, Integer letterId, Button btn_bookmark) {
         this.requestQueueBookmarkDel = requestQueueBookmarkDel;

@@ -23,6 +23,12 @@
         <item name="android:windowExitAnimation">@anim/bottom_down</item>
     </style>
 
+    <style name="AnimationPopupLoadingStyle">
+        <item name="android:windowEnterAnimation">@anim/enter_big</item>
+        <item name="android:windowShowAnimation">@anim/enter_big</item>
+        <item name="android:windowExitAnimation">@anim/exit_small</item>
+    </style>
+
 
 
 </resources>
