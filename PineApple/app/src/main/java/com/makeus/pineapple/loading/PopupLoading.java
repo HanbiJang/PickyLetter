@@ -14,6 +14,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.makeus.pineapple.HomeMail;
 import com.makeus.pineapple.R;
 import com.makeus.pineapple.home.Fragment1_Home;
 import com.makeus.pineapple.mypage_settings.mypage.Fragment3_MyPage;
@@ -77,7 +78,15 @@ public class PopupLoading extends Activity {
                         finish();
                         overridePendingTransition(R.anim.none,R.anim.exit_small);
                     }
-                }
+                } /*else if (pastFragmentNum == 4) { //홈뷰
+                    if (HomeMail.setLoadingPopup == true) {
+                        Log.e(" ","홈뷰 로딩끝");
+                        timer.cancel();
+                        finish();
+                        overridePendingTransition(R.anim.none,R.anim.exit_small);
+                    }
+                }*/
+
             }
         };
 

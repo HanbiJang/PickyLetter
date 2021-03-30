@@ -125,14 +125,14 @@ public class Fragment2_Search extends Fragment {
             }
         });
 
-        //네비게이션 디버깅 코드
+/*        //네비게이션 디버깅 코드
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 MainActivity.toggleNavigationBarItems(true);
             }
-        }, 500);
+        }, 500);*/
 
 
         //스와이프 새로고침

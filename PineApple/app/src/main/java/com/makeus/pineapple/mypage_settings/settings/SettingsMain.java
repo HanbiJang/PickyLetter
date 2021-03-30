@@ -3,6 +3,7 @@ package com.makeus.pineapple.mypage_settings.settings;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,8 @@ import com.makeus.pineapple.main.MainActivity;
 import com.makeus.pineapple.R;
 import com.makeus.pineapple.mypage_settings.mypage.Fragment3_MyPage;
 import com.makeus.pineapple.sign.SignIn;
+
+import static com.makeus.pineapple.main.MainActivity.fragmentManager;
 
 public class SettingsMain extends Fragment {
 
@@ -41,6 +44,9 @@ public class SettingsMain extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings_main, container, false);
 
+        //네비게이터 막기
+        MainActivity.toggleNavigationBarItems(false);
+
         //백버튼
         fl_btn_back = view.findViewById(R.id.fl_btn_back);
         btn_back = view.findViewById(R.id.btn_back);
@@ -48,9 +54,7 @@ public class SettingsMain extends Fragment {
             @Override
 
             public void onClick(View v) {
-                Fragment fragment_mypage = new Fragment3_MyPage();
-                myContext.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_right, R.anim.exit_left, R.anim.enter_left_pop, R.anim.exit_left_pop).addToBackStack(null).replace(R.id.container_fragment, fragment_mypage).commit();//프래그먼트 전환
-
+                fragmentManager.popBackStack();
             }
         });
 

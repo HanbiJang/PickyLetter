@@ -34,7 +34,7 @@ public class PopupSub extends Activity {
 
         //타이틀바 없애기
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.popup_loading);
+        setContentView(R.layout.popup_subscribe);
 
         //팝업설정
         Window window = getWindow();

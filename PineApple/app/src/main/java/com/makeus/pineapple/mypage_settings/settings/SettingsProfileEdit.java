@@ -48,6 +48,9 @@ public class SettingsProfileEdit extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings_profile_edit, container, false);
 
+        //네비게이터 막기
+        MainActivity.toggleNavigationBarItems(false);
+
         et_nickname = view.findViewById(R.id.et_nickname);
         btn_edit = view.findViewById(R.id.btn_edit);
 

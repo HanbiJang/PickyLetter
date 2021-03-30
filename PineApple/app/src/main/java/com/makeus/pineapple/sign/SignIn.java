@@ -2,6 +2,9 @@ package com.makeus.pineapple.sign;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -9,9 +12,11 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -21,6 +26,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.makeus.pineapple.home.filters.PopupFilter;
 import com.makeus.pineapple.main.MainActivity;
 import com.makeus.pineapple.R;
 import com.makeus.pineapple.sign.users.UserResult;
@@ -46,6 +52,7 @@ public class SignIn extends Activity {
     Button btn_login, btn_signup, btn_eye;
     EditText et_id, et_pw;
     Boolean isClicked = false;    //비밀번호 보이기 버튼 관련
+    FrameLayout fl_pw, fl_mail;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,6 +65,8 @@ public class SignIn extends Activity {
         btn_eye = findViewById(R.id.btn_eye);
         et_id = findViewById(R.id.et_id);
         et_pw = findViewById(R.id.et_pw);
+        fl_mail = findViewById(R.id.fl_mail);
+        fl_pw = findViewById(R.id.fl_pw);
 
         //로그인
         //색전환 처리
@@ -115,6 +124,10 @@ public class SignIn extends Activity {
     }
 
     private void tryLogin(String userId, String userpw) {
+        //로그인 버튼 막기
+        btn_login.setClickable(false);
+        btn_login.setEnabled(false);
+
         JSONObject requestData1 = makeJsonObjectForLogin(userId, userpw);
         makeRequestPost(requestData1, loginUrl);
     }
@@ -148,7 +161,9 @@ public class SignIn extends Activity {
                         loginResult = true;
                         processResponseForLogin(response);
                         processLogin(); //로그인 처리 하게 만들기
-
+                        //로그인 버튼 활성화하기
+                        btn_login.setClickable(true);
+                        btn_login.setEnabled(true);
 
                     }
                 },
@@ -158,7 +173,9 @@ public class SignIn extends Activity {
                         //로그인 실패
                         loginResult = false;
                         Toast.makeText(SignIn.this, "로그인 실패...", Toast.LENGTH_SHORT).show();
-
+                        //로그인 버튼 활성화하기
+                        btn_login.setClickable(true);
+                        btn_login.setEnabled(true);
                     }
                 }
         ) {
@@ -254,10 +271,26 @@ public class SignIn extends Activity {
             btn_login.setTextColor(getResources().getColor(R.color.pickyGray));
             btn_login.setBackgroundResource(R.drawable.round_squre_coral);
             btn_login.setClickable(true);
+
+            //색변화처리
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                fl_pw.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(SignIn.this, R.color.pickyGray)));
+                fl_mail.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(SignIn.this, R.color.pickyGray)));
+
+            }
+
         } else {
             btn_login.setTextColor(getResources().getColor(R.color.white));
             btn_login.setBackgroundResource(R.drawable.round_squre_gray);
             btn_login.setClickable(false);
+
+            //색변화처리
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                fl_pw.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(SignIn.this, R.color.pickyUnableGray)));
+                fl_mail.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(SignIn.this, R.color.pickyUnableGray)));
+
+            }
+
         }
     }
 }

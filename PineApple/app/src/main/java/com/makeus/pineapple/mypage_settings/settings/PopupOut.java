@@ -2,6 +2,7 @@ package com.makeus.pineapple.mypage_settings.settings;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
@@ -14,6 +15,7 @@ import android.widget.Button;
 
 import com.makeus.pineapple.R;
 import com.makeus.pineapple.server_controllers.delete.DeleteUser;
+import com.makeus.pineapple.sign.SignIn;
 
 public class PopupOut extends Activity {
 
@@ -65,7 +67,12 @@ public class PopupOut extends Activity {
                 );
 
                 deleteUser.tryRequest();
-
+                //로그인 화면으로
+                Intent intent = new Intent(getApplicationContext(), SignIn.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
             }
         });
 

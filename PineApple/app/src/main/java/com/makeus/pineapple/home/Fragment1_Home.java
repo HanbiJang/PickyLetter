@@ -18,8 +18,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
+
 import com.makeus.pineapple.loading.PopupLoading;
 import com.makeus.pineapple.main.MainActivity;
 import com.makeus.pineapple.R;
@@ -27,7 +26,8 @@ import com.makeus.pineapple.home.adapters.HomeAdapters;
 import com.makeus.pineapple.home.adapters.NewLetterAdapter;
 import com.makeus.pineapple.home.adapters.OldLetterAdapter;
 import com.makeus.pineapple.home.filters.PopupFilter;
-import com.makeus.pineapple.server_controllers.get.GetMailBox;
+import com.makeus.pineapple.server_controllers.get.GetMailBoxBottom;
+import com.makeus.pineapple.server_controllers.get.GetMailBoxTop;
 import com.makeus.pineapple.server_controllers.server_data.MailboxRequestData;
 
 
@@ -39,14 +39,8 @@ public class Fragment1_Home extends Fragment {
     static String token = null;
     static String nickName = null;
 
-    static RequestQueue requestQueueTop;
-    static RequestQueue requestQueueBottom;
-
-    static Integer pageTopRv = 0;
-    static Integer pageBottomRv = 0;
-
     LinearLayout ll_main;
-    static RecyclerView rv_newletter,rv_oldletter;
+    public static RecyclerView rv_newletter,rv_oldletter;
     static ImageView img_empty;
     Button btn_filter;
     FrameLayout fl_btn_filter;
@@ -60,17 +54,21 @@ public class Fragment1_Home extends Fragment {
     public static boolean setLoadingPopupNew = false;
     public static boolean setLoadingPopupOld = false;
 
+    //페이지수
+    public static Integer pageTop = -1;
+    public static Integer pageBottom = -1;
+
+    public static Integer pageLimitTop = 0;
+    public static Integer pageLimitBottom = 0;
+
+
+    //어답터
+    public static NewLetterAdapter newLetterAdapter;
+    public static OldLetterAdapter oldLetterAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (requestQueueTop == null) {
-            requestQueueTop = Volley.newRequestQueue(getContext()); // 큐 객체 생성하기
-        }
-        if (requestQueueBottom == null) {
-            requestQueueBottom = Volley.newRequestQueue(getContext()); // 큐 객체 생성하기
-        }
 
         //로그인으로 얻은 유저 데이터 가져오기
         getUserData();
@@ -83,8 +81,11 @@ public class Fragment1_Home extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment1_home, container, false);
 
-        pageTopRv = 0; //스크롤할때마다 page값 증가하므로 초기화
-        pageBottomRv = 0; //스크롤할때마다 page값 증가하므로 초기화
+        //스크롤할때마다 page값 증가하므로 초기화
+        pageTop = -1;
+        pageBottom = -1;
+        pageLimitTop = 0;
+        pageLimitBottom = 0;
 
         //findViewById
         findViewByIdAll(view);
@@ -110,6 +111,7 @@ public class Fragment1_Home extends Fragment {
             }
         });
 
+/*
         //네비게이션 디버깅 코드
         Handler handler0 = new Handler();
         handler0.postDelayed(new Runnable() {
@@ -118,6 +120,7 @@ public class Fragment1_Home extends Fragment {
                 MainActivity.toggleNavigationBarItems(true);
             }
         }, 500);
+*/
 
         //스와이프 새로고침
         sr_layout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -126,8 +129,15 @@ public class Fragment1_Home extends Fragment {
                 setLoadingPopupNew = false;
                 setLoadingPopupOld = false;
 
-                pageTopRv = 0; //스크롤할때마다 page값 증가하므로 초기화
-                pageBottomRv = 0; //스크롤할때마다 page값 증가하므로 초기화
+                //스크롤할때마다 page값 증가하므로 초기화
+                pageTop = -1;
+                pageBottom = -1;
+                pageLimitTop = 0;
+                pageLimitBottom = 0;
+
+                //무한스크롤
+                isLoadingTopRv = false;
+
 
                 setAllRv(view); //리사이클러뷰 설정 (get요청 포함)
 
@@ -183,7 +193,7 @@ public class Fragment1_Home extends Fragment {
                 LinearLayoutManager.HORIZONTAL,
                 false);
         rv_newletter.setLayoutManager(layoutManager);
-        NewLetterAdapter newLetterAdapter = new NewLetterAdapter();
+        newLetterAdapter = new NewLetterAdapter();
 
         //데이터 세팅
         setNewsToRv(newLetterAdapter);
@@ -193,7 +203,7 @@ public class Fragment1_Home extends Fragment {
         LinearLayoutManager layoutManager2 =
                 new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
         rv_oldletter.setLayoutManager(layoutManager2);
-        OldLetterAdapter oldLetterAdapter = new OldLetterAdapter();
+        oldLetterAdapter = new OldLetterAdapter();
 
         //데이터 세팅
         setNewsToRv(oldLetterAdapter);
@@ -210,21 +220,17 @@ public class Fragment1_Home extends Fragment {
 
         //서버에서 구독메일을 받아서 리사이클러뷰의 내용을 세팅함
         if (homeAdapters instanceof NewLetterAdapter) {
-            GetMailBox getMailBox = new GetMailBox(
+            GetMailBoxTop getMailBox = new GetMailBoxTop(
+                    getContext(),
                     rv_newletter,
-                    rv_oldletter,
-                    requestQueueTop,
-                    new MailboxRequestData(userId, pageTopRv, -7 ),
                     homeAdapters
             );
             getMailBox.tryRequest();
         }
         else {
-            GetMailBox getMailBox = new GetMailBox(
-                    rv_newletter,
+            GetMailBoxBottom getMailBox = new GetMailBoxBottom(
+                    getContext(),
                     rv_oldletter,
-                    requestQueueBottom,
-                    new MailboxRequestData(userId, pageTopRv),
                     homeAdapters
             );
             getMailBox.tryRequest();

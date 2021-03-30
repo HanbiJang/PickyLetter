@@ -19,6 +19,7 @@ import com.makeus.pineapple.R;
 import com.makeus.pineapple.HomeMail;
 import com.makeus.pineapple.bookmark.AddOrDelBookmark;
 import com.makeus.pineapple.bookmark.BookmarkFuncs;
+import com.makeus.pineapple.main.MainActivity;
 import com.makeus.pineapple.search.adapters.SearchedNewsResultAdapter;
 import com.makeus.pineapple.search.data.SearchedNews;
 
@@ -73,22 +74,8 @@ public class SearchViewResultHolder extends SearchViewHolder {
                 int pos = getAdapterPosition() ; //리사이클러뷰 내의 위치 알 수 있음
                 if (pos != RecyclerView.NO_POSITION) {
                     // 데이터 리스트로부터 아이템 데이터 참조.
-                    SearchedNews item = SearchedNewsResultAdapter.getItems().get(pos);
-                    Fragment fragment_homemail = new HomeMail();
-
-                    // 누른 아이템에 대한 정보 프래그먼트로 전달
-                    Bundle bundle = new Bundle(1); // 파라미터는 전달할 데이터 개수
-                    bundle.putString("newsTitle", item.getTitle()); // key , value
-                    bundle.putString("newsBrand", item.getBrand()); // key , value
-                    bundle.putString("newsDate", item.getDate()); // key , value
-                    bundle.putString("newsImage", item.getImg_news()); // key , value
-                    bundle.putString("newsBrandImage", item.getImg_brand()); // key , value
-                    bundle.putInt("letterId", item.getLetterId()); // key , value
-                    bundle.putInt("bookmarkId", item.getBookmarkId()); // key , value
-                    bundle.putInt("bookmarkCount", item.getBookmarkCount()); // key , value
-                    fragment_homemail.setArguments(bundle);
-
-                    myContext.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_right,R.anim.exit_left,R.anim.enter_left_pop,R.anim.exit_left_pop).addToBackStack(null).replace(R.id.container_fragment,fragment_homemail).commit();
+                    showHomeMail();
+//                    myContext.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_right,R.anim.exit_left,R.anim.enter_left_pop,R.anim.exit_left_pop).addToBackStack(null).replace(R.id.container_fragment,fragment_homemail).commit();
 
 
                 }
@@ -113,5 +100,41 @@ public class SearchViewResultHolder extends SearchViewHolder {
             }
         });
 
+    }
+
+    private void showHomeMail() {
+        Fragment fragment_homemail = new HomeMail();
+        // 누른 아이템에 대한 정보를 다음 프래그먼트로 전달
+        int pos = getAdapterPosition(); //리사이클러뷰 내의 위치 알 수 있음
+        sendItemDataToNext(pos, fragment_homemail);
+
+        MainActivity.fragmentManager.beginTransaction().show(fragment_homemail).commit();
+        MainActivity.fragmentManager.beginTransaction().
+                setCustomAnimations(R.anim.enter_right, R.anim.exit_left).add(R.id.container_fragment, fragment_homemail).commit();
+        if(MainActivity.fragment1_home != null) MainActivity.fragmentManager.beginTransaction().hide(MainActivity.fragment1_home).commit();
+        if(MainActivity.fragment2_search != null) MainActivity.fragmentManager.beginTransaction().
+                setCustomAnimations(R.anim.enter_right, R.anim.exit_left, R.anim.enter_left_pop, R.anim.exit_left_pop).
+                addToBackStack(null).
+                hide(MainActivity.fragment2_search).commit();
+        if(MainActivity.fragment3_mypage != null) MainActivity.fragmentManager.beginTransaction().hide(MainActivity.fragment3_mypage).commit();
+
+    }
+
+    private void sendItemDataToNext(int pos, Fragment fragment_homemail) {
+        SearchedNews item = SearchedNewsResultAdapter.getItems().get(pos);
+
+        // 누른 아이템에 대한 정보 프래그먼트로 전달
+        Bundle bundle = new Bundle(1); // 파라미터는 전달할 데이터 개수
+        bundle.putString("newsTitle", item.getTitle()); // key , value
+        bundle.putString("newsBrand", item.getBrand()); // key , value
+        bundle.putString("newsDate", item.getDate()); // key , value
+        bundle.putString("newsImage", item.getImg_news()); // key , value
+        bundle.putString("newsBrandImage", item.getImg_brand()); // key , value
+        bundle.putInt("letterId", item.getLetterId()); // key , value
+        bundle.putInt("bookmarkId", item.getBookmarkId()); // key , value
+        bundle.putInt("bookmarkCount", item.getBookmarkCount()); // key , value
+        //이전화면
+        bundle.putInt("preView", 2);
+        fragment_homemail.setArguments(bundle);
     }
 }

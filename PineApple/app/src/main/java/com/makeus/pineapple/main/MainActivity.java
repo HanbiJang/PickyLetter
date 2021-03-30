@@ -3,15 +3,19 @@ package com.makeus.pineapple.main;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.makeus.pineapple.HomeMail;
 import com.makeus.pineapple.R;
 import com.makeus.pineapple.home.Fragment1_Home;
 import com.makeus.pineapple.mypage_settings.mypage.Fragment3_MyPage;
@@ -27,13 +31,15 @@ public class MainActivity extends AppCompatActivity {
 
     static Boolean oneTimeEmpty =false;    //홈화면 empty이미지 띄우는 변수
 
-    Fragment fragment1_home;
-    Fragment fragment2_search;
-    Fragment fragment3_mypage;
+    public static Fragment fragment1_home;
+    public static Fragment fragment2_search;
+    public static Fragment fragment3_mypage;
     static BottomNavigationView navigation;
 
-/*    //앱종료시간체크
-    long backKeyPressedTime;*/
+    public static FragmentManager fragmentManager;
+
+    //앱종료시간체크
+    long backKeyPressedTime;
 
     public static Integer getUserId() {
         return userId;
@@ -64,12 +70,24 @@ public class MainActivity extends AppCompatActivity {
         //인텐트에서 userId, token 정보 얻기
         getIntentData();
 
-        //프레그먼트 생성
+/*        //프레그먼트 생성
         fragment1_home = new Fragment1_Home();
         fragment2_search = new Fragment2_Search();
-        fragment3_mypage = new Fragment3_MyPage();
+        fragment3_mypage = new Fragment3_MyPage();*/
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.container_fragment,fragment1_home).commit();
+        fragmentManager = getSupportFragmentManager();//프래그먼트 매니저
+
+//        getSupportFragmentManager().beginTransaction().replace(R.id.container_fragment,fragment1_home).commit();
+        if(fragment1_home == null){
+            fragment1_home = new Fragment1_Home();
+            fragmentManager.beginTransaction().add(R.id.container_fragment, fragment1_home).commit();
+        }
+
+        else{
+            if(fragment1_home != null) fragmentManager.beginTransaction().show(fragment1_home).commit();
+            if(fragment2_search != null) fragmentManager.beginTransaction().hide(fragment2_search).commit();
+            if(fragment3_mypage != null) fragmentManager.beginTransaction().hide(fragment3_mypage).commit();
+        }
 
         navigation = findViewById(R.id.navigation);
         navigation.setItemIconTintList(null);
@@ -81,17 +99,64 @@ public class MainActivity extends AppCompatActivity {
 
                         toggleNavigationBarItems(false);
 
+                        //네비게이션 디버깅 코드
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                MainActivity.toggleNavigationBarItems(true);
+                            }
+                        }, 500);
+
                         if (item.getItemId() == R.id.tab_home){
                             setOneTimeEmpty(false);
-//                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_right,R.anim.exit_left).replace(R.id.container_fragment,fragment1_home).commit();
-                            getSupportFragmentManager().beginTransaction().replace(R.id.container_fragment,fragment1_home).commit();
+/*//                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_right,R.anim.exit_left).replace(R.id.container_fragment,fragment1_home).commit();
+                            getSupportFragmentManager().beginTransaction().replace(R.id.container_fragment,fragment1_home).commit();*/
+
+                            if(fragment1_home == null){
+                                fragment1_home = new Fragment1_Home();
+                                fragmentManager.beginTransaction().add(R.id.container_fragment, fragment1_home).commit();
+                            }
+
+                            else{
+                                if(fragment1_home != null) fragmentManager.beginTransaction().show(fragment1_home).commit();
+                                if(fragment2_search != null) fragmentManager.beginTransaction().hide(fragment2_search).commit();
+                                if(fragment3_mypage != null) fragmentManager.beginTransaction().hide(fragment3_mypage).commit();
+                                if(HomeMail.homeMail != null) fragmentManager.beginTransaction().hide(HomeMail.homeMail).commit();
+                            }
+
+
+
                         }
                         else if (item.getItemId() == R.id.tab_search){
-                            getSupportFragmentManager().beginTransaction().replace(R.id.container_fragment,fragment2_search).commit();
+//                            getSupportFragmentManager().beginTransaction().replace(R.id.container_fragment,fragment2_search).commit();
+
+                            if(fragment2_search == null){
+                                fragment2_search = new Fragment2_Search();
+                                fragmentManager.beginTransaction().add(R.id.container_fragment, fragment2_search).commit();
+                            }
+
+                            else{
+                                if(fragment1_home != null) fragmentManager.beginTransaction().hide(fragment1_home).commit();
+                                if(fragment2_search != null) fragmentManager.beginTransaction().show(fragment2_search).commit();
+                                if(fragment3_mypage != null) fragmentManager.beginTransaction().hide(fragment3_mypage).commit();
+                                if(HomeMail.homeMail != null) fragmentManager.beginTransaction().hide(HomeMail.homeMail).commit();
+                            }
+
                         }
                         else if (item.getItemId() == R.id.tab_mypage){
-                            getSupportFragmentManager().beginTransaction().replace(R.id.container_fragment,fragment3_mypage).commit();
+//                            getSupportFragmentManager().beginTransaction().replace(R.id.container_fragment,fragment3_mypage).commit();
+                            if(fragment3_mypage == null){
+                                fragment3_mypage = new Fragment3_MyPage();
+                                fragmentManager.beginTransaction().add(R.id.container_fragment, fragment3_mypage).commit();
+                            }
 
+                            else{
+                                if(fragment1_home != null) fragmentManager.beginTransaction().hide(fragment1_home).commit();
+                                if(fragment2_search != null) fragmentManager.beginTransaction().hide(fragment2_search).commit();
+                                if(fragment3_mypage != null) fragmentManager.beginTransaction().show(fragment3_mypage).commit();
+                                if(HomeMail.homeMail != null) fragmentManager.beginTransaction().hide(HomeMail.homeMail).commit();
+                            }
                         }
                         else{
                             return false;
@@ -105,7 +170,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
 
     public static void toggleNavigationBarItems(boolean enabled) {
         Menu navMenu = navigation.getMenu();
@@ -123,19 +187,27 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-/*    //뒤로가기 2번하면 앱종료
+    //뒤로가기 2번하면 앱종료
     @Override
     public void onBackPressed() {
-        //1번째 백버튼 클릭
-        if(System.currentTimeMillis()>backKeyPressedTime+2000){
-            backKeyPressedTime = System.currentTimeMillis();
-            Toast.makeText(MainActivity.this, "'뒤로'버튼을 한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show();
-            Log.e(" ","뒤로가기 버튼 누름");
+
+        if(fragmentManager.getBackStackEntryCount() == 0){
+            //1번째 백버튼 클릭
+            if(System.currentTimeMillis()>backKeyPressedTime+2000){
+                backKeyPressedTime = System.currentTimeMillis();
+                Toast.makeText(MainActivity.this, "'뒤로가기'버튼을 한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show();
+            }
+            //2번째 백버튼 클릭 (종료)
+            else{
+                AppFinish();
+            }
         }
-        //2번째 백버튼 클릭 (종료)
+
         else{
-            AppFinish();
+            fragmentManager.popBackStack();
         }
+
+
     }
 
     //앱종료
@@ -143,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
         finish();
         System.exit(0);
         android.os.Process.killProcess(android.os.Process.myPid());
-    }*/
+    }
 
 
 }

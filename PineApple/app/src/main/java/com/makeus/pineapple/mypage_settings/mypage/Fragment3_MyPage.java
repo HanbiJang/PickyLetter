@@ -29,6 +29,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.makeus.pineapple.home.adapters.OldLetterAdapter;
 import com.makeus.pineapple.loading.PopupLoading;
 import com.makeus.pineapple.main.MainActivity;
 import com.makeus.pineapple.R;
@@ -37,6 +38,8 @@ import com.makeus.pineapple.mypage_settings.mypage.data.BookmarkLetter;
 import com.makeus.pineapple.mypage_settings.mypage.data.BookmarkLetterResult;
 import com.makeus.pineapple.mypage_settings.mypage.data.UserData;
 import com.makeus.pineapple.mypage_settings.settings.SettingsMain;
+import com.makeus.pineapple.server_controllers.get.GetBookmarkLetters;
+import com.makeus.pineapple.server_controllers.get.GetMailBoxBottom;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,26 +48,30 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.makeus.pineapple.main.MainActivity.fragmentManager;
+
 public class Fragment3_MyPage extends Fragment {
+    public static Integer page = -1;
+    public static Integer pageLimit = 0;
+
     static View view;
 
-    static RequestQueue requestQueueBookmark;
-    static RequestQueue requestQueueUserData;
-    static Integer lastLetterId = 0;
+    public static Integer lastLetterId = 0;
 
     MainActivity mainActivity;
     FragmentActivity myContext; //화면 전환
 
-    RecyclerView rv_mypage_bookmark;
+    public static RecyclerView rv_mypage_bookmark;
     Button btn_setting;
     FrameLayout fl_btn_setting;
     TextView tv_nickname, tv_email, tv_bookmarknum;
 
-    //무한 스크롤
-    boolean isLoading = false;
+    RequestQueue requestQueueUserData;
+    public static BookmarkLetterAdapter bookmarkLetterAdapter;
+
 
     //새로고침
-    SwipeRefreshLayout sr_layout;
+    public static SwipeRefreshLayout sr_layout;
     public static boolean setLoadingPopup = false;
 
 
@@ -76,30 +83,20 @@ public class Fragment3_MyPage extends Fragment {
         mainActivity = (MainActivity) getActivity();
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        //get 요청 관련
-        if (requestQueueBookmark == null) {
-            requestQueueBookmark = Volley.newRequestQueue(getContext()); // 큐 객체 생성하기
-        }
-
-        if(requestQueueUserData == null){
-            requestQueueUserData = Volley.newRequestQueue(getContext()); // 큐 객체 생성하기
-        }
-
-        lastLetterId = 0; //마이페이지 북마크 조회 기능 초기화
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment3_mypage, container, false);
+        lastLetterId = 0; //마이페이지 북마크 조회 기능 초기화
         setLoadingPopup = false;
 
+        if(requestQueueUserData == null){
+            requestQueueUserData = Volley.newRequestQueue(myContext); // 큐 객체 생성하기
+        }
         findViewByIdAll(view);
 
         setMyPage(view);
+
 
 
         //세팅 버튼
@@ -127,11 +124,21 @@ public class Fragment3_MyPage extends Fragment {
         sr_layout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                try {
+                    Intent intent = new Intent(getContext(), PopupLoading.class);
+                    intent.putExtra("pastFragmentNum", 3);
+                    getContext().startActivity(intent);
+                } catch (Exception e) {
+                    Log.e("0", "로딩 오류");
+                }
+
                 setLoadingPopup = false; //로딩팝업 관련
                 //서버통신
                 lastLetterId = 0; //마이페이지 북마크 조회 기능 초기화
-                setMyPage(view);
+                page = -1;
+                pageLimit = 0;
 
+                setMyPage(view);
 
             }
         });
@@ -141,6 +148,14 @@ public class Fragment3_MyPage extends Fragment {
     }
 
     private void setMyPage(View view) {
+        try {
+            Intent intent = new Intent(getContext(), PopupLoading.class);
+            intent.putExtra("pastFragmentNum", 3);
+            getContext().startActivity(intent);
+        } catch (Exception e) {
+            Log.e("0", "로딩 오류");
+        }
+
         setUserData(); //사용자 정보 가져오기 (get요청 포함)
         setBookmarkRv(view); //북마크 리사이클러뷰 설정 (get요청 포함)
     }
@@ -198,7 +213,7 @@ public class Fragment3_MyPage extends Fragment {
         };
 
         request.setShouldCache(false);
-        requestQueueBookmark.add(request);
+        requestQueueUserData.add(request);
     }
 
     private void setUserDataToText(UserData userData) {
@@ -222,151 +237,30 @@ public class Fragment3_MyPage extends Fragment {
     }
 
     private void setBookmarkRv(View view) {
+
         LinearLayoutManager layoutManager2 =
                 new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
         rv_mypage_bookmark.setLayoutManager(layoutManager2);
-        BookmarkLetterAdapter bookmarkLetterAdapter = new BookmarkLetterAdapter();
+        bookmarkLetterAdapter = new BookmarkLetterAdapter();
 
         //데이터 세팅
         setNewsToRv(bookmarkLetterAdapter);
     }
 
     private void setNewsToRv(BookmarkLetterAdapter bookmarkLetterAdapter) {
-        bookmarkLetterAdapter.removeAll(); //안 쌓이게 하기
-
-        //서버에서 구독메일을 받아서 리사이클러뷰의 내용을 세팅함
-        ArrayList<BookmarkLetter> bookmarkLetterArrayList = new ArrayList<>();
-        tryGetLetter(bookmarkLetterArrayList, bookmarkLetterAdapter); //get 요청
-    }
-
-    private void tryGetLetter(ArrayList<BookmarkLetter> bookmarkLetterArrayList, BookmarkLetterAdapter bookmarkLetterAdapter) {
-        //시작 로딩 팝업
         setLoadingPopup = false;
-        try{
-            Intent intent = new Intent(getContext(), PopupLoading.class);
-            intent.putExtra("pastFragmentNum", 3);
-            getContext().startActivity(intent);
-        }catch (Exception e){
-            Log.e("0","시작 로딩 에러");
-        }
 
-
-        JSONObject requestData1 = makeJsonObject();
-        makeGetRequestBookmark(requestData1, makeMailBoxUrl(lastLetterId), bookmarkLetterArrayList, bookmarkLetterAdapter);
+        GetBookmarkLetters getBookmarkLetters = new GetBookmarkLetters(
+                getContext(),
+                rv_mypage_bookmark,
+                bookmarkLetterAdapter
+        );
+        getBookmarkLetters.tryRequest();
     }
 
-    private void makeGetRequestBookmark(JSONObject requestData, String BookmarkUrl, ArrayList<BookmarkLetter> bookmarkLetterArrayList, BookmarkLetterAdapter bookmarkLetterAdapter) {
-
-        JsonObjectRequest request = new JsonObjectRequest(
-                Request.Method.GET,
-                BookmarkUrl,
-                requestData,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        processResponseForBookmarkData(response, bookmarkLetterArrayList, bookmarkLetterAdapter);
-                        setNewLetterListToRv(bookmarkLetterAdapter, bookmarkLetterArrayList);
-                        setLoadingPopup = true;
-                        sr_layout.setRefreshing(false); //새로고침 멈춤
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("**에러: ", "북마크 메일 로드 오류");
-                        Toast.makeText(getContext(), "북마크 오류", Toast.LENGTH_SHORT).show();
-
-                    }
-                }
-        ) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                return super.getParams();
-            }
-
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = new HashMap<String, String>();
-                headers.put("Content-Type", "application/json");
-                headers.put("x-access-token", MainActivity.getToken());
-
-                return headers;
-            }
-
-            @Override
-            public String getBodyContentType() {
-                return "application/json";
-            }
-
-        };
-
-        request.setShouldCache(false);
-        requestQueueBookmark.add(request);
-    }
-
-    private void setNewLetterListToRv(BookmarkLetterAdapter bookmarkLetterAdapter, ArrayList<BookmarkLetter> bookmarkLetterArrayList) {
-        //데이터 세팅
-        if (bookmarkLetterArrayList.size() != 0) {
-            for (int i = 0; i < bookmarkLetterArrayList.size(); i++) {
-                bookmarkLetterAdapter.addItem(bookmarkLetterArrayList.get(i));
-            }
-            // 하단 RV : 어답터 설정, 무한 스크롤 설정
-            rv_mypage_bookmark.setAdapter(bookmarkLetterAdapter);
-            initScrollListener(rv_mypage_bookmark, bookmarkLetterAdapter);
-        }
-
-    }
-
-    private void processResponseForBookmarkData(JSONObject response, ArrayList<BookmarkLetter> bookmarkLetterArrayList, BookmarkLetterAdapter bookmarkLetterAdapter) {
-        Gson gson = new Gson();
-        BookmarkLetterResult bookmarkLetterResult = gson.fromJson(String.valueOf(response), BookmarkLetterResult.class);
-
-        if (bookmarkLetterResult.getResultList().size() != 0) {
-            for (int i = 0; i < bookmarkLetterResult.getResultList().size(); i++) {
-                BookmarkLetter bookmarkLetter = new BookmarkLetter();
-
-                bookmarkLetter.setLetterId(bookmarkLetterResult.getResultList().get(i).getLetterId());
-                bookmarkLetter.setPlatformId(bookmarkLetterResult.getResultList().get(i).getPlatformId());
-                bookmarkLetter.setPlatformName(bookmarkLetterResult.getResultList().get(i).getPlatformName());
-                bookmarkLetter.setPlatformImageUrl(bookmarkLetterResult.getResultList().get(i).getPlatformImageUrl());
-                bookmarkLetter.setBookmarkId(bookmarkLetterResult.getResultList().get(i).getBookmarkId());
-                bookmarkLetter.setTitle(bookmarkLetterResult.getResultList().get(i).getTitle());
-                bookmarkLetter.setThumbnailImageUrl(bookmarkLetterResult.getResultList().get(i).getThumbnailImageUrl());
-                bookmarkLetter.setBookmarkCount(bookmarkLetterResult.getResultList().get(i).getBookmarkCount());
-                bookmarkLetter.setCreatedAt(bookmarkLetterResult.getResultList().get(i).getCreatedAt());
-                bookmarkLetter.setModifiedAt(bookmarkLetterResult.getResultList().get(i).getModifiedAt());
-                bookmarkLetter.setSubscribing(bookmarkLetterResult.getResultList().get(i).getSubscribing());
-
-                //마지막 letterId 저장
-                if (i == bookmarkLetterResult.getResultList().size() - 1) {
-                    lastLetterId = bookmarkLetterResult.getResultList().get(i).getLetterId();
-                }
-                bookmarkLetterArrayList.add(bookmarkLetter);
-            }
-        }
-
-    }
-
-    private String makeMailBoxUrl(Integer lastLetterId) {
-        String url;
-        url = "http://3.13.65.158/v1/users/current/bookmarks?lastLetterId=" + lastLetterId;
-        return url;
-    }
 
     private JSONObject makeJsonObject() {
         JSONObject requestData = new JSONObject();
-
-        try {
-            requestData.put("lastLetterId", lastLetterId);
-            requestData.put("x-access-token", MainActivity.getToken());
-
-        } catch (JSONException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
         return requestData;
     }
 
@@ -379,70 +273,6 @@ public class Fragment3_MyPage extends Fragment {
         tv_email = view.findViewById(R.id.tv_email);
         tv_bookmarknum = view.findViewById(R.id.tv_bookmarknum);
         sr_layout = view.findViewById(R.id.sr_layout);
-    }
-
-    private void initScrollListener(RecyclerView rv_search_result, BookmarkLetterAdapter bookmarkLetterAdapter) {
-        rv_search_result.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-
-                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-
-                if (!isLoading) {
-                    if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == bookmarkLetterAdapter.getItemCount() - 1) {//bottom of list!
-                        loadMore(bookmarkLetterAdapter);
-                        isLoading = true;
-                    }
-                }
-            }
-        });
-
-
-    }
-
-    //핸들러 함수 실행, 생성 순서 정해주기 주의!
-    private void loadMore(BookmarkLetterAdapter bookmarkLetterAdapter) {
-
-/*        Handler handler1 = new Handler();
-        handler1.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                bookmarkLetterAdapter.addItem(null); //로딩뷰 추가
-                bookmarkLetterAdapter.notifyItemInserted(bookmarkLetterAdapter.getItems().size() - 1);
-            }
-        }, 300);*/
-
-
-        Handler handler2 = new Handler();
-        handler2.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //로딩뷰 제거
-//                bookmarkLetterAdapter.removeItems(bookmarkLetterAdapter.getItems().size() - 1);
-
-                int scrollPosition = bookmarkLetterAdapter.getItems().size();
-
-                int pastScrollPosition =  scrollPosition;
-                bookmarkLetterAdapter.notifyItemRemoved(scrollPosition);
-
-                //get요청
-                ArrayList<BookmarkLetter> bookmarkLetterArrayListAdded = new ArrayList<>();
-                tryGetLetter(bookmarkLetterArrayListAdded, bookmarkLetterAdapter);
-
-                bookmarkLetterAdapter.notifyDataSetChanged();
-                isLoading = false;
-                rv_mypage_bookmark.scrollToPosition(pastScrollPosition-2);
-
-            }
-        }, 1200);
-
-
     }
 
 

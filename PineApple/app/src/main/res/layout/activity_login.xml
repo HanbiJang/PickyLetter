@@ -15,13 +15,16 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
+        android:id="@+id/fl_mail"
         android:layout_width="328dp"
         android:layout_height="76dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="202dp"
-        android:background="@drawable/round_squre_un"
+        android:background="@drawable/round_squre"
+        android:backgroundTintMode="screen"
+        android:backgroundTint="@color/pickyUnableGray"
         >
         <LinearLayout
             android:layout_width="match_parent"
@@ -57,13 +60,17 @@
     </FrameLayout>
 
     <FrameLayout
+        android:id="@+id/fl_pw"
         android:layout_width="328dp"
         android:layout_height="76dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="286dp"
-        android:background="@drawable/round_squre_un"
+        android:background="@drawable/round_squre"
+        android:backgroundTintMode="screen"
+        android:backgroundTint="@color/pickyUnableGray"
+
         >
         <LinearLayout
             android:layout_width="match_parent"

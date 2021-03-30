@@ -4,9 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -23,6 +26,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.makeus.pineapple.bookmark.AddOrDelBookmark;
+import com.makeus.pineapple.loading.PopupLoading;
 import com.makeus.pineapple.main.MainActivity;
 import com.makeus.pineapple.server_controllers.get.GetLetterInformHomeMail;
 import com.makeus.pineapple.server_controllers.server_data.NewsData;
@@ -36,6 +40,10 @@ import static android.view.View.OVER_SCROLL_ALWAYS;
 import static com.makeus.pineapple.main.MainActivity.getToken;
 
 public class HomeMail extends Fragment {
+
+    public static Fragment homeMail;
+
+    public static boolean setLoadingPopup = false;
 
     //메일 정보
     static RequestQueue requestQueueBookmarkId;
@@ -62,10 +70,14 @@ public class HomeMail extends Fragment {
 
     static Integer isClicked = -1;        //북마크 체크 기능
 
+    //이전 화면
+    Integer preView;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
+        homeMail = this; //자기자신
         myContext = (FragmentActivity) context;
         mainActivity = (MainActivity) getActivity();
     }
@@ -75,16 +87,32 @@ public class HomeMail extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home_mail, container, false);
 
+        //네비게이터 막기
+        MainActivity.toggleNavigationBarItems(false);
+
+/*
+        //로딩뷰 관련
+        try {
+            Intent intent = new Intent(getContext(), PopupLoading.class);
+            intent.putExtra("pastFragmentNum", 4);
+            getContext().startActivity(intent);
+        } catch (Exception e) {
+            Log.e("0", "로딩 오류");
+        }
+*/
+
         //어댑터로부터 정보 넘겨받기
         getDataFromAdapter();
 
         findByViewAll(view);
+
 
         //정보세팅
         //북마크 정보 Get해오기
         if (requestQueueBookmarkId == null) {
             requestQueueBookmarkId = Volley.newRequestQueue(getContext()); // 큐 객체 생성하기
         }
+
 
         //북마크 Id 정보 받아오기 - 북마크 초기 세팅하기
         GetLetterInformHomeMail getLetterInformHomeMail = new GetLetterInformHomeMail(requestQueueBookmarkId, letterId, btn_bookmark);
@@ -123,13 +151,21 @@ public class HomeMail extends Fragment {
         fl_btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myContext.getSupportFragmentManager().popBackStack();
+                showPreView();
             }
         });
+
 
         return view;
     }
 
+
+    private void showPreView() {
+        myContext.getSupportFragmentManager().popBackStack();
+        MainActivity.fragmentManager.beginTransaction().
+                setCustomAnimations(R.anim.enter_left_pop, R.anim.exit_left_pop, R.anim.enter_left_pop, R.anim.exit_left_pop).
+                addToBackStack(null).hide(homeMail).commit();
+    }
 
 
     private void newsDataSettingToUi() {
@@ -148,10 +184,10 @@ public class HomeMail extends Fragment {
 
     }
 
-    public static void bookmarkFirstSetting(Button btn_bookmark){
+    public static void bookmarkFirstSetting(Button btn_bookmark) {
         bookmarkId = newsData.getBookmarkId();
         isClicked = bookmarkId;
-        if(isClicked != 0){
+        if (isClicked != 0) {
             btn_bookmark.setBackgroundResource(R.drawable.btn_bookmark_fill);
         }
     }
@@ -173,25 +209,28 @@ public class HomeMail extends Fragment {
         newsImage = getArguments().getString("newsImage"); // 전달한 key 값
         newsBrandImage = getArguments().getString("newsBrandImage"); // 전달한 key 값
         letterId = getArguments().getInt("letterId"); // 전달한 key 값
-        Log.e("letterId 값", letterId+"");
+        Log.e("letterId 값", letterId + "");
+
+        //이전화면 정보 받기
+        preView = getArguments().getInt("preView"); // 전달한 key 값
     }
 
     public class MyWebView extends WebViewClient {
-
 
         void wvSetting(WebView wv_news) {
             wv_news.getSettings().setJavaScriptEnabled(true);
             wv_news.setWebViewClient(new MyWebView());
             wv_news.setOverScrollMode(OVER_SCROLL_ALWAYS);
+//            wv_news.setOverScrollMode();
 
-            //스크롤 기능 추가
+/*            //스크롤 기능 추가
             wv_news.setOnTouchListener(new View.OnTouchListener() {
                 public boolean onTouch(View v, MotionEvent event) {
                     WebView wv = (WebView) v;
                     wv.requestDisallowInterceptTouchEvent(true);
                     return false;
                 }
-            });
+            });*/
 
         }
     }
@@ -199,14 +238,14 @@ public class HomeMail extends Fragment {
     private void tryGetHtmlAndLoad(Integer letterId) {
         Map<String, String> extraHeaders = new HashMap<String, String>();
         extraHeaders.put("x-access-token", getToken());
-        wv_news.loadUrl(makeGetHtmlUrl(letterId) , extraHeaders);
-
+        wv_news.loadUrl(makeGetHtmlUrl(letterId), extraHeaders);
+        setLoadingPopup = true;
     }
 
     //웹뷰
     private String makeGetHtmlUrl(Integer letterId) {
         String url;
-        url = "http://3.13.65.158/v1/letters/"+letterId+"/html";
+        url = "http://3.13.65.158/v1/letters/" + letterId + "/html";
         return url;
     }
 

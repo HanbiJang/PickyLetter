@@ -14,10 +14,27 @@ public class BookmarkLetter {
                   "modifiedAt": "2021-03-16T13:20:51Z",
                   "subscribing": true*/
 
-    String platformName,platformImageUrl,title,thumbnailImageUrl,createdAt,modifiedAt;
-    Integer letterId,platformId,bookmarkId,bookmarkCount;
+    Integer letterId,platformId;
+    String platformName,platformImageUrl;
+    Integer bookmarkId;
+    String title, thumbnailImageUrl;
+    Integer bookmarkCount;
+    String createdAt, modifiedAt;
     Boolean subscribing;
 
+    public BookmarkLetter(Integer letterId, Integer platformId, String platformName, String platformImageUrl, Integer bookmarkId, String title, String thumbnailImageUrl, Integer bookmarkCount, String createdAt, String modifiedAt, Boolean subscribing) {
+        this.letterId = letterId;
+        this.platformId = platformId;
+        this.platformName = platformName;
+        this.platformImageUrl = platformImageUrl;
+        this.bookmarkId = bookmarkId;
+        this.title = title;
+        this.thumbnailImageUrl = thumbnailImageUrl;
+        this.bookmarkCount = bookmarkCount;
+        this.createdAt = createdAt;
+        this.modifiedAt = modifiedAt;
+        this.subscribing = subscribing;
+    }
 
     //get
     public String getPlatformName() {

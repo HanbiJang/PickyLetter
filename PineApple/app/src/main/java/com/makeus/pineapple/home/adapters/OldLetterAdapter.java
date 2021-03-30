@@ -1,6 +1,9 @@
 package com.makeus.pineapple.home.adapters;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +21,11 @@ import com.android.volley.RequestQueue;
 import com.bumptech.glide.Glide;
 import com.makeus.pineapple.R;
 import com.makeus.pineapple.bookmark.AddOrDelBookmark;
+import com.makeus.pineapple.home.Fragment1_Home;
 import com.makeus.pineapple.home.data.HomeLetters;
 import com.makeus.pineapple.HomeMail;
+import com.makeus.pineapple.main.MainActivity;
+import com.makeus.pineapple.server_controllers.get.GetMailBoxBottomAgain;
 import com.makeus.pineapple.server_controllers.server_data.NewsData;
 
 import java.util.ArrayList;
@@ -31,7 +37,8 @@ public class OldLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     static ArrayList<NewsData> items = new ArrayList<>();
     //뷰타입 - 로딩뷰, 원래뷰
     private final int VIEW_TYPE_PAST_NEWS = 0;
-    private final int VIEW_TYPE_LOADING = 1;
+//    private final int VIEW_TYPE_LOADING = 1;
+    private final int VIEW_TYPE_MORE = 2;
 
     @NonNull
     @Override //뷰홀더 객체의 생성,재사용시 자동으로 호출
@@ -39,7 +46,28 @@ public class OldLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         //xml 레이아웃으로 뷰객체를 생성, 뷰홀더 객체에 담아 반환
         //여러가지 뷰타입을 나눠 경우마다 다르게 만들 수 있음
 
-        if (viewType == VIEW_TYPE_PAST_NEWS) {
+        //뷰홀더 구분
+
+        if(viewType == VIEW_TYPE_PAST_NEWS){
+            //인플레이션
+            LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
+            View itemView = inflater.inflate(R.layout.home_view_past_letter, viewGroup, false);
+            return new ViewHolder(itemView);
+        }
+
+        else if (viewType == VIEW_TYPE_MORE){
+            //인플레이션
+            LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
+            View itemView = inflater.inflate(R.layout.home_view_more, viewGroup, false);
+            return new LoadingViewHolder(itemView);
+        }
+
+        else{
+            return null;
+        }
+
+
+/*        if (viewType == VIEW_TYPE_PAST_NEWS) {
             //인플레이션
             LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
             View itemView = inflater.inflate(R.layout.home_view_past_letter, viewGroup, false);
@@ -54,7 +82,7 @@ public class OldLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         }
 
-        return null;
+        return null;*/
 
 
     }
@@ -74,7 +102,7 @@ public class OldLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public int getItemViewType(int position) {
-        return items.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_PAST_NEWS;
+        return items.get(position) == null ? VIEW_TYPE_MORE : VIEW_TYPE_PAST_NEWS;
     }
 
     @Override
@@ -114,19 +142,33 @@ public class OldLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 public void onClick(View v) {
                     int pos = getAdapterPosition(); //리사이클러뷰 내의 위치 알 수 있음
                     if (pos != RecyclerView.NO_POSITION) {
-                        // 데이터 리스트로부터 아이템 데이터 참조.
-                        Fragment fragment_homemail = new HomeMail();
 
-                        // 누른 아이템에 대한 정보 프래그먼트로 전달
-                        sendItemDataToNext(pos,fragment_homemail);
+                        showHomeMail();
 
-                        myContext.getSupportFragmentManager().beginTransaction().
+/*                        myContext.getSupportFragmentManager().beginTransaction().
                                 setCustomAnimations(R.anim.enter_right, R.anim.exit_left, R.anim.enter_left_pop, R.anim.exit_left_pop).
-                                addToBackStack(null).replace(R.id.container_fragment, fragment_homemail).commit();//프래그먼트 전환
+                                addToBackStack(null).replace(R.id.container_fragment, fragment_homemail).commit();//프래그먼트 전환*/
 
                     }
                 }
             });
+
+        }
+
+        private void showHomeMail() {
+            Fragment fragment_homemail = new HomeMail();
+            // 누른 아이템에 대한 정보를 다음 프래그먼트로 전달
+            int pos = getAdapterPosition(); //리사이클러뷰 내의 위치 알 수 있음
+            sendItemDataToNext(pos, fragment_homemail);
+
+            MainActivity.fragmentManager.beginTransaction().show(fragment_homemail).commit();
+            MainActivity.fragmentManager.beginTransaction().
+                    setCustomAnimations(R.anim.enter_right, R.anim.exit_left).add(R.id.container_fragment, fragment_homemail).commit();
+            if(MainActivity.fragment1_home != null) MainActivity.fragmentManager.beginTransaction().
+                    setCustomAnimations(R.anim.enter_right, R.anim.exit_left, R.anim.enter_left_pop, R.anim.exit_left_pop).
+                    addToBackStack(null).hide(MainActivity.fragment1_home).commit();
+            if(MainActivity.fragment2_search != null) MainActivity.fragmentManager.beginTransaction().hide(MainActivity.fragment2_search).commit();
+            if(MainActivity.fragment3_mypage != null) MainActivity.fragmentManager.beginTransaction().hide(MainActivity.fragment3_mypage).commit();
 
         }
 
@@ -178,18 +220,58 @@ public class OldLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         bundle.putInt("bookmarkId", item.getBookmarkId());
         bundle.putInt("bookmarkCount", item.getBookmarkCount());
 
+        //이전화면
+        bundle.putInt("preView", 1);
+
         fragment_homemail.setArguments(bundle);
 
     }
 
     //(2) 로딩뷰 홀더
-    static class LoadingViewHolder extends RecyclerView.ViewHolder {
-
-        ProgressBar progressBar;
-
+    public static class LoadingViewHolder extends RecyclerView.ViewHolder {
+        public static Button btn_more;
+        public static ProgressBar progressBar;
+        Context myContext;
         public LoadingViewHolder(@NonNull View itemView) {
             super(itemView);
+            myContext = (FragmentActivity) itemView.getContext(); //context
+            btn_more = itemView.findViewById(R.id.btn_more);
             progressBar = itemView.findViewById(R.id.progressBar);
+        }
+
+        //더 불러오기
+        public void setItem(NewsData item) {
+            btn_more.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Fragment1_Home.pageLimitBottom += 1;
+                    //아이템 추가
+                    Log.e(" ", "버튼 누름");
+
+                    //프로그레스바 보여주기
+                    btn_more.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.VISIBLE);
+
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            GetMailBoxBottomAgain getMailBoxAgain = new GetMailBoxBottomAgain(
+                                    myContext,
+                                    Fragment1_Home.rv_oldletter,
+                                    Fragment1_Home.oldLetterAdapter
+                            );
+                            Fragment1_Home.pageLimitBottom += 1;
+                            getMailBoxAgain.tryRequest();
+
+
+                        }
+                    },600);
+
+                }
+            });
+
         }
     }
 
@@ -214,7 +296,10 @@ public class OldLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void removeAll(){items.clear();}
 
     //ProgressBar would be displayed
-    private void showLoadingView(LoadingViewHolder viewHolder, int position) {}
+    private void showLoadingView(LoadingViewHolder viewHolder, int position) {
+        NewsData item = items.get(position);
+        viewHolder.setItem(item);
+    }
 
     //정보 세팅
     private void populateItemRows(ViewHolder viewHolder, int position) {

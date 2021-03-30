@@ -1,5 +1,6 @@
 package com.makeus.pineapple.home.adapters;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,8 +19,14 @@ import com.android.volley.RequestQueue;
 import com.bumptech.glide.Glide;
 import com.makeus.pineapple.R;
 import com.makeus.pineapple.bookmark.AddOrDelBookmark;
+import com.makeus.pineapple.home.Fragment1_Home;
 import com.makeus.pineapple.home.data.HomeLetters;
 import com.makeus.pineapple.HomeMail;
+import com.makeus.pineapple.main.MainActivity;
+import com.makeus.pineapple.search.SearchViewCode;
+import com.makeus.pineapple.search.searchViewHolders.SearchViewRankBlindHolder;
+import com.makeus.pineapple.search.searchViewHolders.SearchViewRankHolder;
+import com.makeus.pineapple.server_controllers.get.GetMailBoxTop;
 import com.makeus.pineapple.server_controllers.server_data.NewsData;
 
 import java.util.ArrayList;
@@ -33,10 +40,29 @@ public class NewLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     //뷰타입
     private final int VIEW_TYPE_NEW_NEWS = 0;
     private final int VIEW_TYPE_LOADING = 1;
+    private final int VIEW_TYPE_MORE = 2;
 
     @NonNull
     @Override //뷰홀더 객체의 생성,재사용시 자동으로 호출
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+
+
+        //뷰홀더 구분
+
+/*        if (viewType == VIEW_TYPE_NEW_NEWS) {
+            //인플레이션
+            LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
+            View itemView = inflater.inflate(R.layout.home_view_new_letter, viewGroup, false);
+            return new ViewHolder(itemView);
+        } else if (viewType == VIEW_TYPE_MORE) {
+            //인플레이션
+            LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
+            View itemView = inflater.inflate(R.layout.home_view_new_more, viewGroup, false);
+            return new LoadingViewHolder(itemView);
+        } else {
+            return null;
+        }*/
+
         if(viewType == VIEW_TYPE_NEW_NEWS){
             //인플레이션
             LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
@@ -65,16 +91,16 @@ public class NewLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     private void populateItemRows(ViewHolder viewHolder, int position) {
-        NewsData item =items.get(position);
+        NewsData item = items.get(position);
         viewHolder.setItem(item);
 
     }
 
 
-
     @Override
     public int getItemViewType(int position) {
         return items.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_NEW_NEWS;
+//        return items.get(position) == null ? VIEW_TYPE_MORE : VIEW_TYPE_NEW_NEWS;
     }
 
     @Override
@@ -83,7 +109,7 @@ public class NewLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     //(1) 원래 뷰홀더
-    static class ViewHolder extends RecyclerView.ViewHolder{
+    static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tv_title;
         TextView tv_brand;
         TextView tv_date;
@@ -94,10 +120,10 @@ public class NewLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         FragmentActivity myContext;        //화면 전환
         static RequestQueue requestQueueBookmarkAdd, requestQueueBookmarkDel, requestQueueGetLetterInform;        //북마크 관련
 
-        public ViewHolder(View itemView){ //아이템을 위한 뷰를 담아두는곳
+        public ViewHolder(View itemView) { //아이템을 위한 뷰를 담아두는곳
             super(itemView);
 
-            myContext=(FragmentActivity) itemView.getContext(); //context
+            myContext = (FragmentActivity) itemView.getContext(); //context
             tv_title = itemView.findViewById(R.id.tv_title);
             tv_brand = itemView.findViewById(R.id.tv_brand);
             tv_date = itemView.findViewById(R.id.tv_date);
@@ -110,19 +136,18 @@ public class NewLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int pos = getAdapterPosition() ; //리사이클러뷰 내의 위치 알 수 있음
+                    int pos = getAdapterPosition(); //리사이클러뷰 내의 위치 알 수 있음
                     if (pos != RecyclerView.NO_POSITION) {
-                        Fragment fragment_homemail = new HomeMail();
 
-                        // 누른 아이템에 대한 정보를 다음 프래그먼트로 전달
-                        sendItemDataToNext(pos,fragment_homemail);
 
-                        //프래그먼트 전환 & 애니메이션 설정
+/*                        //프래그먼트 전환 & 애니메이션 설정
                         myContext.getSupportFragmentManager().
                                 beginTransaction().
-                                setCustomAnimations(R.anim.enter_right,R.anim.exit_left,R.anim.enter_left_pop,R.anim.exit_left_pop).
+                                setCustomAnimations(R.anim.enter_right, R.anim.exit_left, R.anim.enter_left_pop, R.anim.exit_left_pop).
                                 addToBackStack(null).
-                                replace(R.id.container_fragment,fragment_homemail).commit();
+                                replace(R.id.container_fragment, fragment_homemail).commit();*/
+                        showHomeMail();
+
 
                     }
                 }
@@ -130,8 +155,25 @@ public class NewLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         }
 
+        private void showHomeMail() {
+            Fragment fragment_homemail = new HomeMail();
+            // 누른 아이템에 대한 정보를 다음 프래그먼트로 전달
+            int pos = getAdapterPosition(); //리사이클러뷰 내의 위치 알 수 있음
+            sendItemDataToNext(pos, fragment_homemail);
+
+            MainActivity.fragmentManager.beginTransaction().show(fragment_homemail).commit();
+            MainActivity.fragmentManager.beginTransaction().
+                    setCustomAnimations(R.anim.enter_right, R.anim.exit_left).add(R.id.container_fragment, fragment_homemail).commit();
+            if(MainActivity.fragment1_home != null) MainActivity.fragmentManager.beginTransaction().
+                    setCustomAnimations(R.anim.enter_right, R.anim.exit_left, R.anim.enter_left_pop, R.anim.exit_left_pop).
+                    addToBackStack(null).hide(MainActivity.fragment1_home).commit();
+            if(MainActivity.fragment2_search != null) MainActivity.fragmentManager.beginTransaction().hide(MainActivity.fragment2_search).commit();
+            if(MainActivity.fragment3_mypage != null) MainActivity.fragmentManager.beginTransaction().hide(MainActivity.fragment3_mypage).commit();
+
+        }
+
         //클릭 시 홈메일 화면으로 데이터를 보내줌
-        private void sendItemDataToNext(int pos,Fragment fragment_homemail) {
+        private void sendItemDataToNext(int pos, Fragment fragment_homemail) {
             NewsData item = items.get(pos);
 
             Bundle bundle = new Bundle(1); // 파라미터는 전달할 데이터 개수
@@ -142,11 +184,14 @@ public class NewLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             bundle.putString("newsBrandImage", item.getPlatformImageUrl());
             bundle.putInt("letterId", item.getLetterId());
             bundle.putInt("bookmarkId", item.getBookmarkId());
+
+            //이전화면
+            bundle.putInt("preView", 1);
             fragment_homemail.setArguments(bundle);
         }
 
         //뷰 객체의 데이터를 다른 것으로 보이도록함
-        public void setItem(NewsData item){
+        public void setItem(NewsData item) {
             tv_title.setText(item.getTitle());
             tv_brand.setText(item.getPlatformName());
             tv_date.setText(item.getCreatedAt());
@@ -160,15 +205,14 @@ public class NewLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     .error(R.color.pickyUnableGray)
                     .into(img_news);
 
-
             //북마크 체크 기능
             //isClicked != 0 이면 이미 찍혀있음
             isClicked = item.getBookmarkId();
-            if(isClicked != 0){
+            if (isClicked != 0) {
                 btn_bookmark_new.setBackgroundResource(R.drawable.btn_bookmark_fill);
             }
-            AddOrDelBookmark addOrDelBookmark = new AddOrDelBookmark(btn_bookmark_new,item.getLetterId(),
-                    myContext,requestQueueBookmarkAdd,requestQueueBookmarkDel,requestQueueGetLetterInform);
+            AddOrDelBookmark addOrDelBookmark = new AddOrDelBookmark(btn_bookmark_new, item.getLetterId(),
+                    myContext, requestQueueBookmarkAdd, requestQueueBookmarkDel, requestQueueGetLetterInform);
             //북마크 체크 기능
             btn_bookmark_new.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -183,43 +227,54 @@ public class NewLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     //(2) 로딩뷰 홀더
     static class LoadingViewHolder extends RecyclerView.ViewHolder {
-
-        ProgressBar progressBar;
-
+        Context myContext;
         public LoadingViewHolder(@NonNull View itemView) {
             super(itemView);
-            progressBar = itemView.findViewById(R.id.progressBar);
+            myContext = (FragmentActivity) itemView.getContext(); //context
         }
+
     }
 
     //어댑터에서 NewLetter 객체를 사용할 수 있도록하는 함수들
-    public void removeItems(int position) {items.remove(position);}
-
-    @Override
-    public ArrayList<NewsData> getItems() {return items; }
-
-    @Override
-    public void addItem(HomeLetters item){ items.add((NewsData) item); }
-
-    public void setItems(ArrayList<NewsData> items){
-        this.items=items;
+    public void removeItems(int position) {
+        items.remove(position);
     }
 
     @Override
-    public NewsData getItem(int position){
+    public ArrayList<NewsData> getItems() {
+        return items;
+    }
+
+    @Override
+    public void addItem(HomeLetters item) {
+        items.add((NewsData) item);
+    }
+
+    public void setItems(ArrayList<NewsData> items) {
+        this.items = items;
+    }
+
+    @Override
+    public NewsData getItem(int position) {
         return items.get(position);
     }
 
-    public void setItem(int position, NewsData item){
-        items.set(position,item);
+    public void setItem(int position, NewsData item) {
+        items.set(position, item);
     }
 
     //ProgressBar would be displayed
-    private void showLoadingView(LoadingViewHolder viewHolder, int position) {}
+    private void showLoadingView(LoadingViewHolder viewHolder, int position) {
+//        NewsData item = items.get(position);
+//        viewHolder.setItem(item);
+
+    }
 
     //모든 내용 삭제
     @Override
-    public void removeAll(){items.clear();}
+    public void removeAll() {
+        items.clear();
+    }
 
 }
 

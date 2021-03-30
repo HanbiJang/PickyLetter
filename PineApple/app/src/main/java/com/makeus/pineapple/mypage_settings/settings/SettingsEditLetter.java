@@ -45,6 +45,9 @@ public class SettingsEditLetter extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings_edit_letter, container, false);
 
+        //네비게이터 막기
+        MainActivity.toggleNavigationBarItems(false);
+
         findViewByIdAll(view);
 
         //get 요청 관련

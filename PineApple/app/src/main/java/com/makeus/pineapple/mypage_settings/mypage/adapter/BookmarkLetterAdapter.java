@@ -1,6 +1,8 @@
 package com.makeus.pineapple.mypage_settings.mypage.adapter;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +24,14 @@ import com.makeus.pineapple.R;
 import com.makeus.pineapple.HomeMail;
 import com.makeus.pineapple.bookmark.AddOrDelBookmark;
 import com.makeus.pineapple.bookmark.BookmarkFuncs;
+import com.makeus.pineapple.home.Fragment1_Home;
+import com.makeus.pineapple.home.adapters.OldLetterAdapter;
+import com.makeus.pineapple.main.MainActivity;
+import com.makeus.pineapple.mypage_settings.mypage.Fragment3_MyPage;
 import com.makeus.pineapple.mypage_settings.mypage.data.BookmarkLetter;
+import com.makeus.pineapple.server_controllers.get.GetBookmarkLettersAgain;
+import com.makeus.pineapple.server_controllers.get.GetMailBoxBottomAgain;
+import com.makeus.pineapple.server_controllers.server_data.NewsData;
 
 
 import java.util.ArrayList;
@@ -34,7 +43,8 @@ public class BookmarkLetterAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     static ArrayList<BookmarkLetter> items = new ArrayList<>();
     //뷰타입 - 로딩뷰, 원래뷰
     private final int VIEW_TYPE_BOOKMARK = 0;
-    private final int VIEW_TYPE_LOADING = 1;
+//    private final int VIEW_TYPE_LOADING = 1;
+    private final int VIEW_TYPE_MORE = 2;
 
     @NonNull
     @Override //뷰홀더 객체의 생성,재사용시 자동으로 호출
@@ -49,12 +59,11 @@ public class BookmarkLetterAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
             return new BookmarkLetterAdapter.ViewHolder(itemView);
         }
-        else if (viewType == VIEW_TYPE_LOADING) {
+        else if (viewType == VIEW_TYPE_MORE) {
             //인플레이션
             LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-            View itemView = inflater.inflate(R.layout.view_loading, viewGroup, false);
-
-            return new LoadingViewHolder(itemView);
+            View itemView = inflater.inflate(R.layout.home_view_more, viewGroup, false);
+            return new BookmarkLetterAdapter.LoadingViewHolder(itemView);
 
         }
 
@@ -64,7 +73,7 @@ public class BookmarkLetterAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public int getItemViewType(int position) {
-        return items.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_BOOKMARK;
+        return items.get(position) == null ? VIEW_TYPE_MORE : VIEW_TYPE_BOOKMARK;
     }
 
     @Override
@@ -87,9 +96,10 @@ public class BookmarkLetterAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
     private void showLoadingView(BookmarkLetterAdapter.LoadingViewHolder viewHolder, int position) {
-        //ProgressBar would be displayed
-
+        BookmarkLetter item = items.get(position);
+        viewHolder.setItem(item);
     }
+
 
     @Override
     public int getItemCount() { //어댑터에서 관리하는 아이템 개수 반환
@@ -111,10 +121,6 @@ public class BookmarkLetterAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         //화면 전환
         FragmentActivity myContext;
 
-        //요청
-        RequestQueue requestQueueAddBookmark;
-        RequestQueue requestQueueDeleteBookmark;
-
 
         public ViewHolder(View itemView) { //아이템을 위한 뷰를 담아두는곳
             super(itemView);
@@ -134,29 +140,52 @@ public class BookmarkLetterAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 public void onClick(View v) {
                     int pos = getAdapterPosition(); //리사이클러뷰 내의 위치 알 수 있음
                     if (pos != RecyclerView.NO_POSITION) {
-                        // 데이터 리스트로부터 아이템 데이터 참조.
-                        BookmarkLetter item = items.get(pos);
-                        Fragment fragment_homemail = new HomeMail();
 
-                        // 누른 아이템에 대한 정보 프래그먼트로 전달
-                        Bundle bundle = new Bundle(1); // 파라미터는 전달할 데이터 개수
-                        bundle.putString("newsTitle", item.getTitle()); // key , value
-                        bundle.putString("newsBrand", item.getPlatformName());
-                        bundle.putString("newsDate", item.getCreatedAt());
-                        bundle.putString("newsImage", item.getThumbnailImageUrl());
-                        bundle.putString("newsBrandImage", item.getPlatformImageUrl());
-                        bundle.putInt("letterId", item.getLetterId());
-                        bundle.putInt("bookmarkId", item.getBookmarkId());
-                        bundle.putInt("bookmarkCount", item.getBookmarkCount());
-                        fragment_homemail.setArguments(bundle);
-
-                        myContext.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_right, R.anim.exit_left, R.anim.enter_left_pop, R.anim.exit_left_pop).addToBackStack(null).replace(R.id.container_fragment, fragment_homemail).commit();//프래그먼트 전환
+                        showHomeMail();
+//                        myContext.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_right, R.anim.exit_left, R.anim.enter_left_pop, R.anim.exit_left_pop).addToBackStack(null).replace(R.id.container_fragment, fragment_homemail).commit();//프래그먼트 전환
 
 
                     }
                 }
             });
 
+        }
+
+        private void showHomeMail() {
+            Fragment fragment_homemail = new HomeMail();
+            // 누른 아이템에 대한 정보를 다음 프래그먼트로 전달
+            int pos = getAdapterPosition(); //리사이클러뷰 내의 위치 알 수 있음
+            sendItemDataToNext(pos, fragment_homemail);
+
+            MainActivity.fragmentManager.beginTransaction().show(fragment_homemail).commit();
+            MainActivity.fragmentManager.beginTransaction().
+                    setCustomAnimations(R.anim.enter_right, R.anim.exit_left).add(R.id.container_fragment, fragment_homemail).commit();
+            if(MainActivity.fragment1_home != null) MainActivity.fragmentManager.beginTransaction().hide(MainActivity.fragment1_home).commit();
+            if(MainActivity.fragment2_search != null) MainActivity.fragmentManager.beginTransaction().hide(MainActivity.fragment2_search).commit();
+            if(MainActivity.fragment3_mypage != null) MainActivity.fragmentManager.beginTransaction().
+                    setCustomAnimations(R.anim.enter_right, R.anim.exit_left, R.anim.enter_left_pop, R.anim.exit_left_pop).
+                    addToBackStack(null).
+                    hide(MainActivity.fragment3_mypage).commit();
+
+        }
+
+        private void sendItemDataToNext(int pos, Fragment fragment_homemail) {
+            // 데이터 리스트로부터 아이템 데이터 참조.
+            BookmarkLetter item = items.get(pos);
+
+            // 누른 아이템에 대한 정보 프래그먼트로 전달
+            Bundle bundle = new Bundle(1); // 파라미터는 전달할 데이터 개수
+            bundle.putString("newsTitle", item.getTitle()); // key , value
+            bundle.putString("newsBrand", item.getPlatformName());
+            bundle.putString("newsDate", item.getCreatedAt());
+            bundle.putString("newsImage", item.getThumbnailImageUrl());
+            bundle.putString("newsBrandImage", item.getPlatformImageUrl());
+            bundle.putInt("letterId", item.getLetterId());
+            bundle.putInt("bookmarkId", item.getBookmarkId());
+            bundle.putInt("bookmarkCount", item.getBookmarkCount());
+            //이전화면
+            bundle.putInt("preView", 3);
+            fragment_homemail.setArguments(bundle);
         }
 
         public void setItem(BookmarkLetter item) { //뷰 객체의 데이터를 다른 것으로 보이도록함
@@ -195,13 +224,49 @@ public class BookmarkLetterAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
     //(2) 로딩뷰 홀더
-    static class LoadingViewHolder extends RecyclerView.ViewHolder {
-
-        ProgressBar progressBar;
-
+    public static class LoadingViewHolder extends RecyclerView.ViewHolder {
+        public static Button btn_more;
+        Context myContext;
+        public static ProgressBar progressBar;
         public LoadingViewHolder(@NonNull View itemView) {
             super(itemView);
+            myContext = (FragmentActivity) itemView.getContext(); //context
+            btn_more = itemView.findViewById(R.id.btn_more);
             progressBar = itemView.findViewById(R.id.progressBar);
+        }
+
+        //더 불러오기
+        public void setItem(BookmarkLetter item) {
+            btn_more.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    BookmarkLetterAdapter.LoadingViewHolder.btn_more.setVisibility(View.GONE);
+                    BookmarkLetterAdapter.LoadingViewHolder.progressBar.setVisibility(View.VISIBLE);
+
+//                    Fragment3_MyPage.pageLimit += 1;
+
+                    //아이템 추가
+                    Log.e(" ", "버튼 눌름");
+
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            GetBookmarkLettersAgain getBookmarkLettersAgain = new GetBookmarkLettersAgain(
+                                    myContext,
+                                    Fragment3_MyPage.rv_mypage_bookmark,
+                                    Fragment3_MyPage.bookmarkLetterAdapter
+                            );
+                            getBookmarkLettersAgain.tryRequest();
+                        }
+                    },600);
+
+
+
+                }
+            });
+
         }
     }
 

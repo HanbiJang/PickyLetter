@@ -20,6 +20,8 @@
         <activity android:name=".search.PopupSub" android:theme="@android:style/Theme.Dialog" />
         <activity android:name=".home.filters.PopupFilter" android:theme="@android:style/Theme.Dialog" />
         <activity android:name=".loading.PopupLoading" android:theme="@android:style/Theme.Dialog"/>
+        <activity android:name=".home.filters.PopupEndDatePicker" android:theme="@android:style/Theme.Dialog"/>
+        <activity android:name=".home.filters.PopupStartDatePicker" android:theme="@android:style/Theme.Dialog"/>
 
         <activity android:name=".main.MainActivity"/>
         <activity android:name=".sign.SignIn"/>
