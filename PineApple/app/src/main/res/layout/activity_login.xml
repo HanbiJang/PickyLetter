@@ -41,9 +41,18 @@
                 android:includeFontPadding="false"
                 android:textColor="@color/subtitle_gray"/>
 
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+
             <EditText
                 android:id="@+id/et_id"
-                android:layout_width="wrap_content"
+                android:layout_width="197dp"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:textColor="@color/pickyGray"
@@ -54,7 +63,20 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginBottom="12dp"
-                android:background="@color/white" />
+                android:background="@color/white"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/btn_x_mail"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_gravity="center|right"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/btn_search_x"
+                app:backgroundTint="@color/white"
+                app:backgroundTintMode="multiply" />
+
+        </LinearLayout>
 
         </LinearLayout>
     </FrameLayout>
@@ -94,7 +116,7 @@
 
                 <EditText
                     android:id="@+id/et_pw"
-                    android:layout_width="wrap_content"
+                    android:layout_width="197dp"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
                     android:textSize="18sp"
@@ -108,6 +130,16 @@
                     android:layout_marginBottom="12dp"
                     android:background="@color/white"
                     android:layout_weight="1"/>
+
+                <Button
+                    android:id="@+id/btn_x_pw"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_gravity="center|right"
+                    android:layout_marginRight="16dp"
+                    android:background="@drawable/btn_search_x"
+                    app:backgroundTint="@color/white"
+                    app:backgroundTintMode="multiply" />
 
                 <Button
                     android:id="@+id/btn_eye"

@@ -2,13 +2,18 @@ package com.makeus.pineapple.sign;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -35,11 +40,16 @@ public class SignUp_3 extends Activity {
     static RequestQueue requestQueue;
     String token = null;
 
-    Button btn_next;
-    EditText et_pw,et_name,et_mail;
+    Button btn_x;
+    Button btn_next, btn_eye;
+    EditText et_pw, et_name, et_mail;
     LinearLayout ll_pw;
 
+    TextView tv_pw;
+
     String userName, userMail, userPw;
+
+    Boolean isClicked = false; // btn_eye 관련
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,11 +58,14 @@ public class SignUp_3 extends Activity {
         setContentView(R.layout.activity_signup_3);
 
         //findViewById
+        btn_x = findViewById(R.id.btn_x);
         btn_next = findViewById(R.id.btn_next);
+        btn_eye = findViewById(R.id.btn_eye);
         et_pw = findViewById(R.id.et_pw);
         et_name = findViewById(R.id.et_name);
         et_mail = findViewById(R.id.et_mail);
         ll_pw = findViewById(R.id.ll_pw);
+        tv_pw = findViewById(R.id.tv_pw);
 
 
         //데이터 세팅
@@ -62,6 +75,19 @@ public class SignUp_3 extends Activity {
         btn_next.setEnabled(false);
         btn_next.setClickable(false);
         setBtnNext();
+
+        //비번칸 초기화
+        et_pw.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD | InputType.TYPE_CLASS_TEXT);
+
+        //x버튼
+        btn_x.setVisibility(View.INVISIBLE);
+        btn_x.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                et_pw.setText(null);
+                btn_x.setVisibility(View.INVISIBLE);
+            }
+        });
 
         //회원가입 완료 버튼
         btn_next.setOnClickListener(new View.OnClickListener() {
@@ -79,10 +105,23 @@ public class SignUp_3 extends Activity {
             }
         });
 
+        //비밀번호 보이기 버튼
+        btn_eye.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isClicked) {
+                    btn_eye.setBackgroundResource(R.drawable.btn_opened_eyes);
+                    et_pw.setInputType(InputType.TYPE_CLASS_TEXT);
+                    isClicked = true;
+                } else {
+                    btn_eye.setBackgroundResource(R.drawable.btn_eye_close);
+                    et_pw.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD | InputType.TYPE_CLASS_TEXT);
+                    isClicked = false;
+                }
 
-        if (requestQueue == null) {
-            requestQueue = Volley.newRequestQueue(getApplicationContext()); // 큐 객체 생성하기
-        }
+            }
+        });
+
 
     }
 
@@ -91,8 +130,11 @@ public class SignUp_3 extends Activity {
         userPw = et_pw.getText().toString();
         userName = et_name.getText().toString();
 
-        JSONObject requestData3 = makeJsonObjectForSignUp(userMail,userPw,userName);
-        makeRequrstPost(requestData3,signUpUrl);
+        if (requestQueue == null) {
+            requestQueue = Volley.newRequestQueue(getApplicationContext()); // 큐 객체 생성하기
+        }
+        JSONObject requestData3 = makeJsonObjectForSignUp(userMail, userPw, userName);
+        makeRequrstPost(requestData3, signUpUrl);
     }
 
     private void makeRequrstPost(JSONObject requestData, String signUpUrl) {
@@ -142,7 +184,7 @@ public class SignUp_3 extends Activity {
 
     //회원가입 동작 처리
     private void processSignUp() {
-        if(token != null){
+        if (token != null) {
             Toast.makeText(this, "회원가입 성공" + token, Toast.LENGTH_SHORT).show();
         }
     }
@@ -169,7 +211,7 @@ public class SignUp_3 extends Activity {
         return requestData;
     }
 
-    public void intentDataSetting(){
+    public void intentDataSetting() {
         Intent intent = getIntent();
         userName = intent.getExtras().getString("userName");
         userMail = intent.getExtras().getString("userMail");
@@ -200,18 +242,36 @@ public class SignUp_3 extends Activity {
     }
 
     public void setBtnClickable() {
-        if (et_pw.length() >= 8) {
-            btn_next.setTextColor(getResources().getColor(R.color.pickyGray));
-            btn_next.setBackgroundResource(R.drawable.round_squre_coral);
-            btn_next.setClickable(true);
-            btn_next.setEnabled(true);
-            ll_pw.setVisibility(View.INVISIBLE);
-        } else {
-            btn_next.setTextColor(getResources().getColor(R.color.white));
-            btn_next.setBackgroundResource(R.drawable.round_squre_gray);
-            btn_next.setClickable(false);
-            btn_next.setEnabled(false);
-            ll_pw.setVisibility(View.VISIBLE);
+        if(et_pw.length() > 0) {
+
+            btn_x.setVisibility(View.VISIBLE); //버튼 보이기
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                et_pw.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#333333"))); //피키그레이
+                tv_pw.setTextColor(Color.parseColor("#333333"));
+            }
+
+            if (et_pw.length() >= 8) {
+
+                btn_next.setTextColor(getResources().getColor(R.color.pickyGray));
+                btn_next.setBackgroundResource(R.drawable.round_squre_coral);
+                btn_next.setClickable(true);
+                btn_next.setEnabled(true);
+                ll_pw.setVisibility(View.INVISIBLE);
+
+            } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    tv_pw.setTextColor(Color.parseColor("#eb5757"));
+                    et_pw.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#eb5757"))); //레드
+                }
+
+                btn_next.setTextColor(getResources().getColor(R.color.white));
+                btn_next.setBackgroundResource(R.drawable.round_squre_gray);
+                btn_next.setClickable(false);
+                btn_next.setEnabled(false);
+                ll_pw.setVisibility(View.VISIBLE);
+
+            }
         }
     }
 

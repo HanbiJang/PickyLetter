@@ -70,14 +70,9 @@ public class MainActivity extends AppCompatActivity {
         //인텐트에서 userId, token 정보 얻기
         getIntentData();
 
-/*        //프레그먼트 생성
-        fragment1_home = new Fragment1_Home();
-        fragment2_search = new Fragment2_Search();
-        fragment3_mypage = new Fragment3_MyPage();*/
 
         fragmentManager = getSupportFragmentManager();//프래그먼트 매니저
 
-//        getSupportFragmentManager().beginTransaction().replace(R.id.container_fragment,fragment1_home).commit();
         if(fragment1_home == null){
             fragment1_home = new Fragment1_Home();
             fragmentManager.beginTransaction().add(R.id.container_fragment, fragment1_home).commit();
@@ -110,8 +105,6 @@ public class MainActivity extends AppCompatActivity {
 
                         if (item.getItemId() == R.id.tab_home){
                             setOneTimeEmpty(false);
-/*//                            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_right,R.anim.exit_left).replace(R.id.container_fragment,fragment1_home).commit();
-                            getSupportFragmentManager().beginTransaction().replace(R.id.container_fragment,fragment1_home).commit();*/
 
                             if(fragment1_home == null){
                                 fragment1_home = new Fragment1_Home();
@@ -129,7 +122,6 @@ public class MainActivity extends AppCompatActivity {
 
                         }
                         else if (item.getItemId() == R.id.tab_search){
-//                            getSupportFragmentManager().beginTransaction().replace(R.id.container_fragment,fragment2_search).commit();
 
                             if(fragment2_search == null){
                                 fragment2_search = new Fragment2_Search();
@@ -145,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
 
                         }
                         else if (item.getItemId() == R.id.tab_mypage){
-//                            getSupportFragmentManager().beginTransaction().replace(R.id.container_fragment,fragment3_mypage).commit();
+
                             if(fragment3_mypage == null){
                                 fragment3_mypage = new Fragment3_MyPage();
                                 fragmentManager.beginTransaction().add(R.id.container_fragment, fragment3_mypage).commit();

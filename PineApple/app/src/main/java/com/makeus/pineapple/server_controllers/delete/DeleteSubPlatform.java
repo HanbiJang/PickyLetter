@@ -53,6 +53,7 @@ public class DeleteSubPlatform implements DeleteRequest {
         SubscribingPlatformData subscribingPlatformData = gson.fromJson(String.valueOf(response), SubscribingPlatformData.class);
         if(subscribingPlatformData.getName() != null){
             Log.e("0", "플랫폼 삭제 성공:" + subscribingPlatformData.getName() );
+            Toast.makeText(myContext, "구독해지하였어요.", Toast.LENGTH_SHORT).show();
         }
 
     }

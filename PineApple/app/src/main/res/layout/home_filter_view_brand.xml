@@ -10,7 +10,7 @@
         android:id="@+id/btn_brand"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:background="@drawable/round_squre_pickycoral"
+        android:background="@drawable/round_squre_filter"
         android:fontFamily="@font/no_r"
         android:includeFontPadding="false"
         android:text="브랜드"
@@ -21,7 +21,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginRight="8dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"/>
+        android:layout_marginRight="8dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

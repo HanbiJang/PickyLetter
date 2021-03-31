@@ -19,18 +19,17 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.makeus.pineapple.main.MainActivity;
 import com.makeus.pineapple.R;
+import com.makeus.pineapple.server_controllers.get.GetAllPlatform;
 import com.makeus.pineapple.server_controllers.get.GetSubPlatform;
 
 public class SettingsEditLetter extends Fragment {
+    View view;
 
     MainActivity mainActivity;
     FragmentActivity myContext; //화면 전환
-    Button btn_back;
     public static RecyclerView rv_edit_letter;
     FrameLayout fl_btn_back;
     //
-    RequestQueue requestQueue;
-
 
     @Override
     public void onAttach(Context context){
@@ -43,22 +42,15 @@ public class SettingsEditLetter extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_settings_edit_letter, container, false);
+        view = inflater.inflate(R.layout.fragment_settings_edit_letter, container, false);
 
         //네비게이터 막기
         MainActivity.toggleNavigationBarItems(false);
 
         findViewByIdAll(view);
 
-        //get 요청 관련
-        if (requestQueue == null) {
-            requestQueue = Volley.newRequestQueue(getContext()); // 큐 객체 생성하기
-        }
-
-        //구독메일 리사이클러뷰
+        //모든 플랫폼 목록 불러오기 리사이클러뷰
         setRv(view);
-
-
 
         //백버튼
         fl_btn_back.setOnClickListener(new View.OnClickListener() {
@@ -76,16 +68,25 @@ public class SettingsEditLetter extends Fragment {
                 new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
         rv_edit_letter.setLayoutManager((layoutManager));
 
-        GetSubPlatform getSubPlatform = new GetSubPlatform(
-                requestQueue,
-                MainActivity.getUserId()
+        //모든 플랫폼 가져오기
+        GetAllPlatform getAllPlatform = new GetAllPlatform(
+                myContext
         );
 
-        getSubPlatform.tryRequest();
+        getAllPlatform.tryRequest();
     }
 
     private void findViewByIdAll(View view) {
         rv_edit_letter = view.findViewById(R.id.rv_edit_letter);
         fl_btn_back = view.findViewById(R.id.fl_btn_back);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        //리사이클러뷰 재 로딩
+        setRv(view);
+
     }
 }

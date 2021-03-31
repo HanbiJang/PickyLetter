@@ -7,21 +7,23 @@
 
 
     <application
+        android:icon="@drawable/picky_letter_app_icon_final"
         android:usesCleartextTraffic="true"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PineApple">
 
         <!-- 팝업 Activity -->
-        <activity android:name=".mypage_settings.settings.PopupOut" android:theme="@android:style/Theme.Dialog" />
-        <activity android:name=".search.PopupSub" android:theme="@android:style/Theme.Dialog" />
+        <activity android:name=".popup.PopupOut" android:theme="@android:style/Theme.Dialog" />
+        <activity android:name=".popup.PopupSub" android:theme="@android:style/Theme.Dialog" />
         <activity android:name=".home.filters.PopupFilter" android:theme="@android:style/Theme.Dialog" />
-        <activity android:name=".loading.PopupLoading" android:theme="@android:style/Theme.Dialog"/>
+        <activity android:name=".popup.loading.PopupLoading" android:theme="@android:style/Theme.Dialog"/>
         <activity android:name=".home.filters.PopupEndDatePicker" android:theme="@android:style/Theme.Dialog"/>
         <activity android:name=".home.filters.PopupStartDatePicker" android:theme="@android:style/Theme.Dialog"/>
+        <activity android:name=".popup.PopupUnSub" android:theme="@android:style/Theme.Dialog"/>
 
         <activity android:name=".main.MainActivity"/>
         <activity android:name=".sign.SignIn"/>

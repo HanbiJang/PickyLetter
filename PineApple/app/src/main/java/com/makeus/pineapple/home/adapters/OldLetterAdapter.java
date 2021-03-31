@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.RequestQueue;
 import com.bumptech.glide.Glide;
+import com.makeus.pineapple.CalStringDate;
 import com.makeus.pineapple.R;
 import com.makeus.pineapple.bookmark.AddOrDelBookmark;
 import com.makeus.pineapple.home.Fragment1_Home;
@@ -175,11 +176,13 @@ public class OldLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         public void setItem(NewsData item) { //뷰 객체의 데이터를 다른 것으로 보이도록함
             tv_title.setText(item.getTitle());
             tv_brand.setText(item.getPlatformName());
-            tv_date.setText(item.getCreatedAt());
+            tv_date.setText(CalStringDate.calDate(item.getCreatedAt()));
 
             // Glide로 이미지 표시하기
             String imageUrl = item.getPlatformImageUrl();
-            Glide.with(myContext).load(imageUrl).into(cimg_brand);
+            Glide.with(myContext).load(imageUrl)
+                    .error(R.color.pickyUnableGray)
+                    .into(cimg_brand);
 
             String imageUrl2 = item.getThumbnailImageUrl();
             Glide.with(myContext).load(imageUrl2)

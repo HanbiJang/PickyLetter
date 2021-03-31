@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.makeus.pineapple.CalStringDate;
 import com.makeus.pineapple.R;
 import com.makeus.pineapple.HomeMail;
 import com.makeus.pineapple.bookmark.AddOrDelBookmark;
@@ -56,11 +57,13 @@ public class SearchViewResultHolder extends SearchViewHolder {
     public void setItem(SearchViewHolder viewHolder, SearchedNews item) {
         tv_title.setText(item.getTitle());
         tv_brand.setText(item.getBrand());
-        tv_date.setText(item.getDate());
+        tv_date.setText(CalStringDate.calDate(item.getDate()));
 
         // Glide로 이미지 표시하기
         String imageUrl = item.getImg_brand();
-        Glide.with(myContext).load(imageUrl).into(cimg_brand);
+        Glide.with(myContext).load(imageUrl)
+                .error(R.color.pickyUnableGray)
+                .into(cimg_brand);
 
         String imageUrl2 = item.getImg_news();
         Glide.with(myContext).load(imageUrl2)

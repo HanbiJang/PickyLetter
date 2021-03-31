@@ -41,11 +41,25 @@
         android:includeFontPadding="false"
         android:hint="이메일을 입력해주세요."
         android:textColorHint="@color/pickyUnableGray"
+        android:backgroundTint="@color/pickyUnableGray"
         android:textColor="@color/pickyGray"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_x"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_gravity="center|right"
+        android:background="@drawable/btn_search_x"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="235dp"
+        android:layout_marginRight="55dp"
+        app:backgroundTint="@color/white"
+        app:backgroundTintMode="multiply" />
 
     <TextView
         android:layout_width="328dp"
@@ -67,6 +81,7 @@
         android:layout_marginTop="300dp"
         android:fontFamily="@font/no_m"
         android:includeFontPadding="false"
+        android:backgroundTint="@color/pickyUnableGray"
         android:hint="이름을 입력해주세요."
         android:editable="false"
         android:textColorHint="@color/pickyUnableGray"
@@ -114,6 +129,7 @@
             android:layout_height="11dp"
             android:src="@drawable/warning"/>
         <TextView
+            android:id="@+id/tv_warning"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="11sp"

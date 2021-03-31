@@ -20,7 +20,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
-                android:src="@drawable/newspic"
+                android:src="@color/pickyUnableGray"
                 app:civ_border_color="@color/pickyGray"
                 app:civ_border_width="1dp"
                 android:layout_marginRight="16dp"/>
@@ -39,14 +39,11 @@
             <Button
                 android:id="@+id/btn_del"
                 android:layout_width="58dp"
-                android:layout_height="37dp"
+                android:layout_height="32dp"
                 android:layout_gravity="center"
-                android:background="@drawable/round_squre_pickycoral"
-                android:text="삭제"
+                android:background="@drawable/btn_delete_fill"
                 android:fontFamily="@font/no_r"
                 android:includeFontPadding="false"
-                android:textColor="@color/pickyGray"
-                android:textSize="11sp"
                 app:backgroundTint="@color/white"
                 app:backgroundTintMode="multiply" />
         </LinearLayout>

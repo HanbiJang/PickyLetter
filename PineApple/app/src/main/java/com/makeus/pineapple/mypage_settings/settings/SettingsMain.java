@@ -3,7 +3,6 @@ package com.makeus.pineapple.mypage_settings.settings;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +13,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 
 import com.makeus.pineapple.main.MainActivity;
 import com.makeus.pineapple.R;
-import com.makeus.pineapple.mypage_settings.mypage.Fragment3_MyPage;
+import com.makeus.pineapple.popup.PopupOut;
 import com.makeus.pineapple.sign.SignIn;
 
 import static com.makeus.pineapple.main.MainActivity.fragmentManager;
@@ -113,10 +111,18 @@ public class SettingsMain extends Fragment {
             public void onClick(View v) {
 
                 Intent intent = new Intent(getContext(), SignIn.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+
+                //화면 없애기
+                MainActivity.fragment1_home = null;
+                MainActivity.fragment2_search = null;
+                MainActivity.fragment3_mypage = null;
 
                 MainActivity mainActivity = (MainActivity) MainActivity.mainActivity;
                 mainActivity.finish();
+
 
             }
         });

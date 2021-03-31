@@ -28,6 +28,8 @@ import java.util.TimerTask;
 
 public class PopupStartDatePicker extends Activity {
 
+    Integer year,month,day;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,34 +38,19 @@ public class PopupStartDatePicker extends Activity {
         setContentView(R.layout.popup_datepicker);
 
         //팝업설정
-        Window window = getWindow();
-        if (window != null) {
-            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)); //배경 투명
-            WindowManager.LayoutParams params = window.getAttributes();
-
-            // 열기&닫기 시 애니메이션 설정
-            params.windowAnimations = R.style.AnimationPopupStyle;
-            window.setAttributes(params);
-
-        }
+        setDialog();
 
         DatePicker datePicker = (DatePicker)findViewById(R.id.dataPicker);
 
         //오늘 날짜 구하기
-        //정보 설정
-        MailboxRequestData mailboxRequestData = new MailboxRequestData();
-        String today =  mailboxRequestData.calToday();
-        //String 에서 년월일 추출하기
-        Date date = null;
-        try {
-            date = new SimpleDateFormat("yyyy-MM-dd").parse(today);
-        } catch (ParseException e) {
-            e.printStackTrace();
+        if(Fragment1_Home.startDate == null){ //이전에 설정하기 않은 경우
+            MailboxRequestData mailboxRequestData = new MailboxRequestData();
+            String today =  mailboxRequestData.calToday();
+            pickyyyyMMDD(today);        //"yyyy-MM-dd" 형식 String에서 년월일 추출하기
         }
-        Integer year = Integer.valueOf(new SimpleDateFormat("yyyy").format(date)); // 년
-        Integer month = Integer.valueOf(new SimpleDateFormat("MM").format(date)); // 월
-        Log.e("month", month+ "");
-        Integer day = Integer.valueOf(new SimpleDateFormat("dd").format(date)); // 일
+        else{ // 이전에 설정한 경우
+            pickyyyyMMDD(Fragment1_Home.startDate);
+        }
 
 
         datePicker.init(year, month, day, new DatePicker.OnDateChangedListener() {
@@ -79,14 +66,45 @@ public class PopupStartDatePicker extends Activity {
                 PopupFilter.tv_start_days.setText(dayOfMonth+"");
                 //요일
                 MailboxRequestData mailboxRequestData1 = new MailboxRequestData();
-
                 PopupFilter.tv_start_day.setText(mailboxRequestData1.calDay(date));
                 Log.e("요일", mailboxRequestData1.calDay(date));
+
+                //yyyy-MM-dd 형식으로 바꿔서 저장하기
+                String month_0 =  String.format("%02d", monthOfYear); //2자리로 나타내기
+                String day_0 =  String.format("%02d", dayOfMonth); //2자리로 나타내기
+                Fragment1_Home.startDate = year + "-" + month_0 + "-" + day_0;
+
+                Toast.makeText(PopupStartDatePicker.this, "날짜가 선택되었습니다", Toast.LENGTH_SHORT).show();
             }
         });
 
 
 
+    }
+
+    private void setDialog() {
+        Window window = getWindow();
+        if (window != null) {
+            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)); //배경 투명
+            WindowManager.LayoutParams params = window.getAttributes();
+
+            // 열기&닫기 시 애니메이션 설정
+            params.windowAnimations = R.style.AnimationPopupStyle;
+            window.setAttributes(params);
+
+        }
+    }
+
+    private void pickyyyyMMDD(String today) {
+        Date date = null;
+        try {
+            date = new SimpleDateFormat("yyyy-MM-dd").parse(today);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        year = Integer.valueOf(new SimpleDateFormat("yyyy").format(date)); // 년
+        month = Integer.valueOf(new SimpleDateFormat("MM").format(date)); // 월
+        day = Integer.valueOf(new SimpleDateFormat("dd").format(date)); // 일
     }
 
 }

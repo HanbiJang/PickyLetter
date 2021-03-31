@@ -23,7 +23,7 @@
         android:id="@+id/tv_name"
         android:layout_width="328dp"
         android:layout_height="63dp"
-        android:layout_marginTop="187dp"
+        android:layout_marginTop="200dp"
         android:fontFamily="@font/no_r"
         android:includeFontPadding="false"
         android:text="이름"
@@ -41,12 +41,26 @@
         android:fontFamily="@font/no_m"
         android:includeFontPadding="false"
         android:hint="이름을 입력해주세요"
+        android:backgroundTint="@color/pickyUnableGray"
         android:textColorHint="@color/pickyUnableGray"
         android:textColor="@color/pickyGray"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_x"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_gravity="center|right"
+        android:background="@drawable/btn_search_x"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="235dp"
+        android:layout_marginRight="55dp"
+        app:backgroundTint="@color/white"
+        app:backgroundTintMode="multiply" />
 
 
     <Button
@@ -75,7 +89,7 @@
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="@id/tv_name"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="187dp"
+        android:layout_marginTop="200dp"
         android:visibility="invisible">
 
         <ImageView

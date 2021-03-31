@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -49,8 +50,9 @@ public class SignIn extends Activity {
     static String userNickName;
     boolean loginResult;
 
+    Button btn_x_pw, btn_x_mail;
     Button btn_login, btn_signup, btn_eye;
-    EditText et_id, et_pw;
+    public static EditText et_id, et_pw;
     Boolean isClicked = false;    //비밀번호 보이기 버튼 관련
     FrameLayout fl_pw, fl_mail;
 
@@ -60,6 +62,8 @@ public class SignIn extends Activity {
         setContentView(R.layout.activity_login);
 
         //findViewById
+        btn_x_pw = findViewById(R.id.btn_x_pw);
+        btn_x_mail = findViewById(R.id.btn_x_mail);
         btn_login = findViewById(R.id.btn_login);
         btn_signup = findViewById(R.id.btn_signup);
         btn_eye = findViewById(R.id.btn_eye);
@@ -71,6 +75,28 @@ public class SignIn extends Activity {
         //로그인
         //색전환 처리
         setBtnLogin();
+
+        //비번칸 초기화
+        et_pw.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD | InputType.TYPE_CLASS_TEXT ) ;
+
+        btn_x_pw.setVisibility(View.INVISIBLE);
+        btn_x_pw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                et_pw.setText(null);
+                btn_x_pw.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        btn_x_mail.setVisibility(View.INVISIBLE);
+        btn_x_mail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                et_id.setText(null);
+                btn_x_mail.setVisibility(View.INVISIBLE);
+            }
+        });
+
 
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,14 +121,13 @@ public class SignIn extends Activity {
             public void onClick(View v) {
                 if (!isClicked) {
                     btn_eye.setBackgroundResource(R.drawable.btn_opened_eyes);
-                    btn_eye.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    et_pw.setInputType(InputType.TYPE_CLASS_TEXT);
                     isClicked = true;
                 } else {
                     btn_eye.setBackgroundResource(R.drawable.btn_eye_close);
-                    btn_eye.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    et_pw.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD | InputType.TYPE_CLASS_TEXT ) ;
                     isClicked = false;
                 }
-
 
             }
         });
@@ -172,7 +197,7 @@ public class SignIn extends Activity {
                     public void onErrorResponse(VolleyError error) {
                         //로그인 실패
                         loginResult = false;
-                        Toast.makeText(SignIn.this, "로그인 실패...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SignIn.this, "올바른 아이디와 비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
                         //로그인 버튼 활성화하기
                         btn_login.setClickable(true);
                         btn_login.setEnabled(true);
@@ -243,6 +268,13 @@ public class SignIn extends Activity {
             @Override
             public void afterTextChanged(Editable s) {
                 setBtnClickable();
+                if(et_pw.length() > 0){
+                    btn_x_pw.setVisibility(View.VISIBLE);
+                }
+                else{
+                    btn_x_pw.setVisibility(View.INVISIBLE);
+                }
+
             }
         });
 
@@ -260,6 +292,12 @@ public class SignIn extends Activity {
             @Override
             public void afterTextChanged(Editable s) {
                 setBtnClickable();
+                if(et_id.length() > 0){
+                    btn_x_mail.setVisibility(View.VISIBLE);
+                }
+                else{
+                    btn_x_mail.setVisibility(View.INVISIBLE);
+                }
 
             }
         });
@@ -272,6 +310,7 @@ public class SignIn extends Activity {
             btn_login.setBackgroundResource(R.drawable.round_squre_coral);
             btn_login.setClickable(true);
 
+
             //색변화처리
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 fl_pw.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(SignIn.this, R.color.pickyGray)));
@@ -280,9 +319,11 @@ public class SignIn extends Activity {
             }
 
         } else {
+
             btn_login.setTextColor(getResources().getColor(R.color.white));
             btn_login.setBackgroundResource(R.drawable.round_squre_gray);
             btn_login.setClickable(false);
+
 
             //색변화처리
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

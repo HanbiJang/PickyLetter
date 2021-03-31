@@ -21,6 +21,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
+import com.makeus.pineapple.CalStringDate;
 import com.makeus.pineapple.bookmark.AddOrDelBookmark;
 import com.makeus.pineapple.main.MainActivity;
 import com.makeus.pineapple.R;
@@ -136,12 +137,14 @@ public class SearchViewRankHolder extends SearchViewHolder {
 
         tv_title.setText(item.getTitle());
         tv_brand.setText(item.getBrand());
-        tv_date.setText(item.getDate());
+        tv_date.setText(CalStringDate.calDate(item.getDate()));
         tv_num_rank.setText(item.getNumRank().toString());
 
         // Glide로 이미지 표시하기
         String imageUrl = item.getImg_brand();
-        Glide.with(myContext).load(imageUrl).into(cimg_brand);
+        Glide.with(myContext).load(imageUrl)
+                .error(R.color.pickyUnableGray)
+                .into(cimg_brand);
 
         String imageUrl2 = item.getImg_news();
         Glide.with(myContext).load(imageUrl2)

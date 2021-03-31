@@ -42,6 +42,7 @@
         android:fontFamily="@font/no_m"
         android:includeFontPadding="false"
         android:inputType="textPassword"
+        android:backgroundTint="@color/pickyUnableGray"
         android:hint="8자리 이상 비밀번호를 입력해주세요."
         android:textColorHint="@color/pickyUnableGray"
         android:textColor="@color/pickyGray"
@@ -49,6 +50,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_x"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_gravity="center|right"
+        android:background="@drawable/btn_search_x"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="238dp"
+        android:layout_marginRight="85dp"
+        app:backgroundTint="@color/white"
+        app:backgroundTintMode="multiply" />
 
     <Button
         android:id="@+id/btn_eye"
@@ -61,7 +75,7 @@
         android:layout_marginRight="16dp"
         android:background="@drawable/btn_eye_close"
         app:backgroundTint="@color/white"
-        app:backgroundTintMode="multiply" />
+        app:backgroundTintMode="multiply"/>
 
     <TextView
         android:layout_width="328dp"
@@ -83,6 +97,7 @@
         android:layout_marginTop="300dp"
         android:fontFamily="@font/no_m"
         android:includeFontPadding="false"
+        android:backgroundTint="@color/pickyUnableGray"
         android:hint="이메일을 입력해주세요."
         android:text="makeus.pineapple@gmail.com"
         android:editable="false"
@@ -115,6 +130,7 @@
         android:includeFontPadding="false"
         android:hint="이름을 입력해주세요"
         android:text="파인애플"
+        android:backgroundTint="@color/pickyUnableGray"
         android:editable="false"
         android:textColorHint="@color/pickyUnableGray"
         android:textColor="@color/pickyGray"

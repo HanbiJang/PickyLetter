@@ -2,13 +2,18 @@ package com.makeus.pineapple.sign;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -36,11 +41,15 @@ public class SignUp_2 extends Activity {
     static boolean isEmailRedundant;
     static String email;
 
+    Button btn_x;
     Button btn_next;
     EditText et_mail, et_name;
     LinearLayout ll_mail;
 
+    TextView tv_mail;
+
     String userName, userMail;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,13 +58,24 @@ public class SignUp_2 extends Activity {
         setContentView(R.layout.activity_signup_2);
 
         //findViewById
+        btn_x = findViewById(R.id.btn_x);
         btn_next = findViewById(R.id.btn_next);
         et_mail = findViewById(R.id.et_mail);
         et_name = findViewById(R.id.et_name);
         ll_mail = findViewById(R.id.ll_mail);
+        tv_mail = findViewById(R.id.tv_mail);
 
         //정보 가져오기
         intentDataSetting();
+
+        btn_x.setVisibility(View.INVISIBLE);
+        btn_x.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                et_mail.setText(null);
+                btn_x.setVisibility(View.INVISIBLE);
+            }
+        });
 
         //버튼 조건 충족 시 클릭 가능하게 설정
         btn_next.setEnabled(false);
@@ -114,7 +134,13 @@ public class SignUp_2 extends Activity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(SignUp_2.this, "이메일 체크 오류", Toast.LENGTH_SHORT).show();
+                        ll_mail.setVisibility(View.VISIBLE);
+                        Toast.makeText(SignUp_2.this, "올바른 이메일을 입력해주세요 ", Toast.LENGTH_SHORT).show();
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            et_mail.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#eb5757"))); //레드
+                            tv_mail.setTextColor(Color.parseColor("#eb5757"));
+                            ll_mail.setVisibility(View.VISIBLE);
+                        }
 
                     }
                 }
@@ -149,6 +175,8 @@ public class SignUp_2 extends Activity {
     private void processEmailCheck() {
         if (isEmailRedundant == true){
             Toast.makeText(this, "이메일 중복입니다", Toast.LENGTH_SHORT).show();
+            tv_mail.setTextColor(Color.parseColor("#eb575757"));
+            ll_mail.setVisibility(View.VISIBLE);
         }
         else{
             //다음 단계로 넘어가기
@@ -199,17 +227,27 @@ public class SignUp_2 extends Activity {
 
     public void setBtnClickable() {
         if (et_mail.length() > 0) {
+            btn_x.setVisibility(View.VISIBLE);//버튼 보이기
+
             btn_next.setTextColor(getResources().getColor(R.color.pickyGray));
             btn_next.setBackgroundResource(R.drawable.round_squre_coral);
             btn_next.setClickable(true);
             btn_next.setEnabled(true);
             ll_mail.setVisibility(View.INVISIBLE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                tv_mail.setTextColor(Color.parseColor("#333333"));
+                et_mail.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#333333"))); //그레이
+            }
         } else {
             btn_next.setTextColor(getResources().getColor(R.color.white));
             btn_next.setBackgroundResource(R.drawable.round_squre_gray);
             btn_next.setClickable(false);
             btn_next.setEnabled(false);
             ll_mail.setVisibility(View.VISIBLE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                tv_mail.setTextColor(Color.parseColor("#eb5757"));
+                et_mail.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#eb5757"))); //레드
+            }
         }
     }
 

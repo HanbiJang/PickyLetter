@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,26 +28,18 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
-import com.makeus.pineapple.home.adapters.OldLetterAdapter;
-import com.makeus.pineapple.loading.PopupLoading;
+import com.makeus.pineapple.popup.loading.PopupLoading;
 import com.makeus.pineapple.main.MainActivity;
 import com.makeus.pineapple.R;
 import com.makeus.pineapple.mypage_settings.mypage.adapter.BookmarkLetterAdapter;
-import com.makeus.pineapple.mypage_settings.mypage.data.BookmarkLetter;
-import com.makeus.pineapple.mypage_settings.mypage.data.BookmarkLetterResult;
 import com.makeus.pineapple.mypage_settings.mypage.data.UserData;
 import com.makeus.pineapple.mypage_settings.settings.SettingsMain;
 import com.makeus.pineapple.server_controllers.get.GetBookmarkLetters;
-import com.makeus.pineapple.server_controllers.get.GetMailBoxBottom;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.makeus.pineapple.main.MainActivity.fragmentManager;
 
 public class Fragment3_MyPage extends Fragment {
     public static Integer page = -1;

@@ -2,6 +2,9 @@ package com.makeus.pineapple.sign;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -9,18 +12,21 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
 import com.makeus.pineapple.R;
 
 public class SignUp_1 extends Activity {
-
+    Button btn_x;
     Button btn_next;
     EditText et_name;
     LinearLayout ll_name;
     //
     String userName;
+    //
+    TextView tv_name;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -28,9 +34,11 @@ public class SignUp_1 extends Activity {
         setContentView(R.layout.activity_signup_1);
 
         //findViewById
+        btn_x = findViewById(R.id.btn_x);
         btn_next = findViewById(R.id.btn_next);
         et_name = findViewById(R.id.et_name);
         ll_name = findViewById(R.id.ll_name);
+        tv_name = findViewById(R.id.tv_name);
 
         //버튼 조건 처리
         btn_next.setClickable(false);
@@ -50,6 +58,14 @@ public class SignUp_1 extends Activity {
 
                 finish();
 
+            }
+        });
+        btn_x.setVisibility(View.INVISIBLE);
+        btn_x.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                et_name.setText(null);
+                btn_x.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -78,12 +94,23 @@ public class SignUp_1 extends Activity {
 
     public void setBtnClickable() {
         if (et_name.length() > 0) {
+            btn_x.setVisibility(View.VISIBLE);//버튼 보이기
+
             btn_next.setTextColor(getResources().getColor(R.color.pickyGray));
             btn_next.setBackgroundResource(R.drawable.round_squre_coral);
             btn_next.setClickable(true);
             btn_next.setEnabled(true);
             ll_name.setVisibility(View.INVISIBLE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                tv_name.setTextColor(Color.parseColor("#333333"));
+                et_name.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#333333"))); //피키그레이
+            }
+
         } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                tv_name.setTextColor(Color.parseColor("#eb5757"));
+                et_name.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#eb5757"))); //레드
+            }
             btn_next.setTextColor(getResources().getColor(R.color.white));
             btn_next.setBackgroundResource(R.drawable.round_squre_gray);
             btn_next.setClickable(false);

@@ -10,9 +10,10 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.makeus.pineapple.CalStringDate;
 import com.makeus.pineapple.R;
 
-import com.makeus.pineapple.search.PopupSub;
+import com.makeus.pineapple.popup.PopupSub;
 import com.makeus.pineapple.search.data.SearchedNews;
 import com.makeus.pineapple.search.adapters.SearchedNewsRankAdapter;
 
@@ -52,10 +53,10 @@ public class SearchViewResultBlindHolder extends SearchViewHolder {
                     // 데이터 리스트로부터 아이템 데이터 참조.
                     SearchedNews item = SearchedNewsRankAdapter.getItems().get(pos);
 
+                    //구독 유도 팝업
                     Intent intent = new Intent(myContext, PopupSub.class);
-                    //브랜드 이름 넘기기
-                    intent.putExtra("brand",brand);
-
+                    intent.putExtra("brand", item.getBrand());
+                    intent.putExtra("platformId", item.getPlatformId());
                     myContext.startActivity(intent);
 
                 }
@@ -70,11 +71,13 @@ public class SearchViewResultBlindHolder extends SearchViewHolder {
         //브랜드 이름 넘기기
         tv_brand.setText(item.getBrand());
         brand = item.getBrand();
-        tv_date.setText(item.getDate());
+        tv_date.setText(CalStringDate.calDate(item.getDate()));
 
         // Glide로 이미지 표시하기
         String imageUrl = item.getImg_brand();
-        Glide.with(myContext).load(imageUrl).into(cimg_brand);
+        Glide.with(myContext).load(imageUrl)
+                .error(R.color.pickyUnableGray)
+                .into(cimg_brand);
 
         String imageUrl2 = item.getImg_news();
         Glide.with(myContext).load(imageUrl2)

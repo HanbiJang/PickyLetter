@@ -29,6 +29,9 @@
         <item name="android:windowExitAnimation">@anim/exit_small</item>
     </style>
 
+<!--    <style name="EditTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorAccent">@color/pickyGray</item>
+    </style>-->
 
 
 </resources>

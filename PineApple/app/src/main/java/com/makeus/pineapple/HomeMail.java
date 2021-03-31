@@ -4,15 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
@@ -26,7 +22,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.makeus.pineapple.bookmark.AddOrDelBookmark;
-import com.makeus.pineapple.loading.PopupLoading;
 import com.makeus.pineapple.main.MainActivity;
 import com.makeus.pineapple.server_controllers.get.GetLetterInformHomeMail;
 import com.makeus.pineapple.server_controllers.server_data.NewsData;
@@ -165,13 +160,15 @@ public class HomeMail extends Fragment {
         MainActivity.fragmentManager.beginTransaction().
                 setCustomAnimations(R.anim.enter_left_pop, R.anim.exit_left_pop, R.anim.enter_left_pop, R.anim.exit_left_pop).
                 addToBackStack(null).hide(homeMail).commit();
+        //네비게이터 풀기
+        MainActivity.toggleNavigationBarItems(true);
     }
 
 
     private void newsDataSettingToUi() {
         tv_title.setText(newsTitle);
         tv_brand.setText(newsBrand);
-        tv_date.setText(newsDate);
+        tv_date.setText(CalStringDate.calDate(newsDate));
 
         //G-glide로 이미지 설정
         String imageUrl = newsBrandImage;

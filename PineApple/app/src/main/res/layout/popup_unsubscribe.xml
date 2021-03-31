@@ -21,7 +21,7 @@
                     android:gravity="center"
                     android:textSize="13sp"
                     android:textColor="@color/pickyGray"
-                    android:text="오렌지레터를\n아직 구독하지 않고 계시네요!\n구독하여 더 다양한 뉴스레터를 \n받아보시겠어요?"
+                    android:text="오렌지레터를\n정말 구독 해지하시겠어요?"
                     android:fontFamily="@font/no_m"
                     android:includeFontPadding="false"/>
 
@@ -35,7 +35,7 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/btn_no"
+                    android:id="@+id/btn_yes"
                     android:layout_width="wrap_content"
                     android:layout_height="46dp"
                     android:layout_weight="1"
@@ -43,12 +43,12 @@
                     android:backgroundTint="@color/pickyGray"
                     android:fontFamily="@font/no_m"
                     android:includeFontPadding="false"
-                    android:text="　다음에　"
+                    android:text="해지할래요"
                     android:textColor="@color/white"
                     android:textSize="14sp"></Button>
 
                 <Button
-                    android:id="@+id/btn_yes"
+                    android:id="@+id/btn_no"
                     android:layout_width="wrap_content"
                     android:layout_height="46dp"
                     android:layout_weight="1"

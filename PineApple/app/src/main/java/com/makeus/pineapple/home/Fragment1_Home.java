@@ -6,9 +6,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.makeus.pineapple.loading.PopupLoading;
+import com.makeus.pineapple.popup.loading.PopupLoading;
 import com.makeus.pineapple.main.MainActivity;
 import com.makeus.pineapple.R;
 import com.makeus.pineapple.home.adapters.HomeAdapters;
@@ -28,43 +29,62 @@ import com.makeus.pineapple.home.adapters.OldLetterAdapter;
 import com.makeus.pineapple.home.filters.PopupFilter;
 import com.makeus.pineapple.server_controllers.get.GetMailBoxBottom;
 import com.makeus.pineapple.server_controllers.get.GetMailBoxTop;
-import com.makeus.pineapple.server_controllers.server_data.MailboxRequestData;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class Fragment1_Home extends Fragment {
-    static View view;
+    public static View view;
+    public static Context myContext;
 
-    //사용자 정보 얻기
+    //사용자 정보 얻기ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
     static Integer userId = null;
     static String token = null;
     static String nickName = null;
 
+    // UIㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
     LinearLayout ll_main;
     public static RecyclerView rv_newletter,rv_oldletter;
     static ImageView img_empty;
-    Button btn_filter;
+    public static Button btn_filter;
     FrameLayout fl_btn_filter;
     static TextView tv_nickname, tv_dochack, tv_nim, tv_empty;
 
-    public static boolean isLoadingTopRv = false; //상단 무한스크롤
-    public static boolean isLoadingBottomRv = false;  //하단 무한 스크롤
 
-    //새로고침
+    //새로고침ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
     public static SwipeRefreshLayout sr_layout;
     public static boolean setLoadingPopupNew = false;
     public static boolean setLoadingPopupOld = false;
 
-    //페이지수
+    public static boolean isLoadingTopRv = false; //상단 무한스크롤
+    public static boolean isLoadingBottomRv = false;  //하단 무한 스크롤
+
+    //페이지수ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
     public static Integer pageTop = -1;
     public static Integer pageBottom = -1;
 
     public static Integer pageLimitTop = 0;
     public static Integer pageLimitBottom = 0;
 
-
-    //어답터
+    //어답터ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
     public static NewLetterAdapter newLetterAdapter;
     public static OldLetterAdapter oldLetterAdapter;
+
+    //필터ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+    //필터 시작 알림 변수
+    public static boolean isFilterStart_date = false;
+    public static boolean isFilterStart_brand = false;
+    public static boolean isFilterStart_all = false;
+
+    //필터 날짜 변수ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+    public static boolean isbtn_dateClicked = false;
+    public static String endDate = null, startDate =null;
+
+    //필터 플랫폼 변수ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+    public static Map<String, String> brandNameList = null;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,6 +92,8 @@ public class Fragment1_Home extends Fragment {
 
         //로그인으로 얻은 유저 데이터 가져오기
         getUserData();
+        //변수 만들기
+        brandNameList = new HashMap<>();
 
     }
 
@@ -80,12 +102,15 @@ public class Fragment1_Home extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment1_home, container, false);
+        myContext = getContext();
 
         //스크롤할때마다 page값 증가하므로 초기화
         pageTop = -1;
         pageBottom = -1;
         pageLimitTop = 0;
         pageLimitBottom = 0;
+        isLoadingTopRv = false; //상단 무한스크롤
+        isLoadingBottomRv = false;  //하단 무한 스크롤
 
         //findViewById
         findViewByIdAll(view);
@@ -100,6 +125,10 @@ public class Fragment1_Home extends Fragment {
 
 
         //필터 버튼
+
+        if (isFilterStart_date == true || isFilterStart_brand == true || isFilterStart_all == true){ //필터 버튼이 활성화 되어있다면 UI활성화
+            btn_filter.setBackgroundResource(R.drawable.btn_filter_fill);
+        }
         fl_btn_filter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,21 +140,12 @@ public class Fragment1_Home extends Fragment {
             }
         });
 
-/*
-        //네비게이션 디버깅 코드
-        Handler handler0 = new Handler();
-        handler0.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                MainActivity.toggleNavigationBarItems(true);
-            }
-        }, 500);
-*/
 
         //스와이프 새로고침
         sr_layout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+
                 setLoadingPopupNew = false;
                 setLoadingPopupOld = false;
 
@@ -137,10 +157,9 @@ public class Fragment1_Home extends Fragment {
 
                 //무한스크롤
                 isLoadingTopRv = false;
-
+                isLoadingBottomRv = false;
 
                 setAllRv(view); //리사이클러뷰 설정 (get요청 포함)
-
 
             }
         });
@@ -199,7 +218,7 @@ public class Fragment1_Home extends Fragment {
         setNewsToRv(newLetterAdapter);
     }
 
-    private void setBottomRv(View view) {
+    public static void setBottomRv(View view) {
         LinearLayoutManager layoutManager2 =
                 new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
         rv_oldletter.setLayoutManager(layoutManager2);
@@ -209,7 +228,7 @@ public class Fragment1_Home extends Fragment {
         setNewsToRv(oldLetterAdapter);
     }
 
-    private void setNewsToRv(HomeAdapters homeAdapters) {
+    public static void setNewsToRv(HomeAdapters homeAdapters) {
         homeAdapters.removeAll(); //안 쌓이게 하기
         //로딩 팝업
         if (homeAdapters instanceof NewLetterAdapter) {
@@ -221,7 +240,7 @@ public class Fragment1_Home extends Fragment {
         //서버에서 구독메일을 받아서 리사이클러뷰의 내용을 세팅함
         if (homeAdapters instanceof NewLetterAdapter) {
             GetMailBoxTop getMailBox = new GetMailBoxTop(
-                    getContext(),
+                    myContext,
                     rv_newletter,
                     homeAdapters
             );
@@ -229,7 +248,7 @@ public class Fragment1_Home extends Fragment {
         }
         else {
             GetMailBoxBottom getMailBox = new GetMailBoxBottom(
-                    getContext(),
+                    myContext,
                     rv_oldletter,
                     homeAdapters
             );
@@ -258,4 +277,15 @@ public class Fragment1_Home extends Fragment {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        //로딩뷰 관련 변수 초기화
+        isLoadingTopRv = false; //상단 무한스크롤
+        isLoadingBottomRv = false;  //하단 무한 스크롤
+        Log.e("온리줌" , "온리줌 부름");
+
+
+    }
 }

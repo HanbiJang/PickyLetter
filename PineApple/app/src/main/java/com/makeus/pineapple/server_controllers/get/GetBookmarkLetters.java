@@ -48,7 +48,6 @@ public class GetBookmarkLetters implements GetRequestInterface {
 
     @Override
     public void tryRequest() {
-
         //get 요청 관련
         if (requestQueueBookmark == null) {
             requestQueueBookmark = Volley.newRequestQueue(myContext); // 큐 객체 생성하기

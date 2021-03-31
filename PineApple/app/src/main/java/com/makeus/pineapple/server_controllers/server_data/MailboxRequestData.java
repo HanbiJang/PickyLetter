@@ -104,6 +104,16 @@ public class MailboxRequestData {
         return  startDate;
     }
 
+    public String calEndBefore7(Integer days) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        cal.add(Calendar.DATE, days);
+        System.out.println("end after: " + dateFormat.format(cal.getTime()));
+        endDate = dateFormat.format(cal.getTime()); //한주
+        return  endDate;
+    }
+
     //
 
 

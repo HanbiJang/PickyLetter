@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.makeus.pineapple.R;
+import com.makeus.pineapple.mypage_settings.mypage.adapter.BookmarkLetterAdapter;
+import com.makeus.pineapple.mypage_settings.mypage.data.BookmarkLetter;
 import com.makeus.pineapple.search.SearchViewCode;
 import com.makeus.pineapple.search.data.SearchedNews;
 import com.makeus.pineapple.search.searchViewHolders.LoadingViewHolder;
@@ -41,11 +43,18 @@ public class SearchedNewsResultAdapter extends RecyclerView.Adapter<SearchViewHo
             return new SearchViewResultBlindHolder(itemView);
         }
 
-        else if (viewType == SearchViewCode.VIEW_TYPE_LOADING){
+
+/*        else if (viewType == SearchViewCode.VIEW_TYPE_LOADING){
             //인플레이션
             itemView = inflater.inflate(R.layout.view_loading,parent,false);
             return new LoadingViewHolder(itemView);
+        }*/
+        else if (viewType == SearchViewCode.VIEW_TYPE_MORE){
+            //인플레이션
+            itemView = inflater.inflate(R.layout.home_view_more,parent,false);
+            return new LoadingViewHolder(itemView);
         }
+
 
         else{
             return null;
@@ -56,7 +65,8 @@ public class SearchedNewsResultAdapter extends RecyclerView.Adapter<SearchViewHo
     @Override
     public int getItemViewType(int position) {
         if (items.get(position)== null){
-            return SearchViewCode.VIEW_TYPE_LOADING;
+//            return SearchViewCode.VIEW_TYPE_LOADING;
+            return SearchViewCode.VIEW_TYPE_MORE;
         }
         else{
             return items.get(position).getViewType();
@@ -66,9 +76,17 @@ public class SearchedNewsResultAdapter extends RecyclerView.Adapter<SearchViewHo
     @Override
     public void onBindViewHolder(@NonNull SearchViewHolder holder, int position) {
 
-        SearchedNews item= items.get(position);
-        holder.setItem(holder, item);
+        if (holder instanceof SearchViewHolder) {
+            SearchedNews item= items.get(position);
+            holder.setItem(holder, item);
+        } else if (holder instanceof LoadingViewHolder) {
+            showLoadingView((LoadingViewHolder) holder, position);
+        }
 
+    }
+
+    private void showLoadingView(LoadingViewHolder viewHolder, int position) {
+        viewHolder.setItem(viewHolder,getItem(position));
     }
 
     public void removeAll(){items.clear();}

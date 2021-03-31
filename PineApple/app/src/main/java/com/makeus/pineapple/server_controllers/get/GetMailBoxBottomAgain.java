@@ -21,6 +21,7 @@ import com.makeus.pineapple.server_controllers.server_data.NewsResult;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 //레터 정보 불러오는 클래스
 public class GetMailBoxBottomAgain implements GetMailboxInterface {
@@ -40,6 +41,45 @@ public class GetMailBoxBottomAgain implements GetMailboxInterface {
         this.homeAdapters = homeAdapters;
 
         homeLettersArrayList = new ArrayList<>(); //한번만 생성
+    }
+
+    @Override
+    public String makeRequestUrl(Object data) {
+        MailboxRequestData data_ = (MailboxRequestData) data;
+        String url;
+        if (Fragment1_Home.isFilterStart_date == true) { //1. 기간 검색
+            url = "http://3.13.65.158/v1/users/" + data_.getUserId() + "/mailbox"
+                    + "?endDate=" + Fragment1_Home.endDate + "&page=" + data_.getPage() + "&startDate=" + Fragment1_Home.startDate;
+        } else if (Fragment1_Home.isFilterStart_brand == true) { //2. 브랜드 검색
+            Map map = Fragment1_Home.brandNameList;
+            url = "http://3.13.65.158/v1/users/" + data_.getUserId() + "/mailbox"
+                    + "?endDate=" + data_.getEndDate() + "&page=" + data_.getPage();
+
+            for (Object key : map.keySet()) {
+                url = url + "&platforms=" + map.get((String) key);
+            }
+
+            return url + "&startDate=" + data_.getStartDate();
+
+
+        } else if (Fragment1_Home.isFilterStart_all == true) { //3. 모두 검색
+
+            Map map = Fragment1_Home.brandNameList;
+            url = "http://3.13.65.158/v1/users/" + data_.getUserId() + "/mailbox"
+                    + "?endDate=" + Fragment1_Home.endDate + "&page=" + data_.getPage();
+
+            for (Object key : map.keySet()) {
+                url = url + "&platforms=" + map.get((String) key);
+            }
+
+            return url + "&startDate=" + Fragment1_Home.startDate;
+        } else { // 필터 기능 비활성화
+            url = "http://3.13.65.158/v1/users/" + data_.getUserId() + "/mailbox"
+                    + "?endDate=" + data_.calEndBefore7(-7) + "&page=" + data_.getPage() + "&startDate=" + data_.getStartDate();
+        }
+
+        Log.e("makeRequestUrl", url + "");
+        return url;
     }
 
     @Override

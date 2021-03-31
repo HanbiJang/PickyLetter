@@ -10,4 +10,6 @@ public class SearchViewCode {
 
     public static final int VIEW_TYPE_LOADING = 4;
 
+    public static final int VIEW_TYPE_MORE = 5;
+
 }

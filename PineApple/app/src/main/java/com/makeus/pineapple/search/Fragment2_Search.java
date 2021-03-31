@@ -1,9 +1,9 @@
 package com.makeus.pineapple.search;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,13 +29,14 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
-import com.makeus.pineapple.loading.PopupLoading;
+import com.makeus.pineapple.popup.loading.PopupLoading;
 import com.makeus.pineapple.main.MainActivity;
 import com.makeus.pineapple.R;
 import com.makeus.pineapple.search.adapters.SearchedNewsRankAdapter;
 import com.makeus.pineapple.search.adapters.SearchedNewsResultAdapter;
 import com.makeus.pineapple.search.data.SearchedNews;
 import com.makeus.pineapple.search.data.server_data.SearchResult;
+import com.makeus.pineapple.server_controllers.get.GetSearchResult;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,14 +47,18 @@ import java.util.Map;
 
 public class Fragment2_Search extends Fragment {
     static View view;
+    static Context myContext;
 
     static String token = null;
     RequestQueue requestQueue;
-    static Integer lastLetterId = 0;
-    static String searchKeyword;
+    public static Integer lastLetterId = 0;
+    public static String searchKeyword = null;
 
     RecyclerView rv_rank;
-    RecyclerView rv_search_result;
+    public static RecyclerView rv_search_result;
+    public static SearchedNewsResultAdapter searchedNewsResultAdapter;
+
+
     Button btn_search;
     EditText et_search;
     Button btn_x;
@@ -65,7 +70,7 @@ public class Fragment2_Search extends Fragment {
     boolean isLoading = false;
 
     //새로고침
-    SwipeRefreshLayout sr_layout;
+    public static SwipeRefreshLayout sr_layout;
     //로딩 상태변화
     public static boolean setLoadingPopup = false;
 
@@ -73,6 +78,8 @@ public class Fragment2_Search extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment2_search, container, false);
+        myContext = getContext();
+
         setLoadingPopup = false;
 
         lastLetterId = 0;
@@ -153,14 +160,22 @@ public class Fragment2_Search extends Fragment {
         LinearLayoutManager layoutManager2 =
                 new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
         rv_search_result.setLayoutManager((layoutManager2));
-        SearchedNewsResultAdapter searchedNewsResultAdapter = new SearchedNewsResultAdapter();
+        searchedNewsResultAdapter = new SearchedNewsResultAdapter();
 
-        //데이터 서버에서 가져오기
+        GetSearchResult getSearchResult = new GetSearchResult(
+                myContext,
+                rv_search_result,
+                searchedNewsResultAdapter
+        );
+
+        getSearchResult.tryRequest();
+
+/*        //데이터 서버에서 가져오기
         searchedNewsResultAdapter.removeAll(); //안 쌓이게 하기
 
         //서버에서 구독메일을 받아서 리사이클러뷰의 내용을 세팅함
         ArrayList<SearchedNews> searchedNewsArrayList = new ArrayList<>();
-        tryGetResultLetter(searchedNewsArrayList, searchedNewsResultAdapter); //get요청
+        tryGetResultLetter(searchedNewsArrayList, searchedNewsResultAdapter); //get요청*/
 
     }
 
@@ -245,6 +260,7 @@ public class Fragment2_Search extends Fragment {
             SearchedNews searchedNews = null;
             searchedNews = new SearchedNews();
 
+            searchedNews.setPlatformId(rankResult.getResultList().get(i).getPlatformId());
             searchedNews.setImg_brand(rankResult.getResultList().get(i).getPlatformImageUrl());
             searchedNews.setImg_news(rankResult.getResultList().get(i).getThumbnailImageUrl());
             searchedNews.setDate(rankResult.getResultList().get(i).getCreatedAt());
@@ -399,6 +415,7 @@ public class Fragment2_Search extends Fragment {
             SearchedNews searchedNews = null;
             searchedNews = new SearchedNews();
 
+            searchedNews.setPlatformId(rankResult.getResultList().get(i).getPlatformId());
             searchedNews.setImg_brand(rankResult.getResultList().get(i).getPlatformImageUrl());
             searchedNews.setImg_news(rankResult.getResultList().get(i).getThumbnailImageUrl());
             searchedNews.setDate(rankResult.getResultList().get(i).getCreatedAt());

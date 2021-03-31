@@ -1,5 +1,6 @@
 package com.makeus.pineapple.home.filters;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +10,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.makeus.pineapple.R;
+import com.makeus.pineapple.home.Fragment1_Home;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class FilterBrandAdapter extends RecyclerView.Adapter<FilterBrandAdapter.ViewHolder> {
 
@@ -33,7 +36,7 @@ public class FilterBrandAdapter extends RecyclerView.Adapter<FilterBrandAdapter.
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         //기존 뷰객체의 데이터를 position 변수에 맞게 꺼냄
 
-        FilterBrand item= items.get(position);
+        FilterBrand item = items.get(position);
         viewHolder.setItem(item);
 
     }
@@ -43,36 +46,74 @@ public class FilterBrandAdapter extends RecyclerView.Adapter<FilterBrandAdapter.
         return items.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder{
+    static class ViewHolder extends RecyclerView.ViewHolder {
         Button btn_brand;
+        Boolean isClicked;
 
-        public ViewHolder(View itemView){ //아이템을 위한 뷰를 담아두는곳
+        public ViewHolder(View itemView) { //아이템을 위한 뷰를 담아두는곳
             super(itemView);
 
             btn_brand = itemView.findViewById(R.id.btn_brand);
+            isClicked = false;
+        }
+
+        public void setItem(FilterBrand item) { //뷰 객체의 데이터를 다른 것으로 보이도록함
+            btn_brand.setText(item.getBrandName());
+
+            // 초기 설정 : Map 변수에 있으면 클릭 된 것으로 표시
+            initBtn_brand(item);
+
+            //isClicked 가 false 면 (클릭 된 거) 색이 바뀌고 home 의 brandNameList 변수에 추가됨
+
+                btn_brand.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (!isClicked) {
+                            isClicked = true;
+                            btn_brand.setBackgroundResource(R.drawable.round_squre_coral_filter);
+                            Fragment1_Home.brandNameList.put(item.getBrandName() , item.getBrandName());
+                            Log.e("2","추가됨:" + Fragment1_Home.brandNameList.get( item.getBrandName()));
+                        }
+                        else{
+                            isClicked = false;
+                            btn_brand.setBackgroundResource(R.drawable.round_squre_filter);
+                            Log.e("2","삭제됨:" + Fragment1_Home.brandNameList.get( item.getBrandName()));
+                            Fragment1_Home.brandNameList.remove(item.getBrandName());
+                        }
+                    }
+                });
+
+
 
         }
 
-        public void setItem(FilterBrand item){ //뷰 객체의 데이터를 다른 것으로 보이도록함
-            btn_brand.setText(item.getBrandName());
+        private void initBtn_brand(FilterBrand item) {
+            Map map = Fragment1_Home.brandNameList;
+            for (Object key : map.keySet()) {
+                if(item.brandName.equals(key)){
+                    isClicked = true;
+                    btn_brand.setBackgroundResource(R.drawable.round_squre_coral_filter);
+                    break;
+                }
+            }
         }
     }
 
     //어댑터에서 NewLetter 객체를 사용할 수 있도록하는 함수들
-    public void addItem(FilterBrand item){
+    public void addItem(FilterBrand item) {
         items.add(item);
     }
 
-    public void setItems(ArrayList<FilterBrand> items){
-        this.items=items;
+    public void setItems(ArrayList<FilterBrand> items) {
+        this.items = items;
     }
 
-    public FilterBrand getItem(int position){
+    public FilterBrand getItem(int position) {
         return items.get(position);
     }
 
-    public void setItem(int position, FilterBrand item){
-        items.set(position,item);
+    public void setItem(int position, FilterBrand item) {
+        items.set(position, item);
     }
 
 

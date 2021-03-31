@@ -21,6 +21,7 @@ import com.makeus.pineapple.server_controllers.server_data.NewsResult;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 //레터 정보 불러오는 클래스
 public class GetMailBoxBottom implements GetMailboxInterface {
@@ -32,7 +33,7 @@ public class GetMailBoxBottom implements GetMailboxInterface {
     public ArrayList<HomeLetters> homeLettersArrayList;
     HomeAdapters homeAdapters;
 
-    boolean startRequest = true ;
+    boolean startRequest = true;
 
 
     public GetMailBoxBottom(Context myContext, RecyclerView rv_bottom, HomeAdapters homeAdapters) {
@@ -44,13 +45,57 @@ public class GetMailBoxBottom implements GetMailboxInterface {
     }
 
     @Override
+    public String makeRequestUrl(Object data) {
+        MailboxRequestData data_ = (MailboxRequestData) data;
+        String url;
+        if (Fragment1_Home.isFilterStart_date == true) { //1. 기간 검색
+            url = "http://3.13.65.158/v1/users/" + data_.getUserId() + "/mailbox"
+                    + "?endDate=" + Fragment1_Home.endDate + "&page=" + data_.getPage() + "&startDate=" + Fragment1_Home.startDate;
+            Log.e("기간검색", url);
+            return url;
+        } else if (Fragment1_Home.isFilterStart_brand == true) { //2. 브랜드 검색
+            Map map = Fragment1_Home.brandNameList;
+            url = "http://3.13.65.158/v1/users/" + data_.getUserId() + "/mailbox"
+                    + "?endDate=" + data_.getEndDate() + "&page=" + data_.getPage();
+
+            for (Object key : map.keySet()) {
+                url = url + "&platforms=" + map.get((String) key);
+            }
+
+            Log.e("브랜드검색", url);
+            return url + "&startDate=" + data_.getStartDate();
+
+        } else if (Fragment1_Home.isFilterStart_all == true) { //3. 모두 검색
+
+            Map map = Fragment1_Home.brandNameList;
+            url = "http://3.13.65.158/v1/users/" + data_.getUserId() + "/mailbox"
+                    + "?endDate=" + Fragment1_Home.endDate + "&page=" + data_.getPage();
+
+            for (Object key : map.keySet()) {
+                url = url + "&platforms=" + map.get((String) key);
+            }
+
+            Log.e("모두검색", url);
+            return url + "&startDate=" + Fragment1_Home.startDate;
+
+        } else { // 필터 기능 비활성화
+            url = "http://3.13.65.158/v1/users/" + data_.getUserId() + "/mailbox"
+                    + "?endDate=" +data_.calEndBefore7(-7) + "&page=" + data_.getPage() + "&startDate=" + data_.getStartDate();
+
+            Log.e("무필터 검색", url);
+            return url;
+        }
+
+    }
+
+    @Override
     public void tryRequest() {
 
         if (requestQueueTop == null) {
             requestQueueTop = Volley.newRequestQueue(myContext); // 큐 객체 생성하기
         }
 
-        Log.e(" ", " 값"+ Fragment1_Home.pageBottom +   "   "+ Fragment1_Home.pageLimitBottom);
+        Log.e(" ", " 값" + Fragment1_Home.pageBottom + "   " + Fragment1_Home.pageLimitBottom);
 
         Fragment1_Home.pageBottom += 1;
 
@@ -73,7 +118,7 @@ public class GetMailBoxBottom implements GetMailboxInterface {
         setLoadingView(); //로딩뷰 변수 설정
         setToAdapter(); //어답터에 데이터 설정
 
-        Log.e(" 사이즈 값", newsResult.getNewNewsResultList().size() +"");
+        Log.e(" 사이즈 값", newsResult.getNewNewsResultList().size() + "");
         startRequest = true;
 
         if (newsResult.getNewNewsResultList().size() != 0 && startRequest == true && Fragment1_Home.pageBottom <= Fragment1_Home.pageLimitBottom) {
@@ -122,8 +167,8 @@ public class GetMailBoxBottom implements GetMailboxInterface {
     //
 
 
-    private void setBottomRv(){
-        Log.e("1","setNewLetterListToRv 설정 함수 부름");
+    private void setBottomRv() {
+        Log.e("1", "setNewLetterListToRv 설정 함수 부름");
         homeAdapters.removeAll();
         if (homeLettersArrayList.size() != 0) {
             for (int i = 0; i < homeLettersArrayList.size(); i++) {
@@ -136,9 +181,6 @@ public class GetMailBoxBottom implements GetMailboxInterface {
         homeAdapters.addItem(null); //로딩뷰 넣기
         homeAdapters.notifyItemInserted(homeAdapters.getItems().size() - 1);
     }
-
-
-
 
 
 }

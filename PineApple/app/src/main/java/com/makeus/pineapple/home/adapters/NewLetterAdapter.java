@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.RequestQueue;
 import com.bumptech.glide.Glide;
+import com.makeus.pineapple.CalStringDate;
 import com.makeus.pineapple.R;
 import com.makeus.pineapple.bookmark.AddOrDelBookmark;
 import com.makeus.pineapple.home.Fragment1_Home;
@@ -48,20 +49,6 @@ public class NewLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
 
         //뷰홀더 구분
-
-/*        if (viewType == VIEW_TYPE_NEW_NEWS) {
-            //인플레이션
-            LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-            View itemView = inflater.inflate(R.layout.home_view_new_letter, viewGroup, false);
-            return new ViewHolder(itemView);
-        } else if (viewType == VIEW_TYPE_MORE) {
-            //인플레이션
-            LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-            View itemView = inflater.inflate(R.layout.home_view_new_more, viewGroup, false);
-            return new LoadingViewHolder(itemView);
-        } else {
-            return null;
-        }*/
 
         if(viewType == VIEW_TYPE_NEW_NEWS){
             //인플레이션
@@ -194,11 +181,15 @@ public class NewLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         public void setItem(NewsData item) {
             tv_title.setText(item.getTitle());
             tv_brand.setText(item.getPlatformName());
-            tv_date.setText(item.getCreatedAt());
+
+            //날짜 변환
+            tv_date.setText(CalStringDate.calDate(item.getCreatedAt()));
 
             // Glide로 이미지 표시하기
             String imageUrl = item.getPlatformImageUrl();
-            Glide.with(myContext).load(imageUrl).into(cimg_brand);
+            Glide.with(myContext).load(imageUrl)
+                    .error(R.color.pickyUnableGray)
+                    .into(cimg_brand);
 
             String imageUrl2 = item.getThumbnailImageUrl();
             Glide.with(myContext).load(imageUrl2)
