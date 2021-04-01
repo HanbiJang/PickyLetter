@@ -74,14 +74,9 @@ public class GetBookmarkLettersAgain implements GetRequestInterface {
         Log.e("북마크 사이즈", bookmakrResult.getResultList().size() + "");
         startRequest = true;
 
-//        if (bookmakrResult.getResultList().size() != 0 && startRequest == true && Fragment3_MyPage.page <= Fragment3_MyPage.pageLimit - 1) {
-//            tryRequest();
-//        }
-
         setRv();
         Fragment3_MyPage.setLoadingPopup = true;
         Fragment3_MyPage.sr_layout.setRefreshing(false); //새로고침 멈춤
-
 
     }
 
@@ -122,30 +117,27 @@ public class GetBookmarkLettersAgain implements GetRequestInterface {
 
     private void setRv() {
         Log.e("1", "setNewLetterListToRv 재설정 함수 부름");
+
         //로딩뷰 없애기
         Fragment3_MyPage.bookmarkLetterAdapter.removeItems(Fragment3_MyPage.bookmarkLetterAdapter.getItems().size() - 1);
         Fragment3_MyPage.bookmarkLetterAdapter.notifyItemRemoved(Fragment3_MyPage.bookmarkLetterAdapter.getItems().size());
 
         if (bookmarkLetterArrayList.size() != 0) {
+
             for (int i = 0; i < bookmarkLetterArrayList.size(); i++) {
-
-                if (i == bookmarkLetterArrayList.size() - 1) {
-                    Log.e(" ", "null 삽입");
-                    Fragment3_MyPage.bookmarkLetterAdapter.addItem(null);
-                    Fragment3_MyPage.lastLetterId = bookmarkLetterArrayList.get(bookmarkLetterArrayList.size() - 1).getLetterId();
-
-                } else {
-                    bookmarkLetterAdapter.addItem(bookmarkLetterArrayList.get(i));
-                }
+                bookmarkLetterAdapter.addItem(bookmarkLetterArrayList.get(i));
             }
             bookmarkLetterAdapter.addItem(null); //로딩뷰 넣기
+
+            Log.d("11", "북마크 아이템 사이즈" + bookmarkLetterArrayList.size());
+
             Fragment3_MyPage.bookmarkLetterAdapter.notifyItemInserted(Fragment3_MyPage.bookmarkLetterAdapter.getItems().size());
+
+            Log.d("11", "북마크 마지막 아이템" + bookmarkLetterAdapter.getItemCount());
 
             //프로그레스바 보이기
             BookmarkLetterAdapter.LoadingViewHolder.progressBar.setVisibility(View.GONE);
             BookmarkLetterAdapter.LoadingViewHolder.btn_more.setVisibility(View.VISIBLE);
-
-
 
         }
     }

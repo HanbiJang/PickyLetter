@@ -46,8 +46,8 @@ public interface GetRequestInterface {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e("에러 발생", error.getMessage());
                         //에러 발생 코드
+                        Log.e("에러 발생" , "  ");
 
                     }
                 }

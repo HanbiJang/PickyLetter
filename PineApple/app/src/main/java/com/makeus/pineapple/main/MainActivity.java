@@ -183,7 +183,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
+        Log.e(" ","백그라운드 스택수"+ fragmentManager.getBackStackEntryCount());
+
+        //만약 홈메일이 실행 중이라면 그 전 화면으로 가게 만듦
+        if(HomeMail.isHomeMailBack != null && HomeMail.isHomeMailBack == 1){
+            HomeMail.showPreView();
+            HomeMail.isHomeMailBack = null;
+        }
+
         if(fragmentManager.getBackStackEntryCount() == 0){
+
             //1번째 백버튼 클릭
             if(System.currentTimeMillis()>backKeyPressedTime+2000){
                 backKeyPressedTime = System.currentTimeMillis();
@@ -205,8 +214,18 @@ public class MainActivity extends AppCompatActivity {
     //앱종료
     public void AppFinish(){
         finish();
-        System.exit(0);
-        android.os.Process.killProcess(android.os.Process.myPid());
+        overridePendingTransition(R.anim.bottom_up, R.anim.bottom_down);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                System.exit(0);
+                android.os.Process.killProcess(android.os.Process.myPid());
+                overridePendingTransition(R.anim.bottom_up, R.anim.bottom_down);
+            }
+        },500);
+
     }
 
 

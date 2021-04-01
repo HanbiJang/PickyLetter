@@ -179,8 +179,8 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="551dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+android:layout_marginBottom="110dp"
         android:gravity="center">
 
         <View
@@ -211,18 +211,18 @@
         android:id="@+id/btn_signup"
         android:layout_width="328dp"
         android:layout_height="48dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="577dp"
+        android:layout_marginBottom="45dp"
+        android:background="@drawable/round_squre_blue"
+        android:fontFamily="@font/no_r"
+        android:includeFontPadding="false"
         android:text="회원가입"
         android:textColor="@color/white"
-        android:fontFamily="@font/no_r"
         android:textSize="16sp"
-        android:includeFontPadding="false"
-        android:background="@drawable/round_squre_blue"
         app:backgroundTint="@color/white"
-        app:backgroundTintMode="multiply" />
+        app:backgroundTintMode="multiply"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 

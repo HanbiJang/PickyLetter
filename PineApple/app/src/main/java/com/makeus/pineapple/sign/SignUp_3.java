@@ -152,7 +152,7 @@ public class SignUp_3 extends Activity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(SignUp_3.this, "회원가입 에러", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SignUp_3.this, "회원가입 오류", Toast.LENGTH_SHORT).show();
 
                     }
                 }
@@ -185,7 +185,7 @@ public class SignUp_3 extends Activity {
     //회원가입 동작 처리
     private void processSignUp() {
         if (token != null) {
-            Toast.makeText(this, "회원가입 성공" + token, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "회원가입 성공", Toast.LENGTH_SHORT).show();
         }
     }
 

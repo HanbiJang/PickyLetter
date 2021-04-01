@@ -59,7 +59,7 @@ public class SettingsProfileEdit extends Fragment {
         }
 
         //userData중 닉네임을 get해와서 et_nickname에 set하기
-        GetUserData getUserData = new GetUserData(requestQueue);
+        GetUserData getUserData = new GetUserData(getContext());
         getUserData.tryRequest();
 
 

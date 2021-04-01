@@ -79,6 +79,7 @@
             android:textColor="@color/pickyGray"/>
 
         <LinearLayout
+            android:id="@+id/ll_profile_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -104,9 +105,9 @@
 
                 <Button
                     android:id="@+id/btn_profile_edit"
-                    android:layout_width="10dp"
+                    android:layout_width="7dp"
                     android:layout_gravity="right"
-                    android:layout_height="21dp"
+                    android:layout_height="14dp"
                     android:layout_marginTop="3dp"
                     android:background="@drawable/go_pickygray"/>
 
@@ -115,6 +116,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_letter_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -139,8 +141,8 @@
 
                 <Button
                     android:id="@+id/btn_letter_edit"
-                    android:layout_width="10dp"
-                    android:layout_height="21dp"
+                    android:layout_width="7dp"
+                    android:layout_height="14dp"
                     android:layout_gravity="right"
                     android:layout_marginTop="3dp"
                     android:background="@drawable/go_pickygray" />
@@ -176,6 +178,7 @@
             android:textColor="@color/pickyGray"/>
 
         <LinearLayout
+            android:id="@+id/ll_service_center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -201,8 +204,8 @@
 
                 <Button
                     android:id="@+id/btn_searvice_center"
-                    android:layout_width="10dp"
-                    android:layout_height="21dp"
+                    android:layout_width="7dp"
+                    android:layout_height="14dp"
                     android:layout_gravity="right"
                     android:layout_marginTop="3dp"
                     android:background="@drawable/go_pickygray" />
@@ -213,6 +216,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_logout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -236,8 +240,8 @@
                 android:layout_gravity="center">
 
                 <Button
-                    android:layout_width="10dp"
-                    android:layout_height="21dp"
+                    android:layout_width="7dp"
+                    android:layout_height="14dp"
                     android:layout_gravity="right"
                     android:layout_marginTop="3dp"
                     android:background="@drawable/go_pickygray" />
@@ -249,6 +253,7 @@
 
 
         <LinearLayout
+            android:id="@+id/ll_out"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -274,8 +279,8 @@
 
                 <Button
                     android:id="@+id/btn_out"
-                    android:layout_width="10dp"
-                    android:layout_height="21dp"
+                    android:layout_width="7dp"
+                    android:layout_height="14dp"
                     android:layout_gravity="right"
                     android:layout_marginTop="3dp"
                     android:background="@drawable/go_pickygray" />

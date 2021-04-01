@@ -2,14 +2,13 @@ package com.makeus.pineapple.sign;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,7 +26,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
-import com.makeus.pineapple.home.filters.PopupFilter;
 import com.makeus.pineapple.main.MainActivity;
 import com.makeus.pineapple.R;
 import com.makeus.pineapple.sign.users.UserResult;
@@ -43,11 +41,11 @@ public class SignIn extends Activity {
 
     static String loginUrl = "http://3.13.65.158/v1/users/login"; //로그인 url
     static RequestQueue requestQueue;
-    static String token = null;
-    static Integer userId = null;
+    public static String token = null;
+    public static Integer userId = null;
     static String userEmail;
     static String userpw;
-    static String userNickName;
+    public static String userNickName;
     boolean loginResult;
 
     Button btn_x_pw, btn_x_mail;
@@ -60,6 +58,27 @@ public class SignIn extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        //-------------------------------------------------------------
+
+        //자동 로그인
+        SharedPreferences sharedPreferences= getSharedPreferences("user", MODE_PRIVATE);    // test 이름의 기본모드 설정, 만약 test key값이 있다면 해당 값을 불러옴.
+        String token = sharedPreferences.getString("token","");
+        Integer userId = sharedPreferences.getInt("userId",-1);
+        String userNickName = sharedPreferences.getString("userNickName","");
+
+        if(token != "" || userId != -1 || userNickName != ""){
+            Intent intent = new Intent(SignIn.this, MainActivity.class);
+            intent.putExtra("token", token); //인텐트로 token 정보를 넘김
+            intent.putExtra("userId", userId); //인텐트로 userId 정보를 넘김
+            intent.putExtra("nickName", userNickName); //인텐트로 userId 정보를 넘김
+            startActivity(intent);
+            overridePendingTransition(R.anim.enter_right, R.anim.exit_left);
+            finish();
+        }
+
+
+        //-------------------------------------------------------------
 
         //findViewById
         btn_x_pw = findViewById(R.id.btn_x_pw);
@@ -96,6 +115,7 @@ public class SignIn extends Activity {
                 btn_x_mail.setVisibility(View.INVISIBLE);
             }
         });
+
 
 
         btn_login.setOnClickListener(new View.OnClickListener() {
@@ -241,6 +261,14 @@ public class SignIn extends Activity {
             overridePendingTransition(R.anim.enter_right, R.anim.exit_left);
             finish();
 
+            //토큰,userId, nickName 저장하기
+            SharedPreferences sharedPreferences= getSharedPreferences("user", MODE_PRIVATE);    // user 이름의 기본모드 설정
+            SharedPreferences.Editor editor= sharedPreferences.edit(); //sharedPreferences를 제어할 editor를 선언
+            editor.putString("token",token); // key,value 형식으로 저장
+            editor.putInt("userId", userId); // key,value 형식으로 저장
+            editor.putString("nickName", userNickName); // key,value 형식으로 저장
+            editor.commit();    //최종 커밋. 커밋을 해야 저장이 된다.
+
         }
     }
 
@@ -267,6 +295,19 @@ public class SignIn extends Activity {
 
             @Override
             public void afterTextChanged(Editable s) {
+                if(et_pw.length() > 0){
+                    //색변화처리
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        fl_pw.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(SignIn.this, R.color.pickyGray)));
+                    }
+                }
+                else{
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        fl_pw.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(SignIn.this, R.color.pickyUnableGray)));
+
+                    }
+                }
+
                 setBtnClickable();
                 if(et_pw.length() > 0){
                     btn_x_pw.setVisibility(View.VISIBLE);
@@ -291,6 +332,17 @@ public class SignIn extends Activity {
 
             @Override
             public void afterTextChanged(Editable s) {
+                if(et_id.length() > 0){
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        fl_mail.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(SignIn.this, R.color.pickyGray)));
+                    }
+                }
+                else{
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        fl_mail.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(SignIn.this, R.color.pickyUnableGray)));
+
+                    }
+                }
                 setBtnClickable();
                 if(et_id.length() > 0){
                     btn_x_mail.setVisibility(View.VISIBLE);
@@ -305,18 +357,18 @@ public class SignIn extends Activity {
     }
 
     public void setBtnClickable() {
-        if (et_pw.length() >= 8 && et_id.length() > 0) {
+
+        if (et_pw.length() > 0 && et_id.length() > 0) {
             btn_login.setTextColor(getResources().getColor(R.color.pickyGray));
             btn_login.setBackgroundResource(R.drawable.round_squre_coral);
             btn_login.setClickable(true);
 
 
-            //색변화처리
+/*            //색변화처리
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 fl_pw.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(SignIn.this, R.color.pickyGray)));
                 fl_mail.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(SignIn.this, R.color.pickyGray)));
-
-            }
+            }*/
 
         } else {
 
@@ -325,12 +377,12 @@ public class SignIn extends Activity {
             btn_login.setClickable(false);
 
 
-            //색변화처리
+/*            //색변화처리
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 fl_pw.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(SignIn.this, R.color.pickyUnableGray)));
                 fl_mail.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(SignIn.this, R.color.pickyUnableGray)));
 
-            }
+            }*/
 
         }
     }

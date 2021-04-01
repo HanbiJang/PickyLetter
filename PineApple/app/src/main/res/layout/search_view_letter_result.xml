@@ -32,7 +32,7 @@
                 <LinearLayout
                     android:id="@+id/linearLayout2"
                     android:layout_width="match_parent"
-                    android:layout_height="93dp"
+                    android:layout_height="100dp"
                     android:orientation="horizontal"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -61,13 +61,15 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:padding="15dp"
+                        android:paddingLeft="10dp"
+                        android:paddingTop="15dp"
+                        android:paddingBottom="8dp"
                         android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/tv_title"
                             android:layout_width="187.8dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="41dp"
                             android:text="팬톤, 올해의 컬러 팬톤 올해의 컬러"
                             android:fontFamily="@font/no_b"
                             android:includeFontPadding="false"
@@ -77,15 +79,15 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="5dp"
+                            android:layout_height="24dp"
                             android:gravity="center|left"
+                            android:layout_marginTop="10dp"
                             android:orientation="horizontal">
 
                             <de.hdodenhof.circleimageview.CircleImageView
                                 android:id="@+id/cimg_brand"
-                                android:layout_width="8pt"
-                                android:layout_height="8pt"
+                                android:layout_width="23dp"
+                                android:layout_height="23dp"
                                 android:layout_marginRight="5dp"
                                 android:src="@color/pickyUnableGray"
                                 app:civ_border_color="@color/pickyGray"

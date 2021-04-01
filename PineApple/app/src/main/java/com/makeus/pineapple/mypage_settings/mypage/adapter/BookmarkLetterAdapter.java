@@ -247,8 +247,6 @@ public class BookmarkLetterAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     BookmarkLetterAdapter.LoadingViewHolder.btn_more.setVisibility(View.GONE);
                     BookmarkLetterAdapter.LoadingViewHolder.progressBar.setVisibility(View.VISIBLE);
 
-//                    Fragment3_MyPage.pageLimit += 1;
-
                     //아이템 추가
                     Log.e(" ", "버튼 눌름");
 

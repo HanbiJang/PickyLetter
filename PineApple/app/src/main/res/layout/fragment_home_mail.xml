@@ -29,11 +29,23 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/newspic"
-                    android:tintMode="multiply"
-                    app:tint="@color/gray100" />
+                    android:src="@color/pickyUnableGray"/>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#4D333333"
+                    android:scaleType="centerCrop" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="315dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
             </FrameLayout>
+
 
             <FrameLayout
                 android:id="@+id/fl_btn_back"
@@ -70,11 +82,10 @@
             <TextView
                 android:id="@+id/tv_title"
                 android:layout_width="320dp"
-                android:layout_height="wrap_content"
-
-                android:layout_marginTop="200dp"
+                android:layout_height="67dp"
+                android:layout_marginTop="190dp"
                 android:fontFamily="@font/no_b"
-                android:text="팬톤, 올해의 컬러에 담긴 메시지 if 2 sentence"
+                android:text="팬톤, 올해의 컬러에 담긴 메시지 팬톤, 올해의 컬러에 담긴 메시지"
                 android:includeFontPadding="false"
                 android:textColor="@color/white"
                 android:textSize="22sp"
@@ -111,7 +122,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginLeft="54.4dp"
-                android:layout_marginTop="278.4dp"
+                android:layout_marginTop="274.4dp"
                 />
 
             <TextView
@@ -127,7 +138,7 @@
 
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="278.4dp"
+                android:layout_marginTop="274.4dp"
                 android:layout_marginRight="16dp"/>
 
             <View

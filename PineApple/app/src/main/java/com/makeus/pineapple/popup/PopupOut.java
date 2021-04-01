@@ -54,6 +54,7 @@ public class PopupOut extends Activity {
             @Override
             public void onClick(View v) {
                 finish();
+                overridePendingTransition(R.anim.bottom_up, R.anim.bottom_down);
             }
         });
 
@@ -73,6 +74,7 @@ public class PopupOut extends Activity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
+                overridePendingTransition(R.anim.bottom_up, R.anim.bottom_down);
             }
         });
 

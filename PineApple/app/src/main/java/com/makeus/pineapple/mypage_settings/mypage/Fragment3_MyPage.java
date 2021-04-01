@@ -91,6 +91,16 @@ public class Fragment3_MyPage extends Fragment {
 
 
         //세팅 버튼
+        btn_setting.setOnClickListener(new View.OnClickListener() {
+            @Override
+
+            public void onClick(View v) {
+                Fragment fragment_settings_main = new SettingsMain();
+                myContext.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_right, R.anim.exit_left, R.anim.enter_left_pop, R.anim.exit_left_pop).addToBackStack(null).replace(R.id.container_fragment, fragment_settings_main).commit();//프래그먼트 전환
+
+            }
+        });
+
         fl_btn_setting.setOnClickListener(new View.OnClickListener() {
             @Override
 

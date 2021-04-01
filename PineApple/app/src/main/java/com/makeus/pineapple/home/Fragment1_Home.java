@@ -4,7 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSnapHelper;
+import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SnapHelper;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Context;
@@ -29,6 +32,7 @@ import com.makeus.pineapple.home.adapters.OldLetterAdapter;
 import com.makeus.pineapple.home.filters.PopupFilter;
 import com.makeus.pineapple.server_controllers.get.GetMailBoxBottom;
 import com.makeus.pineapple.server_controllers.get.GetMailBoxTop;
+import com.makeus.pineapple.server_controllers.get.GetUserData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,8 +53,8 @@ public class Fragment1_Home extends Fragment {
     static ImageView img_empty;
     public static Button btn_filter;
     FrameLayout fl_btn_filter;
-    static TextView tv_nickname, tv_dochack, tv_nim, tv_empty;
-
+    public static TextView tv_nickname;
+    static TextView tv_dochack, tv_nim, tv_empty;
 
     //새로고침ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
     public static SwipeRefreshLayout sr_layout;
@@ -79,7 +83,7 @@ public class Fragment1_Home extends Fragment {
     public static boolean isFilterStart_all = false;
 
     //필터 날짜 변수ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-    public static boolean isbtn_dateClicked = false;
+    public static boolean isbtn_dateClicked = false; //false가 눌러져있는거
     public static String endDate = null, startDate =null;
 
     //필터 플랫폼 변수ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
@@ -115,20 +119,46 @@ public class Fragment1_Home extends Fragment {
         //findViewById
         findViewByIdAll(view);
 
+        //get으로 닉네임 가져오기
+        GetUserData getUserData = new GetUserData(
+                getContext()
+        );
+        getUserData.tryRequest();
         //닉네임 세팅하기
         tv_nickname.setText(nickName);
+
+
+
+        //--------------------------------------------------
+        //리사이클러뷰
+
+//        SnapHelper snapHelper = new LinearSnapHelper();
+        SnapHelper snapHelper = new PagerSnapHelper();
+        snapHelper.attachToRecyclerView(rv_newletter);
 
         //empty이미지 보여주기 (get요청 하기 전)
         showEmptyImg();
 
         setAllRv(view);
 
+        //---------------------------------------------------
 
         //필터 버튼
 
         if (isFilterStart_date == true || isFilterStart_brand == true || isFilterStart_all == true){ //필터 버튼이 활성화 되어있다면 UI활성화
             btn_filter.setBackgroundResource(R.drawable.btn_filter_fill);
         }
+        btn_filter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getContext(), PopupFilter.class);
+                startActivity(intent);
+                //애니메이션 설정
+                getActivity().overridePendingTransition(R.anim.bottom_up, R.anim.bottom_down);
+            }
+        });
+
         fl_btn_filter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -145,6 +175,12 @@ public class Fragment1_Home extends Fragment {
         sr_layout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+
+                //유저 닉네임 가져오기
+                GetUserData getUserData1 = new GetUserData(
+                        getContext()
+                );
+                getUserData.tryRequest();
 
                 setLoadingPopupNew = false;
                 setLoadingPopupOld = false;
@@ -285,6 +321,7 @@ public class Fragment1_Home extends Fragment {
         isLoadingTopRv = false; //상단 무한스크롤
         isLoadingBottomRv = false;  //하단 무한 스크롤
         Log.e("온리줌" , "온리줌 부름");
+
 
 
     }

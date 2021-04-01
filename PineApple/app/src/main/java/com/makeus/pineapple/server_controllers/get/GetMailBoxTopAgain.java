@@ -50,13 +50,19 @@ public class GetMailBoxTopAgain implements GetMailboxInterface {
             requestQueueTop = Volley.newRequestQueue(myContext); // 큐 객체 생성하기
         }
 
-//        Fragment1_Home.pageTop += 1;
 
         mailboxRequestData = new MailboxRequestData(
                 MainActivity.getUserId(),
                 Fragment1_Home.pageTop,
                 -7
         );
+
+        //---------------------------------------------------------------------------------
+
+        homeAdapters.removeItems(homeAdapters.getItems().size() - 1); //로딩뷰 없애기
+        homeAdapters.notifyItemRemoved(homeAdapters.getItems().size() - 1);
+
+        Fragment1_Home.pageTop += 1; //뉴스를 최대 10개 더 로딩함
 
         JSONObject requestData = makeJsonObject();
         Log.e("get재요청 시작: mailbox 가져오기", " top ");
@@ -75,19 +81,19 @@ public class GetMailBoxTopAgain implements GetMailboxInterface {
         Log.e(" 사이즈 값", newsResult.getNewNewsResultList().size() + "");
         startRequest = true;
 
-        if (Fragment1_Home.isLoadingTopRv == false) {
-            setTopRv();
-//            Fragment1_Home.setLoadingPopupNew = true;
-        }
+/*        if (Fragment1_Home.isLoadingTopRv == false) {
 
-        Fragment1_Home.sr_layout.setRefreshing(false); //새로고침 멈춤
-        MainActivity.setOneTimeEmpty(true);
+        }*/
+
+        setTopRv();
+
+//        Fragment1_Home.sr_layout.setRefreshing(false); //새로고침 멈춤
+//        MainActivity.setOneTimeEmpty(true);
 
     }
 
     public void setLoadingView() {
         if (newsResult.getNewNewsResultList().size() == 0) {
-//            Fragment1_Home.setLoadingPopupNew = true;
             Fragment1_Home.isLoadingTopRv = true;
         }
     }
@@ -126,8 +132,6 @@ public class GetMailBoxTopAgain implements GetMailboxInterface {
             }
         }
 
-/*        // 상단 RV : 어답터 설정, 더보기 설정
-        Fragment1_Home.showNomalRv();*/
         initScrollListener(rv_top, homeAdapters);
     }
 
@@ -145,17 +149,14 @@ public class GetMailBoxTopAgain implements GetMailboxInterface {
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                if (homeAdapters instanceof NewLetterAdapter) {
                     LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                     if (!Fragment1_Home.isLoadingTopRv) {
-                        if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == homeAdapters.getItemCount() - 1) {//bottom of list!
-
+                        if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == homeAdapters.getItemCount()) {//bottom of list!
                             loadMoreTopRv(homeAdapters); //데이터를 더 로딩하기
                             Fragment1_Home.isLoadingTopRv = true;
                         }
                     }
 
-                }
 
             }
         });
@@ -179,11 +180,6 @@ public class GetMailBoxTopAgain implements GetMailboxInterface {
         handler2.postDelayed(new Runnable() { //2초간 실행
             @Override
             public void run() {
-                homeAdapters.removeItems(homeAdapters.getItems().size() - 1); //로딩뷰 없애기
-                int scrollPosition = homeAdapters.getItems().size();
-                homeAdapters.notifyItemRemoved(scrollPosition);
-
-                Fragment1_Home.pageTop += 1; //뉴스를 최대 10개 더 로딩함
 
                 //get요청
                 GetMailBoxTopAgain getMailBoxTopAgain = new GetMailBoxTopAgain(
@@ -196,7 +192,7 @@ public class GetMailBoxTopAgain implements GetMailboxInterface {
                 Fragment1_Home.isLoadingTopRv = false;
 
             }
-        }, 2000);
+        }, 1000);
     }
 
 

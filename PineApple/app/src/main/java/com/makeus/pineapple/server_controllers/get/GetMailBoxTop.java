@@ -160,7 +160,7 @@ public class GetMailBoxTop implements GetMailboxInterface {
 
                 LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 if (!Fragment1_Home.isLoadingTopRv) {
-                    if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == homeAdapters.getItemCount() - 1) {//bottom of list!
+                    if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == homeAdapters.getItemCount()) {//bottom of list!
                         Log.e("보이는 위치", linearLayoutManager.findLastCompletelyVisibleItemPosition() + "");
                         loadMoreTopRv(homeAdapters); //데이터를 더 로딩하기
                         Fragment1_Home.isLoadingTopRv = true;
@@ -181,15 +181,10 @@ public class GetMailBoxTop implements GetMailboxInterface {
         }
 
         Handler handler = new Handler();
-        handler.postDelayed(new Runnable() { //2초간 실행
+        handler.postDelayed(new Runnable() { //0.5초간 실행
             @Override
             public void run() {
                 if (isContinue == true) {
-                    homeAdapters.removeItems(homeAdapters.getItems().size() - 1); //로딩뷰 없애기
-                    int scrollPosition = homeAdapters.getItems().size();
-                    homeAdapters.notifyItemRemoved(scrollPosition);
-
-                    Fragment1_Home.pageTop += 1; //뉴스를 최대 10개 더 로딩함
 
                     //get요청
                     GetMailBoxTopAgain getMailBoxTopAgain = new GetMailBoxTopAgain(

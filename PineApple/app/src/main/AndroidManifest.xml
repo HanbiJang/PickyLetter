@@ -21,9 +21,10 @@
         <activity android:name=".popup.PopupSub" android:theme="@android:style/Theme.Dialog" />
         <activity android:name=".home.filters.PopupFilter" android:theme="@android:style/Theme.Dialog" />
         <activity android:name=".popup.loading.PopupLoading" android:theme="@android:style/Theme.Dialog"/>
-        <activity android:name=".home.filters.PopupEndDatePicker" android:theme="@android:style/Theme.Dialog"/>
-        <activity android:name=".home.filters.PopupStartDatePicker" android:theme="@android:style/Theme.Dialog"/>
+        <activity android:name=".popup.PopupEndDatePicker" android:theme="@android:style/Theme.Dialog"/>
+        <activity android:name=".popup.PopupStartDatePicker" android:theme="@android:style/Theme.Dialog"/>
         <activity android:name=".popup.PopupUnSub" android:theme="@android:style/Theme.Dialog"/>
+        <activity android:name=".popup.PopupLogout" android:theme="@android:style/Theme.Dialog"/>
 
         <activity android:name=".main.MainActivity"/>
         <activity android:name=".sign.SignIn"/>
