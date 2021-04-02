@@ -134,6 +134,11 @@ public class HomeMail extends Fragment {
                 addOrDelBookmark.setBtnFunc(isClicked);
                 isClicked *= -1;
 
+                //모든 페이지 새로고침
+                MainActivity.fragment1_home = null;
+                MainActivity.fragment2_search = null;
+                MainActivity.fragment3_mypage = null;
+
             }
         });
 

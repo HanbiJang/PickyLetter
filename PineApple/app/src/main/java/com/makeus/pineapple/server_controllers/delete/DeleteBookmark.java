@@ -100,6 +100,10 @@ public class DeleteBookmark implements DeleteRequest {
             Fragment3_MyPage.setUserData();
             Fragment3_MyPage.setBookmarkRv(Fragment3_MyPage.view);
         }
+
+
+
+
     }
 
 

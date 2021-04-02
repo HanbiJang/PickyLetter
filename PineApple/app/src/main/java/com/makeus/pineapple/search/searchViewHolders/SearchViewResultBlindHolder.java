@@ -57,6 +57,7 @@ public class SearchViewResultBlindHolder extends SearchViewHolder {
                     Intent intent = new Intent(myContext, PopupSub.class);
                     intent.putExtra("brand", item.getBrand());
                     intent.putExtra("platformId", item.getPlatformId());
+                    intent.putExtra("preView", "search");
                     myContext.startActivity(intent);
 
                 }

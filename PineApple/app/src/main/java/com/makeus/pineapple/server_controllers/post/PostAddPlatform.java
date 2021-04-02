@@ -81,7 +81,6 @@ public class PostAddPlatform implements PostRequest{
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e("Post 에러 발생", error.getMessage());
                         //에러 발생 코드
 
                     }

@@ -57,7 +57,7 @@ public class PostBookmarkAdd implements PostBookmarkAddInterface{
         btn_bookmark.setBackgroundResource(R.drawable.btn_bookmark_fill); //이미지 바꿈
         Toast.makeText(context, "북마크를 등록했어요", Toast.LENGTH_SHORT).show();
 
-        //마이페이지 새로고침
+/*        //마이페이지 새로고침
         if(MainActivity.fragment3_mypage !=null){
             //서버통신
             Fragment3_MyPage.lastLetterId = 0; //마이페이지 북마크 조회 기능 초기화
@@ -66,7 +66,10 @@ public class PostBookmarkAdd implements PostBookmarkAddInterface{
 
             Fragment3_MyPage.setUserData();
             Fragment3_MyPage.setBookmarkRv(Fragment3_MyPage.view);
-        }
+        }*/
+
+        //페이지 새로고침
+        MainActivity.fragment3_mypage = null;
 
     }
 

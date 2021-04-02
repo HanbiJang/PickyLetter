@@ -48,23 +48,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Fragment2_Search extends Fragment {
-    static View view;
+    public static View view;
     static Context myContext;
 
     static String token = null;
-    RequestQueue requestQueue;
+    static RequestQueue requestQueue;
     public static Integer lastLetterId = 0;
     public static String searchKeyword = null;
 
-    RecyclerView rv_rank;
+    public static RecyclerView rv_rank;
     public static RecyclerView rv_search_result;
     public static SearchedNewsResultAdapter searchedNewsResultAdapter;
 
     Button btn_search;
-    EditText et_search;
+    public static EditText et_search;
     Button btn_x;
-    TextView tv_search_result;
-    LinearLayout ll_search_result;
+    public static TextView tv_search_result;
+    public static LinearLayout ll_search_result;
     FrameLayout fl_btn_x, fl_btn_search;
 
     //검색 결과 무한 스크롤
@@ -213,7 +213,7 @@ public class Fragment2_Search extends Fragment {
         return view;
     }
 
-    private void setResultRv(View view) {
+    public static  void setResultRv(View view) {
         LinearLayoutManager layoutManager2 =
                 new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
         rv_search_result.setLayoutManager((layoutManager2));
@@ -367,7 +367,7 @@ public class Fragment2_Search extends Fragment {
         sr_layout = view.findViewById(R.id.sr_layout);
     }
 
-    private void setRankRv(View view) {
+    public static void setRankRv(View view) {
         LinearLayoutManager layoutManager =
                 new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
         rv_rank.setLayoutManager((layoutManager));
@@ -377,7 +377,7 @@ public class Fragment2_Search extends Fragment {
         setNewsToRv(searchedNewsAdapter);
     }
 
-    private void setNewsToRv(SearchedNewsRankAdapter searchedNewsAdapter) {
+    public static void setNewsToRv(SearchedNewsRankAdapter searchedNewsAdapter) {
         searchedNewsAdapter.removeAll(); //안 쌓이게 하기
 
         //서버에서 구독메일을 받아서 리사이클러뷰의 내용을 세팅함
@@ -385,18 +385,18 @@ public class Fragment2_Search extends Fragment {
         tryGetRankLetter(searchedNewsArrayList, searchedNewsAdapter); //get요청
     }
 
-    private void tryGetRankLetter(ArrayList<SearchedNews> searchedNewsArrayList, SearchedNewsRankAdapter searchedNewsAdapter) {
+    public static void tryGetRankLetter(ArrayList<SearchedNews> searchedNewsArrayList, SearchedNewsRankAdapter searchedNewsAdapter) {
         //시작 로딩 팝업
         setLoadingPopup = false;
-        Intent intent = new Intent(getContext(), PopupLoading.class);
+        Intent intent = new Intent(myContext, PopupLoading.class);
         intent.putExtra("pastFragmentNum", 2);
-        getContext().startActivity(intent);
+        myContext.startActivity(intent);
 
         JSONObject requestData1 = makeJsonObject();
         makeGetRequestMailBox(requestData1, makeRankUrl(), searchedNewsArrayList, searchedNewsAdapter);
     }
 
-    private void makeGetRequestMailBox(JSONObject requestData, String rankUrl, ArrayList<SearchedNews> searchedNewsArrayList, SearchedNewsRankAdapter searchedNewsAdapter) {
+    public static void makeGetRequestMailBox(JSONObject requestData, String rankUrl, ArrayList<SearchedNews> searchedNewsArrayList, SearchedNewsRankAdapter searchedNewsAdapter) {
         //서버에 요청을 보내기 위한 객체 생성
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET,
@@ -414,7 +414,7 @@ public class Fragment2_Search extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getContext(), "순위 데이터 오류", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(myContext, "순위 데이터 오류", Toast.LENGTH_SHORT).show();
 
                     }
                 }
@@ -446,7 +446,7 @@ public class Fragment2_Search extends Fragment {
         requestQueue.add(request);
     }
 
-    private void setRankLetterListToRv(ArrayList<SearchedNews> searchedNewsArrayList,
+    static void setRankLetterListToRv(ArrayList<SearchedNews> searchedNewsArrayList,
                                        SearchedNewsRankAdapter searchedNewsAdapter) {
 
         for (int i = 0; i < searchedNewsArrayList.size(); i++) {
@@ -459,7 +459,7 @@ public class Fragment2_Search extends Fragment {
 
 
     //순위 리사이클러뷰 데이터 처리
-    private void processResponseForRank(JSONObject response, ArrayList<SearchedNews> searchedNewsArrayList, SearchedNewsRankAdapter searchedNewsAdapter) {
+    static void processResponseForRank(JSONObject response, ArrayList<SearchedNews> searchedNewsArrayList, SearchedNewsRankAdapter searchedNewsAdapter) {
         Gson gson = new Gson();
         SearchResult rankResult = gson.fromJson(String.valueOf(response), SearchResult.class);
         for (int i = 0; i < rankResult.getResultList().size(); i++) {
@@ -489,13 +489,13 @@ public class Fragment2_Search extends Fragment {
         }
     }
 
-    private String makeRankUrl() {
+    public static String makeRankUrl() {
         String url;
         url = "http://3.13.65.158/v1/letters/bookmark-rank";
         return url;
     }
 
-    private JSONObject makeJsonObject() {
+    public static JSONObject makeJsonObject() {
         JSONObject requestData = new JSONObject();
         try {
             requestData.put("x-access-token", token);
@@ -570,7 +570,6 @@ public class Fragment2_Search extends Fragment {
                 }
             }, 1200);
 
-
-
     }
+
 }

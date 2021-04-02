@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.makeus.pineapple.R;
+import com.makeus.pineapple.search.Fragment2_Search;
 import com.makeus.pineapple.server_controllers.post.PostAddPlatform;
 
 public class PopupSub extends Activity {
@@ -25,19 +26,21 @@ public class PopupSub extends Activity {
     String brand;
     public static Integer platformId;
 
+    String preView;
+
     @Override //바깥영역 터치 막기
-    public boolean dispatchTouchEvent(MotionEvent ev){
+    public boolean dispatchTouchEvent(MotionEvent ev) {
         Rect dialogBoinds = new Rect();
         getWindow().getDecorView().getHitRect(dialogBoinds);
 
-        if(!dialogBoinds.contains((int)ev.getX(), (int) ev.getY())){
+        if (!dialogBoinds.contains((int) ev.getX(), (int) ev.getY())) {
             return false;
         }
         return super.dispatchTouchEvent(ev);
     }
 
     @Override
-    protected  void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //타이틀바 없애기
@@ -52,10 +55,10 @@ public class PopupSub extends Activity {
         Intent intent = getIntent();
         brand = intent.getExtras().getString("brand");
         platformId = intent.getExtras().getInt("platformId");
+        preView = intent.getExtras().getString("preView");
 
 
-        tv_brand.setText(brand+"(을)를\n아직 구독하지 않고 계시네요!\n구독하여 더 다양한 뉴스레터를 \n받아보시겠어요?");
-
+        tv_brand.setText(brand + "(을)를\n아직 구독하지 않고 계시네요!\n구독하여 더 다양한 뉴스레터를 \n받아보시겠어요?");
 
 
         btn_no.setOnClickListener(new View.OnClickListener() {
@@ -80,15 +83,37 @@ public class PopupSub extends Activity {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        if (preView.equals("search")) {
+                            //구독을 하고 돌아왔을 시
+                            //랭킹 rv와 검색 rv 새로고침
+                            Fragment2_Search.setLoadingPopup = false; //로딩팝업 관련
+                            Fragment2_Search.setRankRv(Fragment2_Search.view);
+                            Fragment2_Search.sr_layout.setRefreshing(false); //새로고침 멈춤
+
+                            //검색 재검색
+                            if (Fragment2_Search.searchKeyword != null) {
+                                Fragment2_Search.lastLetterId = 0;
+
+                                //검색 초기화
+                                Fragment2_Search.et_search.setText(null);
+                                Fragment2_Search.rv_search_result.setAdapter(null);
+
+                                Fragment2_Search.tv_search_result.setText("'" + Fragment2_Search.searchKeyword + "'" + " 검색 결과");
+                                Fragment2_Search.ll_search_result.setVisibility(View.VISIBLE);
+                                // 검색 결과 리사이클러뷰 결과 만들기
+
+                                Fragment2_Search.setResultRv(Fragment2_Search.view);
+
+                            }
+                        }
+
                         finish();
                     }
-                },500);
+                }, 500);
 
 
             }
         });
-
-
 
 
     }
