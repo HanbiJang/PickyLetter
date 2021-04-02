@@ -8,12 +8,18 @@ public class User {
     Integer subscribingPlatformCount;
     Integer userId;
 
+    Integer loginCount = 0;
+
     public User(Integer bookmarkCount, String email, String nickname, Integer subscribingPlatformCount, Integer userId) {
         this.bookmarkCount = bookmarkCount;
         this.email = email;
         this.nickname = nickname;
         this.subscribingPlatformCount = subscribingPlatformCount;
         this.userId = userId;
+    }
+
+    public Integer getLoginCount() {
+        return loginCount;
     }
 
     public Integer getBookmarkCoung() {

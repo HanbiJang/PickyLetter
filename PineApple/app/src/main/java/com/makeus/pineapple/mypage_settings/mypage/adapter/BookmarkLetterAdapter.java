@@ -44,7 +44,7 @@ public class BookmarkLetterAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     static ArrayList<BookmarkLetter> items = new ArrayList<>();
     //뷰타입 - 로딩뷰, 원래뷰
     private final int VIEW_TYPE_BOOKMARK = 0;
-//    private final int VIEW_TYPE_LOADING = 1;
+    //    private final int VIEW_TYPE_LOADING = 1;
     private final int VIEW_TYPE_MORE = 2;
 
     @NonNull

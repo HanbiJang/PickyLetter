@@ -38,7 +38,7 @@ public class OldLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     static ArrayList<NewsData> items = new ArrayList<>();
     //뷰타입 - 로딩뷰, 원래뷰
     private final int VIEW_TYPE_PAST_NEWS = 0;
-//    private final int VIEW_TYPE_LOADING = 1;
+    //    private final int VIEW_TYPE_LOADING = 1;
     private final int VIEW_TYPE_MORE = 2;
 
     @NonNull
@@ -72,17 +72,13 @@ public class OldLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             //인플레이션
             LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
             View itemView = inflater.inflate(R.layout.home_view_past_letter, viewGroup, false);
-
             return new ViewHolder(itemView);
         } else if (viewType == VIEW_TYPE_LOADING) {
             //인플레이션
             LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
             View itemView = inflater.inflate(R.layout.view_loading, viewGroup, false);
-
             return new LoadingViewHolder(itemView);
-
         }
-
         return null;*/
 
 

@@ -42,7 +42,7 @@ public class AddOrDelBookmark {
                 requestQueueBookmarkAdd = Volley.newRequestQueue(myContext); // 큐 객체 생성하기
             }
             Log.e("북마크 추가 시작",letterId+ "레터아이디값");
-            postBookmarkAdd = new PostBookmarkAdd(requestQueueBookmarkAdd, letterId, btn_bookmark);
+            postBookmarkAdd = new PostBookmarkAdd(myContext,letterId, btn_bookmark);
             postBookmarkAdd.tryRequest();
         } else {
             //북마크 해제 요청
@@ -53,7 +53,7 @@ public class AddOrDelBookmark {
             if (requestQueueGetLetterInform == null){
                 requestQueueGetLetterInform = Volley.newRequestQueue(myContext);
             }
-            deleteBookmark = new DeleteBookmark(requestQueueBookmarkDel,requestQueueGetLetterInform, letterId,btn_bookmark);
+            deleteBookmark = new DeleteBookmark(myContext,letterId,btn_bookmark);
             deleteBookmark.tryRequest();
         }
     }

@@ -27,7 +27,6 @@ public class UserResult {
 
     //
 
-
     public String getToken() {
         return token;
     }

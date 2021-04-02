@@ -89,6 +89,8 @@ public class HomeMail extends Fragment {
 
         //네비게이터 막기
         MainActivity.toggleNavigationBarItems(false);
+        //네비게이터 안보이게 만들기
+        MainActivity.navigation.setVisibility(View.INVISIBLE);
 
         //어댑터로부터 정보 넘겨받기
         getDataFromAdapter();
@@ -164,6 +166,8 @@ public class HomeMail extends Fragment {
                 hide(homeMail).commit();
         //네비게이터 풀기
         MainActivity.toggleNavigationBarItems(true);
+        //네비게이터 보이게 만들기
+        MainActivity.navigation.setVisibility(View.VISIBLE);
     }
 
 

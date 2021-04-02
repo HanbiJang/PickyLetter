@@ -16,12 +16,15 @@
 
     <FrameLayout
         android:id="@+id/fl_mail"
-        android:layout_width="328dp"
+        android:layout_width="match_parent"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_height="76dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="202dp"
+
         android:background="@drawable/round_squre"
         android:backgroundTintMode="screen"
         android:backgroundTint="@color/pickyUnableGray"
@@ -83,7 +86,9 @@
 
     <FrameLayout
         android:id="@+id/fl_pw"
-        android:layout_width="328dp"
+        android:layout_width="match_parent"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_height="76dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -157,7 +162,9 @@
     
     <Button
         android:id="@+id/btn_login"
-        android:layout_width="328dp"
+        android:layout_width="match_parent"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_height="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -173,43 +180,52 @@
         app:backgroundTintMode="multiply"
         />
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-android:layout_marginBottom="110dp"
-        android:gravity="center">
+        android:layout_marginBottom="110dp">
 
         <View
-            android:layout_width="90dp"
+            android:id="@+id/v_1"
+            android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="@color/pickyUnableGray"/>
+            android:layout_weight="1"
+            android:background="@color/pickyUnableGray"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="6.5dp"/>
 
         <TextView
+            android:id="@+id/tv_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="아직 회원이 아니신가요?"
+            android:text="  아직 회원이 아니신가요?  "
             android:textColor="@color/pickyGray"
             android:fontFamily="@font/no_r"
             android:includeFontPadding="false"
             android:textSize="13sp"
+            android:layout_weight="0.8"
             android:layout_marginLeft="7dp"
-            android:layout_marginRight="7dp"/>
+            android:layout_marginRight="7dp"
+            android:background="@color/white"
+            android:layout_marginBottom="2dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <View
-            android:layout_width="90dp"
-            android:layout_height="2dp"
-            android:background="@color/pickyUnableGray"/>
 
-
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
         android:id="@+id/btn_signup"
-        android:layout_width="328dp"
+        android:layout_width="match_parent"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
         android:layout_height="48dp"
         android:layout_marginBottom="45dp"
         android:background="@drawable/round_squre_blue"

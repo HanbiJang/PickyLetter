@@ -47,6 +47,8 @@ public class SettingsMain extends Fragment {
 
         //네비게이터 막기
         MainActivity.toggleNavigationBarItems(false);
+        //네비게이터 안보이게 만들기
+        MainActivity.navigation.setVisibility(View.INVISIBLE);
 
         findviewByidLl(view);
 

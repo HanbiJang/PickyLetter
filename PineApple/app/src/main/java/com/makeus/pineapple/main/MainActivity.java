@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     public static Fragment fragment1_home;
     public static Fragment fragment2_search;
     public static Fragment fragment3_mypage;
-    static BottomNavigationView navigation;
+    public static BottomNavigationView navigation;
 
     public static FragmentManager fragmentManager;
 

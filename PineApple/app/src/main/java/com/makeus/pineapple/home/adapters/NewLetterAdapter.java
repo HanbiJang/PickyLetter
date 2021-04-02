@@ -268,5 +268,3 @@ public class NewLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
 }
-
-

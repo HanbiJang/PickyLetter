@@ -26,6 +26,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.makeus.pineapple.FirstEditLetter;
 import com.makeus.pineapple.main.MainActivity;
 import com.makeus.pineapple.R;
 import com.makeus.pineapple.sign.users.UserResult;
@@ -40,13 +41,15 @@ import java.util.Map;
 public class SignIn extends Activity {
 
     static String loginUrl = "http://3.13.65.158/v1/users/login"; //로그인 url
-    static RequestQueue requestQueue;
+    static RequestQueue requestQueue ;
     public static String token = null;
     public static Integer userId = null;
     static String userEmail;
     static String userpw;
     public static String userNickName;
     boolean loginResult;
+
+    Integer loginCount =0;
 
     Button btn_x_pw, btn_x_mail;
     Button btn_login, btn_signup, btn_eye;
@@ -253,21 +256,44 @@ public class SignIn extends Activity {
 
         if (loginResult == true) {
             //로그인 성공 시
-            Intent intent = new Intent(SignIn.this, MainActivity.class);
-            intent.putExtra("token", token); //인텐트로 token 정보를 넘김
-            intent.putExtra("userId", userId); //인텐트로 userId 정보를 넘김
-            intent.putExtra("nickName", userNickName); //인텐트로 userId 정보를 넘김
-            startActivity(intent);
-            overridePendingTransition(R.anim.enter_right, R.anim.exit_left);
-            finish();
 
-            //토큰,userId, nickName 저장하기
-            SharedPreferences sharedPreferences= getSharedPreferences("user", MODE_PRIVATE);    // user 이름의 기본모드 설정
-            SharedPreferences.Editor editor= sharedPreferences.edit(); //sharedPreferences를 제어할 editor를 선언
-            editor.putString("token",token); // key,value 형식으로 저장
-            editor.putInt("userId", userId); // key,value 형식으로 저장
-            editor.putString("nickName", userNickName); // key,value 형식으로 저장
-            editor.commit();    //최종 커밋. 커밋을 해야 저장이 된다.
+            if(loginCount == 1){
+                Intent intent = new Intent(SignIn.this, FirstEditLetter.class);
+                intent.putExtra("token", token); //인텐트로 token 정보를 넘김
+                intent.putExtra("userId", userId); //인텐트로 userId 정보를 넘김
+                intent.putExtra("nickName", userNickName); //인텐트로 userId 정보를 넘김
+                startActivity(intent);
+                overridePendingTransition(R.anim.enter_right, R.anim.exit_left);
+                finish();
+
+                //토큰,userId, nickName 저장하기
+                SharedPreferences sharedPreferences= getSharedPreferences("user", MODE_PRIVATE);    // user 이름의 기본모드 설정
+                SharedPreferences.Editor editor= sharedPreferences.edit(); //sharedPreferences를 제어할 editor를 선언
+                editor.putString("token",token); // key,value 형식으로 저장
+                editor.putInt("userId", userId); // key,value 형식으로 저장
+                editor.putString("nickName", userNickName); // key,value 형식으로 저장
+                editor.commit();    //최종 커밋. 커밋을 해야 저장이 된다.
+            }
+
+            else{
+
+                Intent intent = new Intent(SignIn.this, MainActivity.class);
+                intent.putExtra("token", token); //인텐트로 token 정보를 넘김
+                intent.putExtra("userId", userId); //인텐트로 userId 정보를 넘김
+                intent.putExtra("nickName", userNickName); //인텐트로 userId 정보를 넘김
+                startActivity(intent);
+                overridePendingTransition(R.anim.enter_right, R.anim.exit_left);
+                finish();
+
+                //토큰,userId, nickName 저장하기
+                SharedPreferences sharedPreferences= getSharedPreferences("user", MODE_PRIVATE);    // user 이름의 기본모드 설정
+                SharedPreferences.Editor editor= sharedPreferences.edit(); //sharedPreferences를 제어할 editor를 선언
+                editor.putString("token",token); // key,value 형식으로 저장
+                editor.putInt("userId", userId); // key,value 형식으로 저장
+                editor.putString("nickName", userNickName); // key,value 형식으로 저장
+                editor.commit();    //최종 커밋. 커밋을 해야 저장이 된다.
+            }
+
 
         }
     }
@@ -278,6 +304,7 @@ public class SignIn extends Activity {
         userId = userResult.getUser().getUserId();
         token = userResult.getToken();
         userNickName = userResult.getUser().getNickname();
+        loginCount = userResult.getUser().getLoginCount();
     }
 
 

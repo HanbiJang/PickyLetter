@@ -3,6 +3,7 @@ package com.makeus.pineapple.popup;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
@@ -75,6 +76,15 @@ public class PopupOut extends Activity {
                 startActivity(intent);
                 finish();
                 overridePendingTransition(R.anim.bottom_up, R.anim.bottom_down);
+
+                //로그아웃때처럼 토큰, 사용자 정보 날리기
+                //shared Preferences 값 지우기
+                SharedPreferences sharedPreferences= getSharedPreferences("user", MODE_PRIVATE);    // user 이름의 기본모드 설정
+                SharedPreferences.Editor editor= sharedPreferences.edit(); //sharedPreferences를 제어할 editor를 선언
+                editor.remove("token"); // key,value 형식으로 저장
+                editor.remove("userId"); // key,value 형식으로 저장
+                editor.remove("nickName"); // key,value 형식으로 저장
+                editor.commit();    //최종 커밋. 커밋을 해야 저장이 된다.
             }
         });
 

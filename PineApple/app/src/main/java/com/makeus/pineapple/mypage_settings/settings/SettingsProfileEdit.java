@@ -50,6 +50,8 @@ public class SettingsProfileEdit extends Fragment {
 
         //네비게이터 막기
         MainActivity.toggleNavigationBarItems(false);
+        //네비게이터 안보이게 만들기
+        MainActivity.navigation.setVisibility(View.INVISIBLE);
 
         et_nickname = view.findViewById(R.id.et_nickname);
         btn_edit = view.findViewById(R.id.btn_edit);

@@ -31,6 +31,7 @@
         <activity android:name=".sign.SignUp_1"/>
         <activity android:name=".sign.SignUp_2"/>
         <activity android:name=".sign.SignUp_3"/>
+        <activity android:name=".FirstEditLetter"/>
 
         <activity
             android:name=".main.Splash"

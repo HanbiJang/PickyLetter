@@ -45,19 +45,19 @@ public class Fragment3_MyPage extends Fragment {
     public static Integer page = -1;
     public static Integer pageLimit = 0;
 
-    static View view;
+    public static View view;
 
     public static Integer lastLetterId = 0;
 
     MainActivity mainActivity;
-    FragmentActivity myContext; //화면 전환
+    static FragmentActivity myContext; //화면 전환
 
     public static RecyclerView rv_mypage_bookmark;
     Button btn_setting;
     FrameLayout fl_btn_setting;
-    TextView tv_nickname, tv_email, tv_bookmarknum;
+    static TextView tv_nickname, tv_email, tv_bookmarknum;
 
-    RequestQueue requestQueueUserData;
+    static RequestQueue requestQueueUserData;
     public static BookmarkLetterAdapter bookmarkLetterAdapter;
 
 
@@ -80,6 +80,9 @@ public class Fragment3_MyPage extends Fragment {
         view = inflater.inflate(R.layout.fragment3_mypage, container, false);
         lastLetterId = 0; //마이페이지 북마크 조회 기능 초기화
         setLoadingPopup = false;
+
+        //네비게이터 보이게 만들기
+        MainActivity.navigation.setVisibility(View.VISIBLE);
 
         if(requestQueueUserData == null){
             requestQueueUserData = Volley.newRequestQueue(myContext); // 큐 객체 생성하기
@@ -148,11 +151,11 @@ public class Fragment3_MyPage extends Fragment {
 
     }
 
-    private void setMyPage(View view) {
+    public static void setMyPage(View view) {
         try {
-            Intent intent = new Intent(getContext(), PopupLoading.class);
+            Intent intent = new Intent(myContext, PopupLoading.class);
             intent.putExtra("pastFragmentNum", 3);
-            getContext().startActivity(intent);
+            myContext.startActivity(intent);
         } catch (Exception e) {
             Log.e("0", "로딩 오류");
         }
@@ -161,17 +164,17 @@ public class Fragment3_MyPage extends Fragment {
         setBookmarkRv(view); //북마크 리사이클러뷰 설정 (get요청 포함)
     }
 
-    private void setUserData() {
+    public static void setUserData() {
         UserData userData = new UserData();
         tryGetUserData(userData); //get 요청
     }
 
-    private void tryGetUserData(UserData userData) {
+    private static void tryGetUserData(UserData userData) {
         JSONObject requestData1 = makeJsonObject();
         makeGetRequestUserData(requestData1, makeUserDataUrl());
     }
 
-    private void makeGetRequestUserData(JSONObject requestData, String makeUserDataUrl) {
+    private static void makeGetRequestUserData(JSONObject requestData, String makeUserDataUrl) {
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET,
                 makeUserDataUrl,
@@ -217,13 +220,13 @@ public class Fragment3_MyPage extends Fragment {
         requestQueueUserData.add(request);
     }
 
-    private void setUserDataToText(UserData userData) {
+    private static void setUserDataToText(UserData userData) {
         tv_nickname.setText(userData.getNickname());
         tv_bookmarknum.setText("나의 북마크 ("+userData.getBookmarkCount()+")");
         tv_email.setText(userData.getEmail());
     }
 
-    private UserData processResponseForUserData(JSONObject response) {
+    private static UserData processResponseForUserData(JSONObject response) {
         Gson gson = new Gson();
         UserData userData = gson.fromJson(String.valueOf(response), UserData.class);
 
@@ -231,13 +234,13 @@ public class Fragment3_MyPage extends Fragment {
 
     }
 
-    private String makeUserDataUrl() {
+    private static String makeUserDataUrl() {
         String url;
         url = "http://3.13.65.158/v1/users";
         return url;
     }
 
-    private void setBookmarkRv(View view) {
+    public static void setBookmarkRv(View view) {
 
         LinearLayoutManager layoutManager2 =
                 new LinearLayoutManager(view.getContext(), LinearLayoutManager.VERTICAL, false);
@@ -248,11 +251,11 @@ public class Fragment3_MyPage extends Fragment {
         setNewsToRv(bookmarkLetterAdapter);
     }
 
-    private void setNewsToRv(BookmarkLetterAdapter bookmarkLetterAdapter) {
+    private static void setNewsToRv(BookmarkLetterAdapter bookmarkLetterAdapter) {
         setLoadingPopup = false;
 
         GetBookmarkLetters getBookmarkLetters = new GetBookmarkLetters(
-                getContext(),
+                myContext,
                 rv_mypage_bookmark,
                 bookmarkLetterAdapter
         );
@@ -260,7 +263,7 @@ public class Fragment3_MyPage extends Fragment {
     }
 
 
-    private JSONObject makeJsonObject() {
+    private static JSONObject makeJsonObject() {
         JSONObject requestData = new JSONObject();
         return requestData;
     }
@@ -276,5 +279,10 @@ public class Fragment3_MyPage extends Fragment {
         sr_layout = view.findViewById(R.id.sr_layout);
     }
 
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        //네비게이터 보이게 만들기
+        MainActivity.navigation.setVisibility(View.VISIBLE);
+    }
 }

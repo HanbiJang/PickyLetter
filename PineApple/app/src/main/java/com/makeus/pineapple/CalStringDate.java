@@ -21,7 +21,6 @@ public class CalStringDate {
         Integer days = Integer.valueOf(new SimpleDateFormat("dd").format(date)); // 일
 
         String newDate = month + "/" + days + "/" + year;
-        Log.e("날짜 계산", newDate);
         return newDate;
     }
 }
