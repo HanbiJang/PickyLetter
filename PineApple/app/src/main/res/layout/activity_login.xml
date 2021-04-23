@@ -67,7 +67,11 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginBottom="12dp"
                 android:background="@color/white"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+
+                android:singleLine="true"
+                android:nextFocusDown="@+id/et_pw"
+                />
 
             <Button
                 android:id="@+id/btn_x_mail"
@@ -134,7 +138,10 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginBottom="12dp"
                     android:background="@color/white"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+
+                    android:imeOptions="actionDone"
+                    />
 
                 <Button
                     android:id="@+id/btn_x_pw"

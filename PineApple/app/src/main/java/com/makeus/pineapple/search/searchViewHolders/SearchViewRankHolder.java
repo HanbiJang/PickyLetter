@@ -1,6 +1,7 @@
 package com.makeus.pineapple.search.searchViewHolders;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -58,6 +59,8 @@ public class SearchViewRankHolder extends SearchViewHolder {
     //화면 전환
     FragmentActivity myContext;
 
+    Boolean isShowHomeMail = false;
+
 
     public SearchViewRankHolder(@NonNull View itemView) {
         super(itemView);
@@ -75,18 +78,31 @@ public class SearchViewRankHolder extends SearchViewHolder {
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int pos = getAdapterPosition(); //리사이클러뷰 내의 위치 알 수 있음
-                if (pos != RecyclerView.NO_POSITION) {
-                    // 데이터 리스트로부터 아이템 데이터 참조.
-                    Fragment fragment_homemail = new HomeMail();
+                if (isShowHomeMail == false) {//중복클릭 방지
+                    //중복클릭 방지
+                    isShowHomeMail = true;
 
-                    sendItemDataToNext(pos, fragment_homemail);
-                    showHomeMail();
+                    int pos = getAdapterPosition(); //리사이클러뷰 내의 위치 알 수 있음
+                    if (pos != RecyclerView.NO_POSITION) {
+                        // 데이터 리스트로부터 아이템 데이터 참조.
+                        Fragment fragment_homemail = new HomeMail();
 
-/*                    myContext.getSupportFragmentManager().beginTransaction().
-                            setCustomAnimations(R.anim.enter_right, R.anim.exit_left, R.anim.enter_left_pop, R.anim.exit_left_pop).
-                            addToBackStack(null).
-                            replace(R.id.container_fragment, fragment_homemail).commit();*/
+                        sendItemDataToNext(pos, fragment_homemail);
+                        showHomeMail();
+
+                        android.os.Handler handler = new Handler();
+                        handler.postDelayed(
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        //중복클릭 방지
+                                        isShowHomeMail = false;
+                                    }
+                                }
+                                , 500);
+
+                }
+
 
                 }
             }
@@ -104,17 +120,19 @@ public class SearchViewRankHolder extends SearchViewHolder {
         MainActivity.fragmentManager.beginTransaction().show(fragment_homemail).commit();
         MainActivity.fragmentManager.beginTransaction().
                 setCustomAnimations(R.anim.enter_right, R.anim.exit_left).add(R.id.container_fragment, fragment_homemail).commit();
-        if(MainActivity.fragment1_home != null) MainActivity.fragmentManager.beginTransaction().hide(MainActivity.fragment1_home).commit();
-        if(MainActivity.fragment2_search != null) MainActivity.fragmentManager.beginTransaction().
+        if (MainActivity.fragment1_home != null)
+            MainActivity.fragmentManager.beginTransaction().hide(MainActivity.fragment1_home).commit();
+        if (MainActivity.fragment2_search != null) MainActivity.fragmentManager.beginTransaction().
                 setCustomAnimations(R.anim.enter_right, R.anim.exit_left, R.anim.enter_left_pop, R.anim.exit_left_pop).
                 addToBackStack(null).
                 hide(MainActivity.fragment2_search).commit();
-        if(MainActivity.fragment3_mypage != null) MainActivity.fragmentManager.beginTransaction().hide(MainActivity.fragment3_mypage).commit();
+        if (MainActivity.fragment3_mypage != null)
+            MainActivity.fragmentManager.beginTransaction().hide(MainActivity.fragment3_mypage).commit();
 
     }
 
     //클릭 시 홈메일 화면으로 데이터를 보내줌
-    private void sendItemDataToNext( int pos, Fragment fragment){
+    private void sendItemDataToNext(int pos, Fragment fragment) {
         SearchedNews item = SearchedNewsRankAdapter.getItems().get(pos);
 
         // 누른 아이템에 대한 정보 프래그먼트로 전달

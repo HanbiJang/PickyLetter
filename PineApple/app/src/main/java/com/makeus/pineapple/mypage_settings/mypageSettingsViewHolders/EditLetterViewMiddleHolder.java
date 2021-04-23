@@ -24,7 +24,6 @@ public class EditLetterViewMiddleHolder extends EditLetterViewHolder {
     CircleImageView cimg_brand;
     Button btn_del;
 
-
     public EditLetterViewMiddleHolder(@NonNull View itemView) {
         super(itemView);
 

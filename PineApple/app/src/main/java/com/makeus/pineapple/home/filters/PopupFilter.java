@@ -42,18 +42,6 @@ public class PopupFilter extends Activity {
     public static TextView tv_start_days, tv_start_year_month, tv_start_day,
             tv_end_days, tv_end_year_month, tv_end_day, tv_start, tv_end, tv__;
 
-    //날짜
-
-    @Override //바깥영역 터치 막기
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        Rect dialogBoinds = new Rect();
-        getWindow().getDecorView().getHitRect(dialogBoinds);
-
-        if (!dialogBoinds.contains((int) ev.getX(), (int) ev.getY())) {
-            return false;
-        }
-        return super.dispatchTouchEvent(ev);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

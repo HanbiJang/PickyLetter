@@ -71,7 +71,10 @@
                     android:padding="10dp"
                     android:textColor="@color/pickyGray"
                     android:textColorHint="@color/pickyUnableGray"
-                    android:textSize="12sp">
+                    android:textSize="12sp"
+
+                    android:imeOptions="actionSearch"
+                    >
 
                 </EditText>
 

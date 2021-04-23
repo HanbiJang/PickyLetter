@@ -55,9 +55,12 @@ public class PostBookmarkAdd implements PostBookmarkAddInterface{
         BookmakrResult bookmakrResult = gson.fromJson(String.valueOf(response), BookmakrResult.class);
         Log.d("북마크 동작: ", String.valueOf(bookmakrResult.isResult()));
         btn_bookmark.setBackgroundResource(R.drawable.btn_bookmark_fill); //이미지 바꿈
-        Toast.makeText(context, "북마크를 등록했어요", Toast.LENGTH_SHORT).show();
 
-/*        //마이페이지 새로고침
+        //북마크 버튼 활성화 시키기
+        btn_bookmark.setEnabled(true);
+        btn_bookmark.setClickable(true);
+
+        //마이페이지 새로고침
         if(MainActivity.fragment3_mypage !=null){
             //서버통신
             Fragment3_MyPage.lastLetterId = 0; //마이페이지 북마크 조회 기능 초기화
@@ -66,7 +69,7 @@ public class PostBookmarkAdd implements PostBookmarkAddInterface{
 
             Fragment3_MyPage.setUserData();
             Fragment3_MyPage.setBookmarkRv(Fragment3_MyPage.view);
-        }*/
+        }
 
         //페이지 새로고침
         MainActivity.fragment3_mypage = null;

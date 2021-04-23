@@ -7,6 +7,8 @@
 
 
     <application
+        android:resizeableActivity="false"
+
         android:icon="@drawable/picky_letter_app_icon_final"
         android:usesCleartextTraffic="true"
         android:allowBackup="true"
@@ -25,6 +27,7 @@
         <activity android:name=".popup.PopupStartDatePicker" android:theme="@android:style/Theme.Dialog"/>
         <activity android:name=".popup.PopupUnSub" android:theme="@android:style/Theme.Dialog"/>
         <activity android:name=".popup.PopupLogout" android:theme="@android:style/Theme.Dialog"/>
+        <activity android:name=".popup.PopupEmpty" android:theme="@android:style/Theme.Dialog"/>
 
         <activity android:name=".main.MainActivity"/>
         <activity android:name=".sign.SignIn"/>

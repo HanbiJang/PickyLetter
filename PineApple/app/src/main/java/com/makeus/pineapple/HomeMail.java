@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,7 +25,6 @@ import com.makeus.pineapple.bookmark.AddOrDelBookmark;
 import com.makeus.pineapple.main.MainActivity;
 import com.makeus.pineapple.server_controllers.get.GetLetterInformHomeMail;
 import com.makeus.pineapple.server_controllers.server_data.NewsData;
-import com.makeus.pineapple.sign.SignIn;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,7 +52,7 @@ public class HomeMail extends Fragment {
     MainActivity mainActivity;
     public static FragmentActivity myContext; //화면 전환
     FrameLayout fl_btn_back;
-    static Button btn_bookmark , btn_back;
+    static Button btn_bookmark, btn_back;
     TextView tv_title;
     TextView tv_brand;
     TextView tv_date;
@@ -116,7 +114,6 @@ public class HomeMail extends Fragment {
         //웹뷰
         MyWebView myWebView = new MyWebView();
         myWebView.wvSetting(wv_news);
-
         tryGetHtmlAndLoad(letterId);//html 정보 가져오기
 
         AddOrDelBookmark addOrDelBookmark = new AddOrDelBookmark(btn_bookmark,
@@ -133,11 +130,6 @@ public class HomeMail extends Fragment {
                 //북마크 등록/해제 함수
                 addOrDelBookmark.setBtnFunc(isClicked);
                 isClicked *= -1;
-
-                //모든 페이지 새로고침
-                MainActivity.fragment1_home = null;
-                MainActivity.fragment2_search = null;
-                MainActivity.fragment3_mypage = null;
 
             }
         });

@@ -50,12 +50,14 @@ public class PopupSub extends Activity {
         //팝업설정
         setDialog();
 
-        findViewByIdAll();
-
         Intent intent = getIntent();
         brand = intent.getExtras().getString("brand");
         platformId = intent.getExtras().getInt("platformId");
         preView = intent.getExtras().getString("preView");
+
+
+        findViewByIdAll();
+
 
 
         tv_brand.setText(brand + "(을)를\n아직 구독하지 않고 계시네요!\n구독하여 더 다양한 뉴스레터를 \n받아보시겠어요?");
@@ -83,33 +85,38 @@ public class PopupSub extends Activity {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (preView.equals("search")) {
-                            //구독을 하고 돌아왔을 시
-                            //랭킹 rv와 검색 rv 새로고침
-                            Fragment2_Search.setLoadingPopup = false; //로딩팝업 관련
-                            Fragment2_Search.setRankRv(Fragment2_Search.view);
-                            Fragment2_Search.sr_layout.setRefreshing(false); //새로고침 멈춤
+                        if(preView != null){
+                            if (preView.equals("search")) {
+                                //구독을 하고 돌아왔을 시
+                                //랭킹 rv와 검색 rv 새로고침
+                                Fragment2_Search.setLoadingPopup = false; //로딩팝업 관련
+                                Fragment2_Search.setRankRv(Fragment2_Search.view);
+                                Fragment2_Search.sr_layout.setRefreshing(false); //새로고침 멈춤
 
-                            //검색 재검색
-                            if (Fragment2_Search.searchKeyword != null) {
-                                Fragment2_Search.lastLetterId = 0;
+                                //검색 재검색
+                                if (Fragment2_Search.searchKeyword != null) {
+                                    Fragment2_Search.lastLetterId = 0;
 
-                                //검색 초기화
-                                Fragment2_Search.et_search.setText(null);
-                                Fragment2_Search.rv_search_result.setAdapter(null);
+                                    //검색 초기화
+                                    Fragment2_Search.et_search.setText(null);
+                                    Fragment2_Search.rv_search_result.setAdapter(null);
 
-                                Fragment2_Search.tv_search_result.setText("'" + Fragment2_Search.searchKeyword + "'" + " 검색 결과");
-                                Fragment2_Search.ll_search_result.setVisibility(View.VISIBLE);
-                                // 검색 결과 리사이클러뷰 결과 만들기
+                                    Fragment2_Search.tv_search_result.setText("'" + Fragment2_Search.searchKeyword + "'" + " 검색 결과");
+                                    Fragment2_Search.ll_search_result.setVisibility(View.VISIBLE);
+                                    // 검색 결과 리사이클러뷰 결과 만들기
 
-                                Fragment2_Search.setResultRv(Fragment2_Search.view);
+                                    Fragment2_Search.setResultRv(Fragment2_Search.view);
 
+                                }
                             }
                         }
 
+                        Intent intent1 = new Intent(PopupSub.this, PopupEmpty.class);
+                        startActivity(intent1);
+
                         finish();
                     }
-                }, 500);
+                }, 550);
 
 
             }

@@ -82,6 +82,9 @@ public class PopupUnSub extends Activity {
                     @Override
                     public void run() {
                         finish();
+
+                        Intent intent1 = new Intent(PopupUnSub.this, PopupEmpty.class);
+                        startActivity(intent1);
                     }
                 },500);
             }

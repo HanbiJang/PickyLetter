@@ -41,6 +41,7 @@ public class OldLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     //    private final int VIEW_TYPE_LOADING = 1;
     private final int VIEW_TYPE_MORE = 2;
 
+
     @NonNull
     @Override //뷰홀더 객체의 생성,재사용시 자동으로 호출
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
@@ -66,20 +67,6 @@ public class OldLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         else{
             return null;
         }
-
-
-/*        if (viewType == VIEW_TYPE_PAST_NEWS) {
-            //인플레이션
-            LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-            View itemView = inflater.inflate(R.layout.home_view_past_letter, viewGroup, false);
-            return new ViewHolder(itemView);
-        } else if (viewType == VIEW_TYPE_LOADING) {
-            //인플레이션
-            LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-            View itemView = inflater.inflate(R.layout.view_loading, viewGroup, false);
-            return new LoadingViewHolder(itemView);
-        }
-        return null;*/
 
 
     }
@@ -108,11 +95,11 @@ public class OldLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     //(1) 원래 뷰홀더
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tv_title;
         TextView tv_brand;
         TextView tv_date;
-        Button btn_bookmark_past;
+        public static Button btn_bookmark_past;
         ImageView img_news;
         CircleImageView cimg_brand;
         //북마크 체크 기능
@@ -120,6 +107,8 @@ public class OldLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         static RequestQueue requestQueueBookmarkAdd, requestQueueBookmarkDel, requestQueueGetLetterInform;        //북마크 관련
         //화면 전환
         FragmentActivity myContext;
+
+        Boolean isShowHomeMail = false; //중복클릭 방지
 
         public ViewHolder(View itemView) { //아이템을 위한 뷰를 담아두는곳
             super(itemView);
@@ -137,16 +126,16 @@ public class OldLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int pos = getAdapterPosition(); //리사이클러뷰 내의 위치 알 수 있음
-                    if (pos != RecyclerView.NO_POSITION) {
+                    if(isShowHomeMail == false){
+                        //중복클릭 방지
+                        isShowHomeMail = true;
 
-                        showHomeMail();
-
-/*                        myContext.getSupportFragmentManager().beginTransaction().
-                                setCustomAnimations(R.anim.enter_right, R.anim.exit_left, R.anim.enter_left_pop, R.anim.exit_left_pop).
-                                addToBackStack(null).replace(R.id.container_fragment, fragment_homemail).commit();//프래그먼트 전환*/
-
+                        int pos = getAdapterPosition(); //리사이클러뷰 내의 위치 알 수 있음
+                        if (pos != RecyclerView.NO_POSITION) {
+                            showHomeMail();
+                        }
                     }
+
                 }
             });
 
@@ -166,6 +155,17 @@ public class OldLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     addToBackStack(null).hide(MainActivity.fragment1_home).commit();
             if(MainActivity.fragment2_search != null) MainActivity.fragmentManager.beginTransaction().hide(MainActivity.fragment2_search).commit();
             if(MainActivity.fragment3_mypage != null) MainActivity.fragmentManager.beginTransaction().hide(MainActivity.fragment3_mypage).commit();
+
+            android.os.Handler handler = new Handler();
+            handler.postDelayed(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            //중복클릭 방지
+                            isShowHomeMail = false;
+                        }
+                    }
+                    ,500);
 
         }
 

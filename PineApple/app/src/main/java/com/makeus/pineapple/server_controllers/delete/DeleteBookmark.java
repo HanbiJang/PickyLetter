@@ -63,13 +63,12 @@ public class DeleteBookmark implements DeleteRequest {
 
 
     @Override
-    public JSONObject makeJsonObject() {
+    public JSONObject makeJsonObject()
+    {
         JSONObject requestData = new JSONObject();
-        try {
+        try{
             requestData.put("bookmarkId", bookmarkId);
-
         } catch (Exception e) {
-
         }
         return requestData;
     }
@@ -83,15 +82,20 @@ public class DeleteBookmark implements DeleteRequest {
     }
 
     @Override
-    public void processResponse(JSONObject response) {
+    public void processResponse(JSONObject response)
+    {
         Gson gson = new Gson();
         BookmakrResult bookmakrResult = gson.fromJson(String.valueOf(response), BookmakrResult.class);
         btn_bookmark.setBackgroundResource(R.drawable.btn_bookmark_line); //이미지 바꿈
         Log.e("0", "북마크 삭제 성공");
-        Toast.makeText(context, "북마크를 해지했어요", Toast.LENGTH_SHORT).show();
+
+        //북마크 버튼 활성화 시키기
+        btn_bookmark.setEnabled(true);
+        btn_bookmark.setClickable(true);
 
         //마이페이지 새로고침
-        if(MainActivity.fragment3_mypage !=null){
+        if(MainActivity.fragment3_mypage !=null)
+        {
             //서버통신
             Fragment3_MyPage.lastLetterId = 0; //마이페이지 북마크 조회 기능 초기화
             Fragment3_MyPage.page = -1;
@@ -100,10 +104,6 @@ public class DeleteBookmark implements DeleteRequest {
             Fragment3_MyPage.setUserData();
             Fragment3_MyPage.setBookmarkRv(Fragment3_MyPage.view);
         }
-
-
-
-
     }
 
 

@@ -2,6 +2,7 @@ package com.makeus.pineapple.home.adapters;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,6 +108,8 @@ public class NewLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         FragmentActivity myContext;        //화면 전환
         static RequestQueue requestQueueBookmarkAdd, requestQueueBookmarkDel, requestQueueGetLetterInform;        //북마크 관련
 
+        Boolean isShowHomeMail = false; //중복클릭 방지
+
         public ViewHolder(View itemView) { //아이템을 위한 뷰를 담아두는곳
             super(itemView);
 
@@ -123,20 +126,16 @@ public class NewLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int pos = getAdapterPosition(); //리사이클러뷰 내의 위치 알 수 있음
-                    if (pos != RecyclerView.NO_POSITION) {
+                    if(isShowHomeMail == false){//중복클릭 방지
+                        //중복클릭 방지
+                        isShowHomeMail = true;
 
-
-/*                        //프래그먼트 전환 & 애니메이션 설정
-                        myContext.getSupportFragmentManager().
-                                beginTransaction().
-                                setCustomAnimations(R.anim.enter_right, R.anim.exit_left, R.anim.enter_left_pop, R.anim.exit_left_pop).
-                                addToBackStack(null).
-                                replace(R.id.container_fragment, fragment_homemail).commit();*/
-                        showHomeMail();
-
-
+                        int pos = getAdapterPosition(); //리사이클러뷰 내의 위치 알 수 있음
+                        if (pos != RecyclerView.NO_POSITION) {
+                            showHomeMail();
+                        }
                     }
+
                 }
             });
 
@@ -157,6 +156,17 @@ public class NewLetterAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             if(MainActivity.fragment2_search != null) MainActivity.fragmentManager.beginTransaction().hide(MainActivity.fragment2_search).commit();
             if(MainActivity.fragment3_mypage != null) MainActivity.fragmentManager.beginTransaction().hide(MainActivity.fragment3_mypage).commit();
 
+
+            android.os.Handler handler = new Handler();
+            handler.postDelayed(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            //중복클릭 방지
+                            isShowHomeMail = false;
+                        }
+                    }
+                    ,500);
         }
 
         //클릭 시 홈메일 화면으로 데이터를 보내줌

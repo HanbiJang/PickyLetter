@@ -6,9 +6,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -100,6 +102,36 @@ public class Fragment2_Search extends Fragment {
 
 
         /****검색****/
+
+        //키보드 검색버튼
+        et_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                switch(actionId)
+                {
+                    case EditorInfo.IME_ACTION_SEARCH:
+                        //검색 기능
+                        searchKeyword = et_search.getText().toString();
+
+
+                        if (searchKeyword.length() >= 2) {
+                            lastLetterId = 0;
+
+                            tv_search_result.setText("'" + searchKeyword + "'" + " 검색 결과");
+                            ll_search_result.setVisibility(View.VISIBLE);
+                            // 검색 결과 리사이클러뷰 결과 만들기
+
+                            setResultRv(view);
+
+                        }
+                        else{
+                            Toast.makeText(getContext(), "2글자 이상을 검색하세요", Toast.LENGTH_SHORT).show();
+                        }
+
+                        break;
+                }
+                return true;
+            } });
+
         //검색 버튼
         btn_search.setOnClickListener(new View.OnClickListener() {
             @Override

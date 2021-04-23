@@ -1,6 +1,7 @@
 package com.makeus.pineapple.search.searchViewHolders;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -41,6 +42,7 @@ public class SearchViewResultHolder extends SearchViewHolder {
     //화면 전환
     FragmentActivity myContext;
 
+    Boolean isShowHomeMail = false; //중복클릭 방지
 
     public SearchViewResultHolder(@NonNull View itemView) {
         super(itemView);
@@ -74,14 +76,31 @@ public class SearchViewResultHolder extends SearchViewHolder {
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int pos = getAdapterPosition() ; //리사이클러뷰 내의 위치 알 수 있음
-                if (pos != RecyclerView.NO_POSITION) {
-                    // 데이터 리스트로부터 아이템 데이터 참조.
-                    showHomeMail();
-//                    myContext.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_right,R.anim.exit_left,R.anim.enter_left_pop,R.anim.exit_left_pop).addToBackStack(null).replace(R.id.container_fragment,fragment_homemail).commit();
+                if (isShowHomeMail == false) {//중복클릭 방지
+                    //중복클릭 방지
+                    isShowHomeMail = true;
 
+                    int pos = getAdapterPosition() ; //리사이클러뷰 내의 위치 알 수 있음
+                    if (pos != RecyclerView.NO_POSITION) {
+                        // 데이터 리스트로부터 아이템 데이터 참조.
+                        showHomeMail();
+
+                        android.os.Handler handler = new Handler();
+                        handler.postDelayed(
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        //중복클릭 방지
+                                        isShowHomeMail = false;
+                                    }
+                                }
+                                , 500);
+
+                    }
 
                 }
+
+
             }
         });
 

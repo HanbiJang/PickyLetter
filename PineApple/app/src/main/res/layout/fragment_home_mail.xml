@@ -49,22 +49,24 @@
 
             <FrameLayout
                 android:id="@+id/fl_btn_back"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
 
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="45dp"
+                android:layout_marginLeft="1dp"/>
+
+            <Button
+                android:id="@+id/btn_back"
+                android:layout_width="7dp"
+                android:layout_height="14dp"
                 android:layout_marginTop="59dp"
                 android:layout_marginLeft="17dp"
+                android:background="@drawable/btn_back"
+                app:backgroundTint="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <Button
-                    android:id="@+id/btn_back"
-                    android:layout_width="7dp"
-                    android:layout_height="14dp"
-                    android:background="@drawable/btn_back"
-                    app:backgroundTint="@color/white"/>
-
-            </FrameLayout>
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <Button
                 android:id="@+id/btn_bookmark"

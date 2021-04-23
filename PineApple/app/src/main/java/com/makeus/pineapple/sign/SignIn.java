@@ -9,10 +9,13 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -120,7 +123,26 @@ public class SignIn extends Activity {
         });
 
 
+        //키보드 로그인 버튼
+        et_pw.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                switch(actionId)
+                {
+                    case EditorInfo.IME_ACTION_DONE:
+                        //로그인 과정
+                        //아이디, 비번 입력 받기
+                        userpw = et_pw.getText().toString();
+                        userEmail = et_id.getText().toString();
 
+                        //로그인 시도
+                        tryLogin(userEmail, userpw);
+                        break;
+                }
+                        return true;
+            } });
+
+
+        //로그인 버튼
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

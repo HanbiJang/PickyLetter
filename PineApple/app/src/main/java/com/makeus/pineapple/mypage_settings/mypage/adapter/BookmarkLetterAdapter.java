@@ -59,8 +59,7 @@ public class BookmarkLetterAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             View itemView = inflater.inflate(R.layout.mypage_view_bookmark_letter, viewGroup, false);
 
             return new BookmarkLetterAdapter.ViewHolder(itemView);
-        }
-        else if (viewType == VIEW_TYPE_MORE) {
+        } else if (viewType == VIEW_TYPE_MORE) {
             //인플레이션
             LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
             View itemView = inflater.inflate(R.layout.home_view_more, viewGroup, false);
@@ -122,6 +121,7 @@ public class BookmarkLetterAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         //화면 전환
         FragmentActivity myContext;
 
+        Boolean isShowHomeMail = false; //중복 클릭 방지
 
         public ViewHolder(View itemView) { //아이템을 위한 뷰를 담아두는곳
             super(itemView);
@@ -139,12 +139,27 @@ public class BookmarkLetterAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int pos = getAdapterPosition(); //리사이클러뷰 내의 위치 알 수 있음
-                    if (pos != RecyclerView.NO_POSITION) {
+                    if (isShowHomeMail == false) {//중복클릭 방지
+                        //중복클릭 방지
+                        isShowHomeMail = true;
 
-                        showHomeMail();
-//                        myContext.getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_right, R.anim.exit_left, R.anim.enter_left_pop, R.anim.exit_left_pop).addToBackStack(null).replace(R.id.container_fragment, fragment_homemail).commit();//프래그먼트 전환
+                        int pos = getAdapterPosition(); //리사이클러뷰 내의 위치 알 수 있음
+                        if (pos != RecyclerView.NO_POSITION) {
 
+                            showHomeMail();
+
+                            android.os.Handler handler = new Handler();
+                            handler.postDelayed(
+                                    new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            //중복클릭 방지
+                                            isShowHomeMail = false;
+                                        }
+                                    }
+                                    , 500);
+
+                        }
 
                     }
                 }
@@ -161,12 +176,15 @@ public class BookmarkLetterAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             MainActivity.fragmentManager.beginTransaction().show(fragment_homemail).commit();
             MainActivity.fragmentManager.beginTransaction().
                     setCustomAnimations(R.anim.enter_right, R.anim.exit_left).add(R.id.container_fragment, fragment_homemail).commit();
-            if(MainActivity.fragment1_home != null) MainActivity.fragmentManager.beginTransaction().hide(MainActivity.fragment1_home).commit();
-            if(MainActivity.fragment2_search != null) MainActivity.fragmentManager.beginTransaction().hide(MainActivity.fragment2_search).commit();
-            if(MainActivity.fragment3_mypage != null) MainActivity.fragmentManager.beginTransaction().
-                    setCustomAnimations(R.anim.enter_right, R.anim.exit_left, R.anim.enter_left_pop, R.anim.exit_left_pop).
-                    addToBackStack(null).
-                    hide(MainActivity.fragment3_mypage).commit();
+            if (MainActivity.fragment1_home != null)
+                MainActivity.fragmentManager.beginTransaction().hide(MainActivity.fragment1_home).commit();
+            if (MainActivity.fragment2_search != null)
+                MainActivity.fragmentManager.beginTransaction().hide(MainActivity.fragment2_search).commit();
+            if (MainActivity.fragment3_mypage != null)
+                MainActivity.fragmentManager.beginTransaction().
+                        setCustomAnimations(R.anim.enter_right, R.anim.exit_left, R.anim.enter_left_pop, R.anim.exit_left_pop).
+                        addToBackStack(null).
+                        hide(MainActivity.fragment3_mypage).commit();
 
         }
 
@@ -209,11 +227,11 @@ public class BookmarkLetterAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             //북마크 체크 기능
             //isClicked != 0 이면 이미 찍혀있음
             isClicked = item.getBookmarkId();
-            if(isClicked != 0){
+            if (isClicked != 0) {
                 btn_bookmark_bookmark.setBackgroundResource(R.drawable.btn_bookmark_fill);
             }
-            AddOrDelBookmark addOrDelBookmark = new AddOrDelBookmark(btn_bookmark_bookmark,item.getLetterId(),
-                    myContext,requestQueueBookmarkAdd,requestQueueBookmarkDel,requestQueueGetLetterInform);
+            AddOrDelBookmark addOrDelBookmark = new AddOrDelBookmark(btn_bookmark_bookmark, item.getLetterId(),
+                    myContext, requestQueueBookmarkAdd, requestQueueBookmarkDel, requestQueueGetLetterInform);
             //북마크 체크 기능
             btn_bookmark_bookmark.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -231,6 +249,7 @@ public class BookmarkLetterAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         public static Button btn_more;
         Context myContext;
         public static ProgressBar progressBar;
+
         public LoadingViewHolder(@NonNull View itemView) {
             super(itemView);
             myContext = (FragmentActivity) itemView.getContext(); //context
@@ -261,8 +280,7 @@ public class BookmarkLetterAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                             );
                             getBookmarkLettersAgain.tryRequest();
                         }
-                    },600);
-
+                    }, 600);
 
 
                 }
@@ -289,15 +307,17 @@ public class BookmarkLetterAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
 
-    public void removeItems(int position){
+    public void removeItems(int position) {
         items.remove(position);
     }
 
-    public ArrayList<BookmarkLetter> getItems(){
+    public ArrayList<BookmarkLetter> getItems() {
         return items;
     }
 
-    public void removeAll(){ items.clear(); }
+    public void removeAll() {
+        items.clear();
+    }
 
 
 }
