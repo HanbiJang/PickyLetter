@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white">
+
+    <TextView
+        android:layout_width="328dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="84dp"
+        android:fontFamily="@font/no_b"
+        android:includeFontPadding="false"
+        android:text="마지막으로\n비밀번호를 입력해주세요!"
+        android:textColor="@color/pickyGray"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+
+    <TextView
+        android:id="@+id/tv_pw"
+        android:layout_width="328dp"
+        android:layout_height="63dp"
+        android:layout_marginTop="200dp"
+        android:fontFamily="@font/no_r"
+        android:includeFontPadding="false"
+        android:text="비밀번호"
+        android:textColor="@color/subtitle_gray"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/et_pw"
+        android:layout_width="328dp"
+        android:layout_height="63dp"
+        android:layout_marginTop="210dp"
+        android:fontFamily="@font/no_m"
+        android:includeFontPadding="false"
+        android:inputType="textPassword"
+        android:backgroundTint="@color/pickyUnableGray"
+        android:hint="8자리 이상 비밀번호를 입력해주세요."
+        android:textColorHint="@color/pickyUnableGray"
+        android:textColor="@color/pickyGray"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_x"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_gravity="center|right"
+        android:background="@drawable/btn_search_x"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="238dp"
+        android:layout_marginRight="85dp"
+        app:backgroundTint="@color/white"
+        app:backgroundTintMode="multiply" />
+
+    <Button
+        android:id="@+id/btn_eye"
+        android:layout_width="16dp"
+        android:layout_height="12dp"
+        android:layout_gravity="center|right"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/et_pw"
+        android:layout_marginTop="238dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/btn_eye_close"
+        app:backgroundTint="@color/white"
+        app:backgroundTintMode="multiply"/>
+
+    <TextView
+        android:layout_width="328dp"
+        android:layout_height="63dp"
+        android:layout_marginTop="290dp"
+        android:fontFamily="@font/no_r"
+        android:includeFontPadding="false"
+        android:text="이메일"
+        android:textColor="@color/subtitle_gray"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/et_mail"
+        android:layout_width="328dp"
+        android:layout_height="63dp"
+        android:layout_marginTop="300dp"
+        android:fontFamily="@font/no_m"
+        android:includeFontPadding="false"
+        android:backgroundTint="@color/pickyUnableGray"
+        android:hint="이메일을 입력해주세요."
+        android:text="makeus.pineapple@gmail.com"
+        android:editable="false"
+        android:textColorHint="@color/pickyUnableGray"
+        android:textColor="@color/pickyGray"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="328dp"
+        android:layout_height="63dp"
+        android:layout_marginTop="380dp"
+        android:fontFamily="@font/no_r"
+        android:includeFontPadding="false"
+        android:text="이름"
+        android:textColor="@color/subtitle_gray"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/et_name"
+        android:layout_width="328dp"
+        android:layout_height="63dp"
+        android:layout_marginTop="390dp"
+        android:fontFamily="@font/no_m"
+        android:includeFontPadding="false"
+        android:hint="이름을 입력해주세요"
+        android:text="파인애플"
+        android:backgroundTint="@color/pickyUnableGray"
+        android:editable="false"
+        android:textColorHint="@color/pickyUnableGray"
+        android:textColor="@color/pickyGray"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <Button
+        android:id="@+id/btn_next"
+        android:layout_width="328dp"
+        android:layout_height="48dp"
+        android:background="@drawable/round_squre_gray"
+        android:fontFamily="@font/no_r"
+        android:includeFontPadding="false"
+        android:text="회원가입 완료"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:layout_marginBottom="45dp"
+        app:backgroundTint="@color/white"
+        app:backgroundTintMode="multiply"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/ll_pw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="@id/tv_pw"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="200dp"
+        android:visibility="invisible">
+
+        <ImageView
+            android:id="@+id/img_warning"
+            android:layout_width="13dp"
+            android:layout_height="11dp"
+            android:src="@drawable/warning"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="11sp"
+            android:textColor="@color/pickyRed"
+            android:fontFamily="@font/no_r"
+            android:includeFontPadding="false"
+            android:layout_marginLeft="6dp"
+            android:text="8자리 이상 비밀번호를 입력해주세요"/>
+
+    </LinearLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

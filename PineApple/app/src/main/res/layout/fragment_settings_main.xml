@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="7pt"
+    android:paddingRight="7pt"
+    android:layout_marginTop="21pt"
+    android:background="@color/white">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:id="@+id/fl_btn_back"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center">
+
+            <Button
+                android:id="@+id/btn_back"
+                android:layout_width="7dp"
+                android:layout_height="14dp"
+                android:layout_gravity="left"
+                android:layout_marginTop="3dp"
+                android:background="@drawable/btn_back"/>
+
+        </FrameLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:fontFamily="@font/no_b"
+                android:includeFontPadding="false"
+                android:textSize="16sp"
+                android:textColor="@color/pickyGray"
+                android:layout_marginRight="7dp"
+                android:text="설정" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView000"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="개인정보"
+            android:fontFamily="@font/no_r"
+            android:includeFontPadding="false"
+            android:textSize="14sp"
+            android:layout_marginTop="34.1dp"
+            android:textColor="@color/pickyGray"/>
+
+        <LinearLayout
+            android:id="@+id/ll_profile_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                android:id="@+id/textView001"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="내 프로필 수정"
+                android:fontFamily="@font/no_m"
+                android:includeFontPadding="false"
+                android:textSize="18sp"
+                android:layout_weight="1"
+                android:textColor="@color/pickyGray"/>
+
+            <FrameLayout
+                android:id="@+id/fl_btn_profile_edit"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center">
+
+                <Button
+                    android:id="@+id/btn_profile_edit"
+                    android:layout_width="7dp"
+                    android:layout_gravity="right"
+                    android:layout_height="14dp"
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/go_pickygray"/>
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_letter_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="구독메일 조회 및 편집"
+                android:fontFamily="@font/no_m"
+                android:includeFontPadding="false"
+                android:textSize="18sp"
+                android:textColor="@color/pickyGray"/>
+
+            <FrameLayout
+                android:id="@+id/fl_btn_letter_edit"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center">
+
+                <Button
+                    android:id="@+id/btn_letter_edit"
+                    android:layout_width="7dp"
+                    android:layout_height="14dp"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/go_pickygray" />
+
+            </FrameLayout>
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="23.1dp"
+        android:layout_marginBottom="23.4dp"
+        android:background="#000000" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="시스템"
+            android:fontFamily="@font/no_r"
+            android:includeFontPadding="false"
+            android:textColor="@color/pickyGray"/>
+
+        <LinearLayout
+            android:id="@+id/ll_service_center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                android:id="@+id/textView14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="고객센터"
+                android:fontFamily="@font/no_m"
+                android:includeFontPadding="false"
+                android:textSize="18sp"
+
+                android:textColor="@color/pickyGray"/>
+
+            <FrameLayout
+                android:id="@+id/fl_btn_service_center"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center">
+
+                <Button
+                    android:id="@+id/btn_searvice_center"
+                    android:layout_width="7dp"
+                    android:layout_height="14dp"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/go_pickygray" />
+
+            </FrameLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_logout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/no_m"
+                android:includeFontPadding="false"
+                android:text="로그아웃"
+
+                android:textSize="18sp"
+                android:textColor="@color/pickyGray"/>
+
+            <FrameLayout
+                android:id="@+id/fl_btn_logout"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center">
+
+                <Button
+                    android:layout_width="7dp"
+                    android:layout_height="14dp"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/go_pickygray" />
+
+            </FrameLayout>
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/ll_out"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/no_m"
+                android:includeFontPadding="false"
+                android:text="탈퇴"
+
+                android:textSize="18sp"
+                android:textColor="@color/pickyGray"/>
+
+            <FrameLayout
+                android:id="@+id/fl_btn_out"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center">
+
+                <Button
+                    android:id="@+id/btn_out"
+                    android:layout_width="7dp"
+                    android:layout_height="14dp"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="3dp"
+                    android:background="@drawable/go_pickygray" />
+
+            </FrameLayout>
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
+</LinearLayout>

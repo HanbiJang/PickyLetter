@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white">
+
+    <TextView
+        android:layout_width="328dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="84dp"
+        android:fontFamily="@font/no_b"
+        android:includeFontPadding="false"
+        android:text="뉴스레터를 구독중인\n이메일을 입력해주세요!"
+        android:textColor="@color/pickyGray"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_mail"
+        android:layout_width="328dp"
+        android:layout_height="63dp"
+        android:layout_marginTop="200dp"
+        android:fontFamily="@font/no_r"
+        android:includeFontPadding="false"
+        android:text="이메일"
+        android:textColor="@color/subtitle_gray"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/et_mail"
+        android:layout_width="328dp"
+        android:layout_height="63dp"
+        android:layout_marginTop="210dp"
+        android:fontFamily="@font/no_m"
+        android:includeFontPadding="false"
+        android:hint="이메일을 입력해주세요."
+        android:textColorHint="@color/pickyUnableGray"
+        android:backgroundTint="@color/pickyUnableGray"
+        android:textColor="@color/pickyGray"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_x"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_gravity="center|right"
+        android:background="@drawable/btn_search_x"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="235dp"
+        android:layout_marginRight="55dp"
+        app:backgroundTint="@color/white"
+        app:backgroundTintMode="multiply" />
+
+    <TextView
+        android:layout_width="328dp"
+        android:layout_height="63dp"
+        android:layout_marginTop="290dp"
+        android:fontFamily="@font/no_r"
+        android:includeFontPadding="false"
+        android:text="이름"
+        android:textColor="@color/subtitle_gray"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/et_name"
+        android:layout_width="328dp"
+        android:layout_height="63dp"
+        android:layout_marginTop="300dp"
+        android:fontFamily="@font/no_m"
+        android:includeFontPadding="false"
+        android:backgroundTint="@color/pickyUnableGray"
+        android:hint="이름을 입력해주세요."
+        android:editable="false"
+        android:textColorHint="@color/pickyUnableGray"
+        android:textColor="@color/pickyGray"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <Button
+        android:id="@+id/btn_next"
+        android:layout_width="328dp"
+        android:layout_height="48dp"
+        android:background="@drawable/round_squre_gray"
+        android:fontFamily="@font/no_r"
+        android:includeFontPadding="false"
+        android:text="다음"
+        android:layout_marginBottom="45dp"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:backgroundTint="@color/white"
+        app:backgroundTintMode="multiply"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/ll_mail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="@id/tv_mail"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="200dp"
+        android:visibility="invisible">
+
+        <ImageView
+            android:id="@+id/img_warning"
+            android:layout_width="13dp"
+            android:layout_height="11dp"
+            android:src="@drawable/warning"/>
+        <TextView
+            android:id="@+id/tv_warning"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="11sp"
+            android:textColor="@color/pickyRed"
+            android:fontFamily="@font/no_r"
+            android:includeFontPadding="false"
+            android:layout_marginLeft="6dp"
+            android:text="올바른 이메일주소를 입력해주세요"/>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

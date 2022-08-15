@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.makeus.pineapple">
+
+    <uses-permission
+        android:name="android.permission.INTERNET"/>
+
+
+    <application
+        android:resizeableActivity="false"
+
+        android:icon="@drawable/picky_letter_app_icon_final"
+        android:usesCleartextTraffic="true"
+        android:allowBackup="true"
+
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.PineApple">
+
+        <!-- 팝업 Activity -->
+        <activity android:name=".popup.PopupOut" android:theme="@android:style/Theme.Dialog" />
+        <activity android:name=".popup.PopupSub" android:theme="@android:style/Theme.Dialog" />
+        <activity android:name=".home.filters.PopupFilter" android:theme="@android:style/Theme.Dialog" />
+        <activity android:name=".popup.loading.PopupLoading" android:theme="@android:style/Theme.Dialog"/>
+        <activity android:name=".popup.PopupEndDatePicker" android:theme="@android:style/Theme.Dialog"/>
+        <activity android:name=".popup.PopupStartDatePicker" android:theme="@android:style/Theme.Dialog"/>
+        <activity android:name=".popup.PopupUnSub" android:theme="@android:style/Theme.Dialog"/>
+        <activity android:name=".popup.PopupLogout" android:theme="@android:style/Theme.Dialog"/>
+        <activity android:name=".popup.PopupEmpty" android:theme="@android:style/Theme.Dialog"/>
+
+        <activity android:name=".main.MainActivity"/>
+        <activity android:name=".sign.SignIn"/>
+        <activity android:name=".sign.SignUp_1"/>
+        <activity android:name=".sign.SignUp_2"/>
+        <activity android:name=".sign.SignUp_3"/>
+        <activity android:name=".FirstEditLetter"/>
+
+        <activity
+            android:name=".main.Splash"
+            android:screenOrientation="fullSensor">
+            <intent-filter> <!-- 스플래시 이미지 화면을 첫화면으로 설정하기 -->
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+    </application>
+
+</manifest>

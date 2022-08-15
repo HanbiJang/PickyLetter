@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="254dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/round_squre"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_brand"
+        android:layout_width="235dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/no_m"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:text="날짜를 정해주세요"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/pickyGray"
+        android:textSize="13sp" />
+
+    <DatePicker
+        android:id="@+id/dataPicker"
+        android:layout_width="wrap_content"
+        android:layout_height="180dp"
+        android:calendarViewShown="false"
+        android:datePickerMode="spinner"
+        android:theme="@android:style/Theme.Holo.Light"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="bottom"
+        android:layout_marginTop="1dp">
+
+        <Button
+            android:id="@+id/btn_no"
+            android:layout_width="wrap_content"
+            android:layout_height="43dp"
+            android:text="취소"
+            android:fontFamily="@font/no_m"
+            android:includeFontPadding="false"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:background="@drawable/btn_popup_round_squre_left"
+            android:backgroundTint="@color/pickyGray"
+            android:layout_weight="1"></Button>
+
+        <Button
+            android:id="@+id/btn_yes"
+            android:layout_width="wrap_content"
+            android:layout_height="43dp"
+            android:text="확인"
+            android:fontFamily="@font/no_m"
+            android:includeFontPadding="false"
+            android:background="@drawable/btn_popup_round_squre_right"
+
+            app:backgroundTintMode="multiply"
+            app:backgroundTint="@color/white"
+
+            android:textSize="14sp"
+            android:textColor="@color/pickyGray"
+            android:layout_weight="1"></Button>
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
+
+
+
+
+
