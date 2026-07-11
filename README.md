@@ -8,7 +8,7 @@
 
 [![게임플레이 영상](https://img.youtube.com/vi/mXKTkPdiSQg/0.jpg)](https://youtu.be/mXKTkPdiSQg?si=bHDAR7blZi7zrtal)
 > 이미지를 클릭하면 게임플레이 영상을 볼 수 있습니다.
-[![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=flat&logo=youtube&logoColor=white)](https://youtu.be/u2X_XooNu3g?si=TAnIL9zTUeXB7dwV)
+[![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=flat&logo=youtube&logoColor=white)](https://youtu.be/u2X_XooNu3g?si=wp2DexOHHgnGXRq-)
 
 ---
 
